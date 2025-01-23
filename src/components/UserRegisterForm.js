@@ -1,22 +1,34 @@
 // Integration file: Auth
 
-import React from "react";
+import React, {useState} from "react";
 import "./css/UserRegisterForm.css";
 
 export default class UserRegisterForm extends React.Component {
     async componentDidMount() {
         //Since we are using a button outside of the form to handle the login attempt
-        //let's listen to the username and password input fields for if the user
-        //presses the enter key, and if so we can simulate a button click
+        //let's listen to the input fields for if the user presses the enter key, 
+        // and if so we can simulate a button click
         var usernameInput = document.getElementById('username')
+        var emailInput = document.getElementById('email')
         var passwordInput = document.getElementById('password')
+        var confirmPasswordInput = document.getElementById('confirm-password')
 
         usernameInput.addEventListener('keyup', function onEvent(e) {
             if(e.code === "Enter") {
                 document.getElementById('submit-button').click()
             }
         })
+        emailInput.addEventListener('keyup', function onEvent(e) {
+            if(e.code === "Enter") {
+                document.getElementById('submit-button').click()
+            }
+        })
         passwordInput.addEventListener('keyup', function onEvent(e) {
+            if(e.code === "Enter") {
+                document.getElementById('submit-button').click()
+            }
+        })
+        confirmPasswordInput.addEventListener('keyup', function onEvent(e) {
             if(e.code === "Enter") {
                 document.getElementById('submit-button').click()
             }
@@ -38,42 +50,42 @@ export default class UserRegisterForm extends React.Component {
     }
 
     render() {
+        var errorMessageText = ""
+
         function registrationHandler(username, password, email, confirmPassword) {
             var registerJSON = {"username": username, "password": password, "email": email}
 
             //Grab the error messages
-            var noUsernameMessage = document.getElementById('no-username-message')
-            var noEmailMessage = document.getElementById('no-email-message')
-            var noPasswordMessage = document.getElementById('no-password-message')
-            var nonMatchingPasswordMessage = document.getElementById('nonmatching-password-message')
-            var usernameAlreadyTakenMessage = document.getElementById('username-already-taken-message')
-            var emailAlreadyTakenMessage = document.getElementById('email-already-taken-message')
+            var errorMessage = document.getElementById('error-message')
 
             //Reset all the error messages when the user attempts to register
-            noUsernameMessage.hidden = true
-            noEmailMessage.hidden = true
-            noPasswordMessage.hidden = true
-            nonMatchingPasswordMessage.hidden = true
-            usernameAlreadyTakenMessage.hidden = true
-            emailAlreadyTakenMessage.hidden = true
+            errorMessage.hidden = true
 
             //Check if the username, password, or email are empty
             if(username === "") {
-                noUsernameMessage.hidden = false
+                errorMessageText = 'You must enter a username'
+                errorMessage.hidden = false
                 return
             }
             if(email === "") {
-                noEmailMessage.hidden = false
+                errorMessageText = 'You must enter an email'
+                errorMessage.hidden = false
                 return
             }
             if(password === "") {
-                noPasswordMessage.hidden = false
+                errorMessageText = 'You must enter a password'
+                errorMessage.hidden = false
+                return
+            }
+            if(confirmPassword === "") {
+                errorMessageText = 'You must enter a confirmation password'
+                errorMessage.hidden = false
                 return
             }
 
             //Check if the password and confirmation password match
             if(password !== confirmPassword) {
-                nonMatchingPasswordMessage.hidden = false
+                errorMessageText = 'Passwords do not match'
                 return
             }
             
@@ -93,7 +105,8 @@ export default class UserRegisterForm extends React.Component {
 
                         if(response.status === 409) {
                             //Custom error codes: 410 for username error, 401 for email error
-                            data.errorCode === 410 ? usernameAlreadyTakenMessage.hidden = false : emailAlreadyTakenMessage.hidden = false
+                            data.errorCode === 410 ? errorMessageText = 'Username already taken' : errorMessageText = 'Email already taken'
+                            errorMessage.hidden = false
                             return
                         }
 
@@ -116,12 +129,7 @@ export default class UserRegisterForm extends React.Component {
                 <div id="register-div" className="register-div">
                     <h1 style={{color: "white"}}>Create account</h1>
                     <div style={{height: "50px"}} >
-                        <b id="username-already-taken-message" hidden={true} style={{color: "red"}}>Username already taken</b>
-                        <b id="email-already-taken-message" hidden={true} style={{color: "red"}}>Email already taken</b>
-                        <b id="no-username-message" hidden={true} style={{color: "red"}}>You must enter a username</b>
-                        <b id="no-email-message" hidden={true} style={{color: "red"}}>You must enter an email</b>
-                        <b id="no-password-message" hidden={true} style={{color: "red"}}>You must enter a password</b>
-                        <b id="nonmatching-password-message" hidden={true} style={{color: "red"}}>Your passwords do not match</b>
+                        <b id="error-message" hidden={true} style={{color: "red"}}>{errorMessageText}</b>
                     </div>
                     <form id="register-form" className="register-form">
                         <label htmlFor="username">Username:</label><br />
