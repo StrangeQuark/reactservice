@@ -40,27 +40,22 @@ export default class UserLoginForm extends React.Component {
             //JWT 
             var loginJSON = {"username": username, "password": password}
 
-            //Error messages
-            var noUsernameMessage = document.getElementById('no-username-message')
-            var noPasswordMessage = document.getElementById('no-password-message')
-            var failedLoginMessage = document.getElementById('failed-login-message')
-            var userNotEnabledMessage = document.getElementById('user-not-enabled-message')
+            //Error message
+            var errorMessage = document.getElementById('error-message')
+            var errorMessageText = ''
 
             //Reset all the login error messages when the user attempts a login
-            noUsernameMessage.hidden = true
-            noPasswordMessage.hidden = true
-            failedLoginMessage.hidden = true
-            userNotEnabledMessage.hidden = true
+            errorMessage.hidden = true
 
-            //Check if the username and password are empty. If they are, return and make the
-            //appropriate message visible. If both are empty, just default to prompting the
-            //user for a username
+            //Check if the username and password are empty. If they are, display error message
             if(username === "") {
-                noUsernameMessage.hidden = false
+                errorMessageText = 'You must enter a username'
+                errorMessage.hidden = false
                 return
             }
             if(password === "") {
-                noPasswordMessage.hidden = false
+                errorMessageText = 'You must enter a password'
+                errorMessage.hidden = false
                 return
             }
 
@@ -73,7 +68,8 @@ export default class UserLoginForm extends React.Component {
                 }).then(response => response.json().then(
                     (data) => {
                         if(response.status === 401) {
-                            failedLoginMessage.hidden = false
+                            errorMessageText = 'Incorrect username or password'
+                            errorMessage.hidden = false
                             //error out
                             return
                         }
@@ -95,10 +91,7 @@ export default class UserLoginForm extends React.Component {
             <div id="login-div" className="login-div">
                 <h1 style={{color: "white"}}>Login</h1>
                 <div style={{height: "50px"}} >
-                    <b id="failed-login-message" hidden={true} style={{color: "red"}}>Incorrect username or password</b>
-                    <b id="user-not-enabled-message" hidden={true} style={{color: "red"}}>You must verify your account</b>
-                    <b id="no-username-message" hidden={true} style={{color: "red"}}>You must enter a username</b>
-                    <b id="no-password-message" hidden={true} style={{color: "red"}}>You must enter a password</b>
+                    <b id="error-message" hidden={true} style={{color: "red"}}>{errorMessage}</b>
                 </div>
                 <form id="login-form" className="login-form">
                     <label htmlFor="username">Username:</label><br />
