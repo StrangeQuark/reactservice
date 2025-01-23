@@ -98,9 +98,6 @@ export default class UserRegisterForm extends React.Component {
                         }
 
                         var requestSuccessDiv = document.getElementById('request-success-div')
-                            //Save the JWT token to the cookies
-                            document.cookie = "refresh_token=" + data.jwtToken
-
                             //Show user a message that a verification email has been sent to their account
                             document.getElementById('request-success-text-field').innerHTML = "Thank you for signing up! An email has been sent to " + registerJSON.email + " with a " +
                                                                                               "confirmation link to activate your account. <a href='/login'>Click here</a> to return to the login page"
