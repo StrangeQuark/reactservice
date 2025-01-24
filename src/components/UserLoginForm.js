@@ -91,7 +91,7 @@ export default class UserLoginForm extends React.Component {
             <div id="login-div" className="login-div">
                 <h1 style={{color: "white"}}>Login</h1>
                 <div style={{height: "50px"}} >
-                    <b id="error-message" hidden={true} style={{color: "red"}}>{errorMessage}</b>
+                    {/* <b id="error-message" hidden={true} style={{color: "red"}}>{errorMessage}</b> */}
                 </div>
                 <form id="login-form" className="login-form">
                     <label htmlFor="username">Username:</label><br />

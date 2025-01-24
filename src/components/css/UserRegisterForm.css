@@ -2,18 +2,27 @@
 
 .register-div {
   border-radius: 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
   background-color: #282c34;
-  padding: 40px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 0px 40px 20px 40px;
+  width: 20vw;
+  /* min-height: 80vh; */
+  /* max-height: 80vh; */
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 55vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+
 
 .register-form label {
   float: left;
   color: white;
+  width: 100%;
 }
 
 .register-form input {
@@ -22,6 +31,12 @@
   color: white;
   border: none;
   outline: none;
+  width: 18vw;
+  margin-top: 2vh;
+}
+
+.register-form hr {
+  margin-bottom: 5vh;
   width: 100%;
 }
 
