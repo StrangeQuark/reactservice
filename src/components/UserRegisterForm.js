@@ -1,9 +1,9 @@
 // Integration file: Auth
 
 import React, { useState } from "react";
-import "./css/UserRegisterForm.css";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
+import "./css/UserRegisterForm.css";
 
 
 const UserRegisterForm = () => {
