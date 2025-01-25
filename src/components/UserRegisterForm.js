@@ -1,11 +1,28 @@
 // Integration file: Auth
 
-import React from "react";
+import React, { useState } from "react";
 import "./css/UserRegisterForm.css";
+import { FaRegCircleXmark } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
+
 
 const UserRegisterForm = () => {
+  const[username, setUsername] = useState()
+  const[isUsernameValid, setIsUsernameValid] = useState(true)
+
+  const[isEmailValid, setIsEmailValid] = useState(true)
+
+  const[isSubmitted, setIsSubmitted] = useState(false)
 
   function registrationHandler(username, password, email, confirmPassword) {
+
+    setIsSubmitted(true)
+
+    if(username === '') {
+      setIsUsernameValid(false)
+      return
+    }
+
     var registerJSON = {"username": username, "password": password, "email": email}
 
     fetch('http://localhost:6001/auth/register', {
@@ -23,8 +40,7 @@ const UserRegisterForm = () => {
 
         if(response.status === 409) {
           //Custom error codes: 410 for username error, 401 for email error
-          // data.errorCode === 410 ? errorMessageText = 'Username already taken' : errorMessageText = 'Email already taken'
-          // errorMessage.hidden = false
+          data.errorCode === 410 ? setIsUsernameValid(false) : setIsEmailValid(false)
           return
         }
 
@@ -48,8 +64,12 @@ const UserRegisterForm = () => {
         <h1 style={{color: "white"}}>Create account</h1>
 
         <form id="register-form" className="register-form">
-          <label htmlFor="username">Username:</label><br />
-          <input type="text" id="username" name="username" placeholder="Type your username"/><hr />
+          <label htmlFor="username">Username:</label>
+          <br />
+          {isSubmitted && (isUsernameValid ? <FaCheckCircle style={{color: 'green'}}/> : <FaRegCircleXmark style={{color: 'red'}}/>)}
+          <input type="text" id="username" name="username" placeholder="Type your username" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <hr />
+
 
           <label htmlFor="email">Email:</label><br />
           <input type="text" id="email" name="email" placeholder="Type your email"/><hr />
