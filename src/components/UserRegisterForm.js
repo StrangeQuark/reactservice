@@ -50,10 +50,6 @@ const UserRegisterForm = () => {
                                                                           "confirmation link to activate your account. <a href='/login'>Click here</a> to return to the login page"
         document.getElementById('register-div').hidden = true
         requestSuccessDiv.hidden = false
-
-        //Move the request-success-div to the center of the screen once the width and height have been rendered
-        requestSuccessDiv.style.marginTop = "-" + requestSuccessDiv.offsetHeight / 2 + "px"
-        requestSuccessDiv.style.marginLeft = "-" + requestSuccessDiv.offsetWidth / 2 + "px"
       }
     ))
   }
