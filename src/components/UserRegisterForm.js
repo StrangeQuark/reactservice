@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
+import EmailUtility from "../utility/EmailUtility"
 import "./css/UserRegisterForm.css";
 
 
@@ -22,20 +23,35 @@ const UserRegisterForm = () => {
   const[isSubmitted, setIsSubmitted] = useState(false)
   const[isSuccess, setIsSuccess] = useState(false)
 
+  const[usernameErrorMessage, setUsernameErrorMessage] = useState("")
+  const[emailErrorMessage, setEmailErrorMessage] = useState("")
+  const[passwordErrorMessage, setPasswordErrorMessage] = useState("")
+  const[confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("")
+
   function registrationHandler() {
     setIsSubmitted(true)
 
     setIsUsernameValid(username !== '')
-    setIsEmailValid(email !== '')
+    setUsernameErrorMessage(username !== '' ? "" : "Username must not be blank")
+
+    setIsEmailValid(email !== ''  && EmailUtility.verifyEmailRegex(email))
+    setEmailErrorMessage(email !== '' ? "" : "Email must not be blank")
+    setEmailErrorMessage(EmailUtility.verifyEmailRegex(email) ? "" : "Not a valid email")
+
     setIsPasswordValid(password !== '')
+    setPasswordErrorMessage(password !== '' ? "" : "Password must not be blank")
+
     setIsConfirmPasswordValid(confirmPassword !== '' && confirmPassword === password)
+    setConfirmPasswordErrorMessage(confirmPassword !== '' ? "" : "Confirmation password must not be blank")
+    setConfirmPasswordErrorMessage(confirmPassword === password ? "" : "Passwords must match")
 
     const isFormValid =
       username !== '' &&
       email !== '' &&
       password !== '' &&
       confirmPassword !== '' &&
-      confirmPassword === password;
+      confirmPassword === password &&
+      EmailUtility.verifyEmailRegex(email);
 
     if (!isFormValid)
       return;
@@ -55,8 +71,10 @@ const UserRegisterForm = () => {
             const data = await response.json().catch(() => ({}));
             if (data.errorCode === 410) {
               setIsUsernameValid(false);
+              setUsernameErrorMessage("Username is already taken")
             } else if (data.errorCode === 401) {
               setIsEmailValid(false);
+              setEmailErrorMessage("Email is already taken")
             }
           }
         } else {
@@ -78,27 +96,27 @@ const UserRegisterForm = () => {
         <form id="register-form" className="register-form">
           <label htmlFor="username">Username:</label>
           <br />
-          {isSubmitted && (isUsernameValid ? <FaCheckCircle style={{color: 'green'}}/> : <FaRegCircleXmark style={{color: 'red'}}/>)}
-          <input type="text" id="username" name="username" placeholder="Type your username" value={username} onChange={(e) => setUsername(e.target.value)} />
+          {isSubmitted && (isUsernameValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={usernameErrorMessage} className="circle-x-mark"/>)}
+          <input type="text" id="username" name="username" placeholder="Type your username" spellCheck="false" value={username} onChange={(e) => setUsername(e.target.value)} />
           <hr />
 
 
           <label htmlFor="email">Email:</label>
           <br />
-          {isSubmitted && (isEmailValid ? <FaCheckCircle style={{color: 'green'}}/> : <FaRegCircleXmark style={{color: 'red'}}/>)}
-          <input type="text" id="email" name="email" placeholder="Type your email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+          {isSubmitted && (isEmailValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={emailErrorMessage} className="circle-x-mark"/>)}
+          <input type="text" id="email" name="email" placeholder="Type your email" spellCheck="false" value={email} onChange={(e) => setEmail(e.target.value)}/>
           <hr />
 
           <label htmlFor="password">Password:</label>
           <br />
-          {isSubmitted && (isPasswordValid ? <FaCheckCircle style={{color: 'green'}}/> : <FaRegCircleXmark style={{color: 'red'}}/>)}
-          <input type="password" id="password" name="password" placeholder="Type your password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+          {isSubmitted && (isPasswordValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={passwordErrorMessage} className="circle-x-mark"/>)}
+          <input type="password" id="password" name="password" placeholder="Type your password" spellCheck="false" value={password} onChange={(e) => setPassword(e.target.value)}/>
           <hr />
 
           <label htmlFor="confirm-password">Confirm password:</label>
           <br />
-          {isSubmitted && (isConfirmPasswordValid ? <FaCheckCircle style={{color: 'green'}}/> : <FaRegCircleXmark style={{color: 'red'}}/>)}
-          <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+          {isSubmitted && (isConfirmPasswordValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={confirmPasswordErrorMessage} className="circle-x-mark"/>)}
+          <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" spellCheck="false" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
           <hr />
         </form>
 
