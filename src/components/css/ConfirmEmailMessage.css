@@ -3,13 +3,19 @@ Integration file: Auth */
 
 .message-div {
   border-radius: 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
   background-color: #282c34;
   padding: 40px;
   padding-top: 20px;
   padding-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .message-div p {
