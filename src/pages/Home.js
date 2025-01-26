@@ -1,6 +1,7 @@
 import React from 'react';
 import Toolbar from './../components/Toolbar';
-function Home() {
+
+const Home = () => {
     return(
         <>
             <Toolbar />
