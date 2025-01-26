@@ -14,6 +14,7 @@ input[data-autocompleted] {
   background-color: #282c34;
   padding: 0px 40px 20px 40px;
   width: 14vw;
+  min-width: 230px;
   
   display: flex;
   flex-direction: column;
@@ -27,6 +28,7 @@ input[data-autocompleted] {
 
 .register-form {
   width: 12vw;
+  min-width: 200px;
 }
 
 .register-form label {
@@ -62,23 +64,43 @@ input[data-autocompleted] {
   padding: 40px;
   padding-top: 20px;
   padding-bottom: 20px;
-
+  font-size: x-large;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 55vh;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
+  min-height: 200px; /* Ensure the height is never too small */
+  min-width: 250px;  /* Ensure the width is never too small */
+  width: 24vw;
+  height: auto;
+  box-sizing: border-box; /* Include padding in the width/height calculation */
 }
 
 .request-div p {
   color: white;
+  text-align: center; /* Ensure the text is centered within the paragraph */
+  margin: 3vh 0; /* Add spacing between the paragraphs */
 }
+
 
 .request-div a {
   color: white;
+}
+
+.check-circle,
+.circle-x-mark {
+  position: absolute;
+  left: -25px; /* Position the icons to the left */
+  top: 85%;
+  transform: translateY(-50%); /* Vertically center the icons */
+  font-size: 20px; /* Ensure the icon has a consistent size */
+  z-index: 1; /* Ensure the icon is above the input */
 }
 
 .check-circle {
@@ -87,4 +109,9 @@ input[data-autocompleted] {
 
 .circle-x-mark {
   color: red;
+}
+
+.register-form .input-container {
+  position: relative; /* Position icons relative to this container */
+  width: 100%;
 }
