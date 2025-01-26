@@ -75,17 +75,17 @@ input[data-autocompleted] {
   left: 50%;
   transform: translate(-50%, -50%);
   
-  min-height: 200px; /* Ensure the height is never too small */
-  min-width: 250px;  /* Ensure the width is never too small */
+  min-height: 200px;
+  min-width: 250px;
   width: 24vw;
   height: auto;
-  box-sizing: border-box; /* Include padding in the width/height calculation */
+  box-sizing: border-box;
 }
 
 .request-div p {
   color: white;
-  text-align: center; /* Ensure the text is centered within the paragraph */
-  margin: 3vh 0; /* Add spacing between the paragraphs */
+  text-align: center;
+  margin: 3vh 0;
 }
 
 
@@ -96,11 +96,11 @@ input[data-autocompleted] {
 .check-circle,
 .circle-x-mark {
   position: absolute;
-  left: -25px; /* Position the icons to the left */
+  left: -25px;
   top: 85%;
-  transform: translateY(-50%); /* Vertically center the icons */
-  font-size: 20px; /* Ensure the icon has a consistent size */
-  z-index: 1; /* Ensure the icon is above the input */
+  transform: translateY(-50%);
+  font-size: 20px;
+  z-index: 1;
 }
 
 .check-circle {
@@ -112,6 +112,6 @@ input[data-autocompleted] {
 }
 
 .register-form .input-container {
-  position: relative; /* Position icons relative to this container */
+  position: relative;
   width: 100%;
 }
