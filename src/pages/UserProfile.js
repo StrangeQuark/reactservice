@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Toolbar from './../components/Toolbar';
 
-function UserProfile() {
+const UserProfile = () => {
     // const params = useParams()
 
     const jwtToken = document.cookie.split("; ").find((row) => row.startsWith("refresh_token="))?.split("=")[1]

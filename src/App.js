@@ -7,7 +7,7 @@ import ResetPasswordSearch from './pages/ResetPasswordSearch'; // Integration li
 import ConfirmEmail from './pages/ConfirmEmail'; // Integration line: Auth - Integration line: Email
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
         <BrowserRouter>
           <Routes>

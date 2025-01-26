@@ -1,14 +1,5 @@
 /* Integration file: Auth */
 
-/* For hiding the background of autocomplete entries */
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s;
-}
-input[data-autocompleted] {
-    background-color: transparent !important;
-}
-
 .register-div {
   border-radius: 20px;
   background-color: #282c34;
