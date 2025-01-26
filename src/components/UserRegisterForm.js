@@ -95,28 +95,31 @@ const UserRegisterForm = () => {
 
         <form id="register-form" className="register-form">
           <label htmlFor="username">Username:</label>
-          <br />
-          {isSubmitted && (isUsernameValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={usernameErrorMessage} className="circle-x-mark"/>)}
-          <input type="text" id="username" name="username" placeholder="Type your username" spellCheck="false" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <div className="input-container">
+            {isSubmitted && (isUsernameValid ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={usernameErrorMessage} className="circle-x-mark" />)}
+            <input type="text" id="username" name="username" placeholder="Type your username" spellCheck="false" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </div>
           <hr />
 
-
           <label htmlFor="email">Email:</label>
-          <br />
-          {isSubmitted && (isEmailValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={emailErrorMessage} className="circle-x-mark"/>)}
-          <input type="text" id="email" name="email" placeholder="Type your email" spellCheck="false" value={email} onChange={(e) => setEmail(e.target.value)}/>
+          <div className="input-container">
+            {isSubmitted && (isEmailValid ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={emailErrorMessage} className="circle-x-mark" />)}
+            <input type="text" id="email" name="email" placeholder="Type your email" spellCheck="false" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
           <hr />
 
           <label htmlFor="password">Password:</label>
-          <br />
-          {isSubmitted && (isPasswordValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={passwordErrorMessage} className="circle-x-mark"/>)}
-          <input type="password" id="password" name="password" placeholder="Type your password" spellCheck="false" value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <div className="input-container">
+            {isSubmitted && (isPasswordValid ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={passwordErrorMessage} className="circle-x-mark" />)}
+            <input type="password" id="password" name="password" placeholder="Type your password" spellCheck="false" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
           <hr />
 
           <label htmlFor="confirm-password">Confirm password:</label>
-          <br />
-          {isSubmitted && (isConfirmPasswordValid ? <FaCheckCircle className="check-circle"/> : <FaRegCircleXmark title={confirmPasswordErrorMessage} className="circle-x-mark"/>)}
-          <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" spellCheck="false" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+          <div className="input-container">
+            {isSubmitted && (isConfirmPasswordValid ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={confirmPasswordErrorMessage} className="circle-x-mark" />)}
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" spellCheck="false" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          </div>
           <hr />
         </form>
 
@@ -125,7 +128,10 @@ const UserRegisterForm = () => {
 
       {isSuccess && (<div id="request-success-div" className="request-div">
         <p id="request-success-text-field">
-          Thank you for signing up! An email has been sent to {email} with a confirmation link to activate your account. <a href="/login">Click here</a> to return to the login page.
+          Thank you for signing up! An email has been sent to {email} with a confirmation link to activate your account.
+        </p>
+        <p>
+          <a href="/login">Click here</a> to return to the login page.
         </p>
       </div>)}
     </>

@@ -14,6 +14,7 @@ input[data-autocompleted] {
   background-color: #282c34;
   padding: 0px 40px 20px 40px;
   width: 14vw;
+  min-width: 230px;
   
   display: flex;
   flex-direction: column;
@@ -27,6 +28,7 @@ input[data-autocompleted] {
 
 .register-form {
   width: 12vw;
+  min-width: 200px;
 }
 
 .register-form label {
@@ -62,23 +64,43 @@ input[data-autocompleted] {
   padding: 40px;
   padding-top: 20px;
   padding-bottom: 20px;
-
+  font-size: x-large;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 55vh;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
+  min-height: 200px;
+  min-width: 250px;
+  width: 24vw;
+  height: auto;
+  box-sizing: border-box;
 }
 
 .request-div p {
   color: white;
+  text-align: center;
+  margin: 3vh 0;
 }
+
 
 .request-div a {
   color: white;
+}
+
+.check-circle,
+.circle-x-mark {
+  position: absolute;
+  left: -25px;
+  top: 85%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  z-index: 1;
 }
 
 .check-circle {
@@ -87,4 +109,9 @@ input[data-autocompleted] {
 
 .circle-x-mark {
   color: red;
+}
+
+.register-form .input-container {
+  position: relative;
+  width: 100%;
 }
