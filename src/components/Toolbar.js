@@ -5,7 +5,7 @@ import { IoMdSettings } from "react-icons/io";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { GiHamburgerMenu } from "react-icons/gi";
 
-function Toolbar() {
+const Toolbar = () => {
     var username = null
     var localUsername = localStorage.getItem('username')
     var sessionUsername = sessionStorage.getItem('username')
