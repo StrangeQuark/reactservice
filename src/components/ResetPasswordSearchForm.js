@@ -2,7 +2,7 @@
 // Integration file: Auth
 
 import React from "react";
-import "./css/ResetPassword.css";
+import "./css/ResetPasswordSearchForm.css";
 
 export default class ResetPasswordSearchForm extends React.Component {
     async componentDidMount() {

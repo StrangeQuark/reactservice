@@ -1,7 +1,7 @@
 // Integration file: Email
 
 import React from "react";
-import "./css/ResetPassword.css";
+import "./css/ResetPasswordForm.css";
 
 export default class ResetPasswordSearchForm extends React.Component {
     async componentDidMount() {
