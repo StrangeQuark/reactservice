@@ -94,15 +94,15 @@ export default class ResetPasswordSearchForm extends React.Component {
 
         return(
             <>
-            <div id="request-div" className="request-div">
-                <h1 style={{color: "white"}}>New password</h1>
+            <div id="request-div" className="auth-div">
+                <h1>New password</h1>
                 <div id="nonmatching-password-message-div" style={{height: "100px"}} >
                     <b id="nonmatching-password-message" hidden={true} style={{color: "red"}}>Your passwords do not match</b>
                     <b id="no-password-message" hidden={true} style={{color: "red"}}>You must enter a password</b>
                     <b id="token-already-confirmed" hidden={true} style={{color: "red"}}>This token has already been confirmed</b>
                     <b id="token-not-found" hidden={true} style={{color: "red"}}>Token not found</b>
                 </div>
-                <form id="request-form" className="request-form">
+                <form id="request-form">
                     <label htmlFor="password">New password:</label><br />
                     <div style={{height: "20px"}} />
                     <input type="password" id="password" name="password" placeholder="Type your password"/><hr />
@@ -112,9 +112,9 @@ export default class ResetPasswordSearchForm extends React.Component {
                     <div style={{height: "20px"}} />
                     <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password"/><hr />
                 </form>
-                <button className="submit-button" id='submit-button' onClick={() => requestHandler()}>SUBMIT</button>
+                <button id='submit-button' onClick={() => requestHandler()}>SUBMIT</button>
             </div>
-            <div id="request-success-div" className="request-div" hidden={true}>
+            <div id="request-success-div" className="auth-div" hidden={true}>
                 <p id="request-success-text-field"></p>
             </div>
             </>
