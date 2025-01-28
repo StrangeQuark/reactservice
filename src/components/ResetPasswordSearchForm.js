@@ -36,7 +36,7 @@ const ResetPasswordSearchForm = () => {
     return(
         <>
         {!isSuccess && (<div id="request-div" className="req-div">
-            <h1 style={{color: "white"}}>Reset password</h1>
+            <h1>Reset password</h1>
             <div id="no-credentials-message-div" className="no-credentials-message-div" >
                 {isError && (<b id="no-credentials-message">Sorry, we could not find your account</b>)}
             </div>
