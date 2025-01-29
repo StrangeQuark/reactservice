@@ -22,7 +22,7 @@ const ConfirmEmailMessage = () => {
     return(
         <>
             {message && (
-            <div id="message-div" className="message-div">
+            <div id="message-div" className="auth-div">
                 <p id="message-text-field">{message}</p>
             </div>
             )}

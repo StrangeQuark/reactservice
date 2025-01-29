@@ -1,9 +1,9 @@
 /* Integration file: Auth */
 
 .auth-help-div {
-  display: flex; /* Enables flexbox */
-  justify-content: space-between; /* Pushes children to the far edges */
-  align-items: center; /* Ensures vertical alignment (if needed) */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin-top: 4vh;
 }
