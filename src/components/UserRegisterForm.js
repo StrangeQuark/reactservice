@@ -1,10 +1,10 @@
 // Integration file: Auth
 
-import React, { useState } from "react";
-import { FaRegCircleXmark } from "react-icons/fa6";
-import { FaCheckCircle } from "react-icons/fa";
+import React, { useState } from "react"
+import { FaRegCircleXmark } from "react-icons/fa6"
+import { FaCheckCircle } from "react-icons/fa"
 import EmailUtility from "../utility/EmailUtility"
-import "./css/UserRegisterForm.css";
+import "./css/UserRegisterForm.css"
 
 
 const UserRegisterForm = () => {
@@ -51,10 +51,10 @@ const UserRegisterForm = () => {
       password !== '' &&
       confirmPassword !== '' &&
       confirmPassword === password &&
-      EmailUtility.verifyEmailRegex(email);
+      EmailUtility.verifyEmailRegex(email)
 
     if (!isFormValid)
-      return;
+      return
 
     var registerJSON = {"username": username, "password": password, "email": email}
 
@@ -68,23 +68,22 @@ const UserRegisterForm = () => {
       .then(async (response) => {
         if (!response.ok) {
           if (response.status === 409) {
-            const data = await response.json().catch(() => ({}));
+            const data = await response.json().catch(() => ({}))
             if (data.errorCode === 410) {
-              setIsUsernameValid(false);
+              setIsUsernameValid(false)
               setUsernameErrorMessage("Username is already taken")
             } else if (data.errorCode === 401) {
-              setIsEmailValid(false);
+              setIsEmailValid(false)
               setEmailErrorMessage("Email is already taken")
             }
           }
         } else {
-          const data = await response.json();
-          setIsSuccess(true);
+          setIsSuccess(true)
         }
       })
       .catch((error) => {
-        console.error('Network error or unexpected issue:', error);
-      });
+        console.error('Network error or unexpected issue:', error)
+      })
     
   }
 
@@ -138,4 +137,4 @@ const UserRegisterForm = () => {
   )
 }
 
-export default UserRegisterForm;
+export default UserRegisterForm

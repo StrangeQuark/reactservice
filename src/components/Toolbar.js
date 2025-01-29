@@ -1,9 +1,9 @@
-import React from "react";
-import "./css/Toolbar.css";
+import React from "react"
+import "./css/Toolbar.css"
 import logo from "../res/logo.png"
-import { IoMdSettings } from "react-icons/io";
-import { RiLoginCircleLine } from "react-icons/ri";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { IoMdSettings } from "react-icons/io"
+import { RiLoginCircleLine } from "react-icons/ri"
+import { GiHamburgerMenu } from "react-icons/gi"
 
 const Toolbar = () => {
     var username = null
@@ -63,7 +63,7 @@ const Toolbar = () => {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Toolbar;
+export default Toolbar

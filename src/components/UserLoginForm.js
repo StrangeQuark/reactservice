@@ -1,7 +1,7 @@
 // Integration file: Auth
 
-import React, { useState } from "react";
-import "./css/UserLoginForm.css";
+import React, { useState } from "react"
+import "./css/UserLoginForm.css"
 
 const UserLoginForm = () => {
     const[username, setUsername] = useState("")
@@ -50,7 +50,7 @@ const UserLoginForm = () => {
     return(
         <div id="login-div" className="auth-div">
             <h1>Login</h1>
-            <div style={{height: "50px"}} >
+            <div className="error-div" >
                 {errorMessage && (<b id="error-message">{errorMessage}</b>)}
             </div>
             <form id="login-form">

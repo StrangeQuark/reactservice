@@ -1,8 +1,8 @@
 // Integration file: Email
 // Integration file: Auth
 
-import React, { useState } from "react";
-import "./css/ResetPasswordSearchForm.css";
+import React, { useState } from "react"
+import "./css/ResetPasswordSearchForm.css"
 
 const ResetPasswordSearchForm = () => {
     const[credentials, setCredentials] = useState("")
@@ -37,7 +37,7 @@ const ResetPasswordSearchForm = () => {
         <>
         {!isSuccess && (<div id="request-div" className="auth-div">
             <h1>Reset password</h1>
-            <div id="no-credentials-message-div" className="no-credentials-message-div" >
+            <div className="error-div" >
                 {isError && (<b id="no-credentials-message">Sorry, we could not find your account</b>)}
             </div>
             <form id="request-form">
@@ -54,4 +54,4 @@ const ResetPasswordSearchForm = () => {
     )
 }
 
-export default ResetPasswordSearchForm;
+export default ResetPasswordSearchForm
