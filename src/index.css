@@ -41,6 +41,13 @@ input[data-autocompleted] {
 .auth-div b {
   text-align: center;
   margin: 3vh 0;
+  color: red;
+  font-size: large;
+}
+
+.auth-div p {
+  text-align: center;
+  color: white;
 }
 
 .auth-div form {
@@ -62,8 +69,6 @@ input[data-autocompleted] {
 }
 
 .auth-div a {
-  /* float: right; */
-  font-size: small;
   color: white;
   text-decoration: none;
 }
@@ -88,4 +93,9 @@ input[data-autocompleted] {
   border-radius: 30px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.error-div {
+  height: 100px;
+  display: flex;
 }

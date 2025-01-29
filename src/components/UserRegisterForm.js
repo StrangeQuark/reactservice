@@ -78,7 +78,6 @@ const UserRegisterForm = () => {
             }
           }
         } else {
-          const data = await response.json()
           setIsSuccess(true)
         }
       })
