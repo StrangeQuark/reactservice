@@ -1,7 +1,7 @@
 // Integration file: Auth
 
-import React, { useState } from "react";
-import "./css/UserLoginForm.css";
+import React, { useState } from "react"
+import "./css/UserLoginForm.css"
 
 const UserLoginForm = () => {
     const[username, setUsername] = useState("")
