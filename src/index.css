@@ -20,3 +20,72 @@ input:-webkit-autofill:focus {
 input[data-autocompleted] {
     background-color: transparent !important;
 }
+
+.auth-div {
+  border-radius: 20px;
+  background-color: #282c34;
+  padding: 20px 40px 20px 40px;
+  width: 14vw;
+  min-width: 230px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 55vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.auth-div b {
+  text-align: center;
+  margin: 3vh 0;
+}
+
+.auth-div form {
+  width: 12vw;
+  min-width: 200px;
+}
+
+.auth-div hr {
+  margin-bottom: 5vh;
+  width: 100%;
+}
+
+.auth-div h1 {
+  color: white;
+}
+
+.auth-div h4 {
+  color: white;
+}
+
+.auth-div a {
+  /* float: right; */
+  font-size: small;
+  color: white;
+  text-decoration: none;
+}
+
+.auth-div label {
+  float: left;
+  color: white;
+  width: 100%;
+}
+
+.auth-div input {
+  position: relative;
+  background-color: transparent;
+  color: white;
+  border: none;
+  outline: none;
+  margin-top: 2vh;
+}
+
+.auth-div button {
+  width: 100%;
+  border-radius: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

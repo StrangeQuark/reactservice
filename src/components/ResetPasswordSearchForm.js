@@ -35,19 +35,19 @@ const ResetPasswordSearchForm = () => {
 
     return(
         <>
-        {!isSuccess && (<div id="request-div" className="req-div">
-            <h1 style={{color: "white"}}>Reset password</h1>
+        {!isSuccess && (<div id="request-div" className="auth-div">
+            <h1>Reset password</h1>
             <div id="no-credentials-message-div" className="no-credentials-message-div" >
                 {isError && (<b id="no-credentials-message">Sorry, we could not find your account</b>)}
             </div>
-            <form id="request-form" className="req-form">
+            <form id="request-form">
                 <label htmlFor="credentials">Username or email:</label><br />
                 <input type="text" id="credentials" name="credentials" placeholder="Type your username or email" value={credentials} onChange={(e) => setCredentials(e.target.value)}/>
                 <hr />
             </form>
-            <button className="submit-button" id='submit-button' onClick={() => requestHandler()}>SUBMIT</button>
+            <button id='submit-button' onClick={() => requestHandler()}>SUBMIT</button>
         </div>)}
-        {isSuccess && (<div id="request-success-div" className="req-div">
+        {isSuccess && (<div id="request-success-div" className="auth-div">
             <p id="request-success-text-field">Please check your email for a password reset link</p>
         </div>)}
         </>
