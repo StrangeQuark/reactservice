@@ -5,11 +5,7 @@ const Home = () => {
     return(
         <>
             <Toolbar />
-
-            <div id="spacer-div" style={{height: "50px"}}></div>
-
-            
-            </>
+        </>
     )
 }
 
