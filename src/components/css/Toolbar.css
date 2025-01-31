@@ -1,8 +1,6 @@
 .Toolbar {
   width: 100%;
   /* background-color: #282c34; */
-  overflow: auto;
-  /* height: 80px; */
   border-bottom: 1px solid lightgrey;
   position: relative;
   height: 6vh;
@@ -19,17 +17,17 @@
 
 .Toolbar img {
   cursor: pointer;
-  width: 8%;
+  height: 5vh;
   padding: 0 1em;
 }
 
 .center-popout-container {
   background-color: #14161a;
   border: black;
-  width: 40%;
+  width: 50%;
   position: fixed;
   right: 3%;
-  top: 60px;
+  top: 6vh;
   z-index: 10;
 }
 
@@ -65,24 +63,24 @@
 
 .Toolbar svg {
   cursor: pointer;
-  padding: 0 1em;
+  padding: 0 0.6em;
 }
 
 .Toolbar input {
   border-radius: 5px;
-  font-size: 15px;
-  padding: 1em 1em;
+  font-size: 12px;
+  height: 4vh;
 }
 
 .Toolbar select {
   cursor: pointer;
-  border: none;
+  /* border: none; */
   font-size: 15px;
-  max-width: 75%;
+  max-width: 50%;
   color: #595959;
   font-weight: 1000;
   text-decoration: none;
-  /* padding: 0 2em; */
+  height: 6vh;
 }
 
 .option {

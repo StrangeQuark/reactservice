@@ -1,29 +1,31 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { IoMdSettings } from "react-icons/io"
 import { RiLoginCircleLine } from "react-icons/ri"
 import { GiHamburgerMenu } from "react-icons/gi"
+import { verifyRefreshToken, getUsernameFromJWT } from "../utility/AuthUtility"
 
 const Toolbar = () => {
-    var username = null
-    var localUsername = localStorage.getItem('username')
-    var sessionUsername = sessionStorage.getItem('username')
+    const [displayPopout, setDisplayPopout] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [username, setUsername] = useState("")
 
-    if(localUsername != null) {
-        username = localUsername
-    }
-    if(sessionUsername != null) {
-        username = sessionUsername
-    }
-
-    function displayPopout() {
-        document.getElementById('user-popout-container').hidden = !document.getElementById('user-popout-container').hidden
-    }
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isValid = await verifyRefreshToken()
+            if (isValid) {
+                setIsLoggedIn(true)
+                setUsername(getUsernameFromJWT())
+            }
+        }
+    
+        checkAuth()
+    }, [])
+    
 
     function logout() {
-        localStorage.clear()
-        sessionStorage.clear()
+        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href="/"
     }
 
@@ -38,29 +40,25 @@ const Toolbar = () => {
     return (
         <div className="Toolbar">
             <div className="left-div">
-                <GiHamburgerMenu size={"3%"}/>
+                <GiHamburgerMenu size={"1em"}/>
                 <img src={ logo } />
                 <select>
-                    <option className="option">Project 1</option>
-                    <option className="option">Super long Project 2</option>
-                    <option className="option">Project 3</option>
-                    <option className="option">Project 4</option>
+                    <option className="option">Dropdown</option>
+                    <option className="option">Very very long dropdown option</option>
                 </select>
             </div>
             <div className="center-div">
                 <a href="/">Home</a>
-                <a href="/backlog">Backlog</a>
-                <a href="/reports">Reports</a>
             </div>
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" />
                 <IoMdSettings size={"2em"}/>
-                { (username === null) ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <a id="userButton" onClick={displayPopout}>{username}</a> }
-                <div id='center-popout-container' className="center-popout-container" hidden={true}>
+                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <a id="userButton" onClick={() => setDisplayPopout(!displayPopout)}>{username}</a> }
+                {displayPopout && (<div id='center-popout-container' className="center-popout-container">
                     <button onClick={() => {navigateToUserProfile()}}>Profile</button>
                     <button>Settings</button>
                     <button onClick={() => {logout()}}>Logout</button>
-                </div>
+                </div>)}
             </div>
         </div>
     )
