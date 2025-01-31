@@ -1,23 +1,31 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { IoMdSettings } from "react-icons/io"
 import { RiLoginCircleLine } from "react-icons/ri"
 import { GiHamburgerMenu } from "react-icons/gi"
+import { verifyRefreshToken, getUsernameFromJWT } from "../utility/AuthUtility"
 
 const Toolbar = () => {
     const [displayPopout, setDisplayPopout] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [username, setUsername] = useState("")
 
-    var username = null
-    var localUsername = localStorage.getItem('username')
-
-    if(localUsername != null) {
-        username = localUsername
-    }
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isValid = await verifyRefreshToken()
+            if (isValid) {
+                setIsLoggedIn(true)
+                setUsername(getUsernameFromJWT())
+            }
+        }
+    
+        checkAuth()
+    }, [])
+    
 
     function logout() {
-        localStorage.clear()
-        sessionStorage.clear()
+        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href="/"
     }
 
@@ -45,7 +53,7 @@ const Toolbar = () => {
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" />
                 <IoMdSettings size={"2em"}/>
-                { (username === null) ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <a id="userButton" onClick={() => setDisplayPopout(!displayPopout)}>{username}</a> }
+                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <a id="userButton" onClick={() => setDisplayPopout(!displayPopout)}>{username}</a> }
                 {displayPopout && (<div id='center-popout-container' className="center-popout-container">
                     <button onClick={() => {navigateToUserProfile()}}>Profile</button>
                     <button>Settings</button>
