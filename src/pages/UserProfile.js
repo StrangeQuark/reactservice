@@ -1,6 +1,6 @@
 // Integration file: Auth
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { verifyRefreshToken } from "../utility/AuthUtility";
 import Toolbar from './../components/Toolbar';
 

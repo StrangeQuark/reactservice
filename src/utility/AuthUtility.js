@@ -1,3 +1,5 @@
+/* Integration file: Auth */
+
 export const verifyRefreshToken = async () => {
     const jwtToken = document.cookie.split("; ").find((row) => row.startsWith("refresh_token="))?.split("=")[1]
 
