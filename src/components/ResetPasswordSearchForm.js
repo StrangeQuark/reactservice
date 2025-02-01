@@ -9,7 +9,13 @@ const ResetPasswordSearchForm = () => {
     const[isError, setIsError] = useState(false)
     const[isSuccess, setIsSuccess] = useState(false)
 
-    function requestHandler() {
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            requestHandler()
+        }
+    }
+
+    const requestHandler = () => {
         var credentialsJson = {"credentials": credentials}
 
         //If the user enters nothing, do nothing
@@ -40,7 +46,7 @@ const ResetPasswordSearchForm = () => {
             <div className="error-div" >
                 {isError && (<b id="no-credentials-message">Sorry, we could not find your account</b>)}
             </div>
-            <form id="request-form">
+            <form id="request-form" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="credentials">Username or email:</label><br />
                 <input type="text" id="credentials" name="credentials" placeholder="Type your username or email" value={credentials} onChange={(e) => setCredentials(e.target.value)}/>
                 <hr />

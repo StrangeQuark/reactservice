@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
 import { FaCheckCircle } from "react-icons/fa"
-import EmailUtility from "../utility/EmailUtility"
+import { verifyEmailRegex } from "../utility/EmailUtility"
 import "./css/UserRegisterForm.css"
 
 
@@ -28,15 +28,21 @@ const UserRegisterForm = () => {
   const[passwordErrorMessage, setPasswordErrorMessage] = useState("")
   const[confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("")
 
-  function registrationHandler() {
+  const handleKeyDown = (event) => {
+      if (event.key === "Enter") {
+          requestHandler()
+      }
+  }
+
+  const requestHandler = () => {
     setIsSubmitted(true)
 
     setIsUsernameValid(username !== '')
     setUsernameErrorMessage(username !== '' ? "" : "Username must not be blank")
 
-    setIsEmailValid(email !== ''  && EmailUtility.verifyEmailRegex(email))
+    setIsEmailValid(email !== ''  && verifyEmailRegex(email))
     setEmailErrorMessage(email !== '' ? "" : "Email must not be blank")
-    setEmailErrorMessage(EmailUtility.verifyEmailRegex(email) ? "" : "Not a valid email")
+    setEmailErrorMessage(verifyEmailRegex(email) ? "" : "Not a valid email")
 
     setIsPasswordValid(password !== '')
     setPasswordErrorMessage(password !== '' ? "" : "Password must not be blank")
@@ -51,7 +57,7 @@ const UserRegisterForm = () => {
       password !== '' &&
       confirmPassword !== '' &&
       confirmPassword === password &&
-      EmailUtility.verifyEmailRegex(email)
+      verifyEmailRegex(email)
 
     if (!isFormValid)
       return
@@ -92,7 +98,7 @@ const UserRegisterForm = () => {
       {!isSuccess && (<div id="register-div" className="auth-div">
         <h1>Create account</h1>
 
-        <form id="register-form" className="register-form">
+        <form id="register-form" className="register-form" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}>
           <label htmlFor="username">Username:</label>
           <div>
             {isSubmitted && (isUsernameValid ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={usernameErrorMessage} className="circle-x-mark" />)}
@@ -122,7 +128,7 @@ const UserRegisterForm = () => {
           <hr />
         </form>
 
-        <button id='submit-button' onClick={() => registrationHandler()}>SIGN UP</button>
+        <button id='submit-button' onClick={() => requestHandler()}>SIGN UP</button>
       </div>)}
 
       {isSuccess && (<div id="request-success-div" className="auth-div">

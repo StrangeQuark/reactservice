@@ -18,7 +18,7 @@
 .Toolbar img {
   cursor: pointer;
   height: 5vh;
-  padding: 0 1em;
+  padding: 0 1vw;
 }
 
 .center-popout-container {
@@ -63,13 +63,14 @@
 
 .Toolbar svg {
   cursor: pointer;
-  padding: 0 0.6em;
+  padding: 0 1vw;
 }
 
 .Toolbar input {
   border-radius: 5px;
   font-size: 12px;
   height: 4vh;
+  width: 10vw;
 }
 
 .Toolbar select {
