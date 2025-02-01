@@ -10,6 +10,12 @@ const ResetPasswordForm = () => {
     const[password, setPassword] = useState("")
     const[confirmationPassword, setConfirmationPassword] = useState("")
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            requestHandler()
+        }
+    }
+
     function requestHandler() {
         //Get the search params
         const query = window.location.search
@@ -50,7 +56,7 @@ const ResetPasswordForm = () => {
             <div className="error-div">
                 {isError && (<b id="nonmatching-password-message">{errorMessage}</b>)}
             </div>
-            <form id="request-form">
+            <form id="request-form" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="password">New password:</label>
                 <br />
                 <input type="password" id="password" name="password" placeholder="Type your password" value={password} onChange={(e) => setPassword(e.target.value)}/>

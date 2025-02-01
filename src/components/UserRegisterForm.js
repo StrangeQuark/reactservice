@@ -28,7 +28,13 @@ const UserRegisterForm = () => {
   const[passwordErrorMessage, setPasswordErrorMessage] = useState("")
   const[confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("")
 
-  function registrationHandler() {
+  const handleKeyDown = (event) => {
+      if (event.key === "Enter") {
+          requestHandler()
+      }
+  }
+
+  function requestHandler() {
     setIsSubmitted(true)
 
     setIsUsernameValid(username !== '')
@@ -92,7 +98,7 @@ const UserRegisterForm = () => {
       {!isSuccess && (<div id="register-div" className="auth-div">
         <h1>Create account</h1>
 
-        <form id="register-form" className="register-form">
+        <form id="register-form" className="register-form" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}>
           <label htmlFor="username">Username:</label>
           <div>
             {isSubmitted && (isUsernameValid ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={usernameErrorMessage} className="circle-x-mark" />)}
@@ -122,7 +128,7 @@ const UserRegisterForm = () => {
           <hr />
         </form>
 
-        <button id='submit-button' onClick={() => registrationHandler()}>SIGN UP</button>
+        <button id='submit-button' onClick={() => requestHandler()}>SIGN UP</button>
       </div>)}
 
       {isSuccess && (<div id="request-success-div" className="auth-div">

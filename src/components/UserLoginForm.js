@@ -8,7 +8,13 @@ const UserLoginForm = () => {
     const[password, setPassword] = useState("")
     const[errorMessage, setErrorMessage] = useState("")
 
-    function loginHandler() {
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            requestHandler()
+        }
+    }
+
+    const requestHandler = () => {
         //JWT 
         var loginJSON = {"username": username, "password": password}
 
@@ -53,7 +59,7 @@ const UserLoginForm = () => {
             <div className="error-div" >
                 {errorMessage && (<b id="error-message">{errorMessage}</b>)}
             </div>
-            <form id="login-form">
+            <form id="login-form" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="username">Username:</label>
                 <br />
                 <input type="text" id="username" name="username" placeholder="Type your username" spellCheck="false" value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -63,7 +69,7 @@ const UserLoginForm = () => {
                 <input type="password" id="password" name="password" placeholder="Type your password" spellCheck="false" value={password} onChange={(e) => setPassword(e.target.value)}/>
                 <hr />
             </form>
-            <button id='submit-button' onClick={() => loginHandler()}>LOGIN</button>
+            <button id='submit-button' onClick={() => requestHandler()}>LOGIN</button>
             <div className="auth-help-div">
                 <a href="/password-reset">Forgot password?</a>
                 <a href="/register">Sign up</a>

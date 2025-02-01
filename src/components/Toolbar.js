@@ -22,7 +22,13 @@ const Toolbar = () => {
     
         checkAuth()
     }, [])
-    
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            // Insert search logic here
+        }
+    };
 
     function logout() {
         document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -51,7 +57,7 @@ const Toolbar = () => {
                 <a href="/">Home</a>
             </div>
             <div className="right-div">
-                <input type="text" id="searchBar" placeholder="Search" />
+                <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>
                 <IoMdSettings size={"2em"}/>
                 { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <a id="userButton" onClick={() => setDisplayPopout(!displayPopout)}>{username}</a> }
                 {displayPopout && (<div id='center-popout-container' className="center-popout-container">
