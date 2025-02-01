@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
 import { FaCheckCircle } from "react-icons/fa"
-import EmailUtility from "../utility/EmailUtility"
+import { verifyEmailRegex } from "../utility/EmailUtility"
 import "./css/UserRegisterForm.css"
 
 
@@ -34,9 +34,9 @@ const UserRegisterForm = () => {
     setIsUsernameValid(username !== '')
     setUsernameErrorMessage(username !== '' ? "" : "Username must not be blank")
 
-    setIsEmailValid(email !== ''  && EmailUtility.verifyEmailRegex(email))
+    setIsEmailValid(email !== ''  && verifyEmailRegex(email))
     setEmailErrorMessage(email !== '' ? "" : "Email must not be blank")
-    setEmailErrorMessage(EmailUtility.verifyEmailRegex(email) ? "" : "Not a valid email")
+    setEmailErrorMessage(verifyEmailRegex(email) ? "" : "Not a valid email")
 
     setIsPasswordValid(password !== '')
     setPasswordErrorMessage(password !== '' ? "" : "Password must not be blank")
@@ -51,7 +51,7 @@ const UserRegisterForm = () => {
       password !== '' &&
       confirmPassword !== '' &&
       confirmPassword === password &&
-      EmailUtility.verifyEmailRegex(email)
+      verifyEmailRegex(email)
 
     if (!isFormValid)
       return
