@@ -16,7 +16,7 @@ const ResetPasswordForm = () => {
         }
     }
 
-    function requestHandler() {
+    const requestHandler = () => {
         //Get the search params
         const query = window.location.search
         const urlParameters = new URLSearchParams(query)

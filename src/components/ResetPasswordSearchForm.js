@@ -15,7 +15,7 @@ const ResetPasswordSearchForm = () => {
         }
     }
 
-    function requestHandler() {
+    const requestHandler = () => {
         var credentialsJson = {"credentials": credentials}
 
         //If the user enters nothing, do nothing

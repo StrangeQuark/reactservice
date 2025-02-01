@@ -34,7 +34,7 @@ const UserRegisterForm = () => {
       }
   }
 
-  function requestHandler() {
+  const requestHandler = () => {
     setIsSubmitted(true)
 
     setIsUsernameValid(username !== '')
