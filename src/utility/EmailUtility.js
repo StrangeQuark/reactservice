@@ -6,5 +6,5 @@ export const verifyEmailRegex = (email) => {
   if (!email || typeof email !== 'string') {
     return false;
   }
-  return this.emailRegex.test(email);
+  return emailRegex.test(email);
 }
