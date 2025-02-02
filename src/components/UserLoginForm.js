@@ -71,8 +71,8 @@ const UserLoginForm = () => {
             </form>
             <button id='submit-button' onClick={() => requestHandler()}>LOGIN</button>
             <div className="auth-help-div">
-                <a href="/password-reset">Forgot password?</a>
-                <a href="/register">Sign up</a>
+                <a id="forgot-password-link" href="/password-reset">Forgot password?</a>
+                <a id="sign-up-link" href="/register">Sign up</a>
             </div>
         </div>
     )
