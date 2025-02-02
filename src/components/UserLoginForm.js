@@ -41,14 +41,24 @@ const UserLoginForm = () => {
                         return
                     }
 
+                    if(response.status === 409) {
+                        setErrorMessage("User is not enabled. Check your email to validate.")
+                        // setErrorMessage(
+                        // <span>
+                        //     User is not enabled. <a href="/contact-support">Click here</a> for support.
+                        // </span>
+                        // )
+                        return
+                    }
+
                     //Save the JWT token to the cookies
                     document.cookie = "refresh_token=" + data.jwtToken
 
-                    //Navigate back, or go to homepage if coming from the registration page
-                    if(!document.referrer.endsWith('/register'))
-                        window.history.back()
-                    else
-                        window.location.href="/"
+                    // //Navigate back, or go to homepage if coming from the registration page
+                    // if(!document.referrer.endsWith('/register'))
+                    //     window.history.back()
+                    // else
+                    window.location.href="/"
                 }
             ))
     }
