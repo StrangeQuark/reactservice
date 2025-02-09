@@ -1,13 +1,13 @@
 version: '1.0.0'
 
 services:
-  app:
+  react-service:
     build: .
     networks:
       - shared-network
     ports:
       - "3001:3001"
-    container_name: react-app
+    container_name: react-service
 networks:
   shared-network:
     external: true
