@@ -27,14 +27,14 @@ const Toolbar = () => {
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
-            event.preventDefault();
+            event.preventDefault()
             // Insert search logic here
         }
-    };
+    }
 
     /* Integration function start: Auth */
     const logout = () => {
-        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
         window.location.href="/"
     }
     /* Integration function end: Auth */
@@ -51,7 +51,7 @@ const Toolbar = () => {
         <div className="Toolbar">
             <div className="left-div">
                 <GiHamburgerMenu size={"1em"}/>
-                <img src={ logo } />
+                <img alt="Logo" src={ logo } />
                 <select>
                     <option className="option">Dropdown</option>
                     <option className="option">Very very long dropdown option</option>
@@ -63,7 +63,7 @@ const Toolbar = () => {
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>
                 <IoMdSettings size={"2em"}/>
-                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <a id="userButton" onClick={() => setDisplayPopout(!displayPopout)}>{username}</a> }
+                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> }
                 {/* Integration function start: Auth */
                 displayPopout && (<div id='center-popout-container' className="center-popout-container">
                     <button onClick={() => {navigateToUserProfile()}}>Profile</button>

@@ -1,26 +1,31 @@
-import Home from './pages/Home';
-import Login from './pages/Login'; // Integration line: Auth
-import Register from './pages/Register'; // Integration line: Auth
-import UserProfile from './pages/UserProfile'; // Integration line: Auth
-import ResetPassword from './pages/ResetPassword'; // Integration line: Email
-import ResetPasswordSearch from './pages/ResetPasswordSearch'; // Integration line: Auth - Integration line: Email
-import ConfirmEmail from './pages/ConfirmEmail'; // Integration line: Auth - Integration line: Email
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import Home from './pages/Home'
+import Login from './pages/Login' // Integration line: Auth
+import Register from './pages/Register' // Integration line: Auth
+import UserProfile from './pages/UserProfile' // Integration line: Auth
+import ResetPassword from './pages/ResetPassword' // Integration line: Email
+import ResetPasswordSearch from './pages/ResetPasswordSearch' // Integration line: Auth - Integration line: Email
+import ConfirmEmail from './pages/ConfirmEmail' // Integration line: Auth - Integration line: Email
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+const router = createBrowserRouter(
+  [
+    { path: "/", element: <Home /> },
+    { path: "/login", element: <Login /> }, // Integration line: Auth
+    { path: "/register", element: <Register /> }, // Integration line: Auth
+    { path: "/password-reset", element: <ResetPasswordSearch /> }, // Integration line: Auth
+    { path: "/new-password", element: <ResetPassword /> }, // Integration line: Email
+    { path: "/user/:id", element: <UserProfile /> }, // Integration line: Auth - Integration line: Email
+    { path: "/confirm-email", element: <ConfirmEmail /> }, // Integration line: Auth - Integration line: Email
+  ],
+  {
+    future: {
+      v7_startTransition: true
+    },
+  }
+)
 
 const App = () => {
-  return (
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" Component={Home}/>
-            <Route path="/login" Component={Login}/> {/* Integration line: Auth */}
-            <Route path="/register" Component={Register}/> {/* Integration line: Auth */}
-            <Route path="/password-reset" Component={ResetPasswordSearch}/> {/* Integration line: Auth */}
-            <Route path="/new-password" Component={ResetPassword}/> {/* Integration line: Email */}
-            <Route path="/user/:id" Component={UserProfile} /> {/* Integration line: Auth - Integration line: Email */}
-            <Route path='/confirm-email' Component={ConfirmEmail}/> {/* Integration line: Auth - Integration line: Email */}
-          </Routes>
-        </BrowserRouter>
-  );
+  return <RouterProvider router={router} />
 }
 
-export default App;
+export default App
