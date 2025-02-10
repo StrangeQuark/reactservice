@@ -34,6 +34,7 @@
 .center-popout-container button {
   width: 100%;
   height: 50px;
+  cursor: pointer;
 }
 
 .center-div {
@@ -92,4 +93,15 @@
   font-weight: 1000;
   
   text-decoration: none;
+}
+
+.user-button {
+  cursor: pointer;
+  padding: 0 1vw;
+  color: #595959;
+  font-size: 120%;
+  font-weight: 1000;
+  height: 6vh;
+  border: none;
+  margin-right: 0.5vw;
 }
