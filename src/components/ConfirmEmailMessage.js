@@ -2,7 +2,6 @@
 // Integration file: Auth
 
 import React, { useEffect, useState } from "react"
-import "./css/ConfirmEmailMessage.css"
 
 const ConfirmEmailMessage = () => {
     const [message, setMessage] = useState()

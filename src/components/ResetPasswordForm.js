@@ -1,7 +1,6 @@
 // Integration file: Email
 
 import React, { useState } from "react"
-import "./css/ResetPasswordForm.css"
 
 const ResetPasswordForm = () => {
     const[isSuccess, setIsSuccess] = useState(false)

@@ -2,7 +2,6 @@
 // Integration file: Auth
 
 import React, { useState } from "react"
-import "./css/ResetPasswordSearchForm.css"
 
 const ResetPasswordSearchForm = () => {
     const[credentials, setCredentials] = useState("")
