@@ -32,12 +32,12 @@ export const getUsernameFromJWT = () => {
     try {
         const jwtToken = document.cookie.split("; ").find((row) => row.startsWith("refresh_token="))?.split("=")[1]
 
-        const payloadBase64 = jwtToken.split('.')[1];
-        const payloadJson = atob(payloadBase64);  // Decode Base64 to JSON string
-        const payload = JSON.parse(payloadJson);
+        const payloadBase64 = jwtToken.split('.')[1]
+        const payloadJson = atob(payloadBase64)
+        const payload = JSON.parse(payloadJson)
 
-        return payload.sub;
+        return payload.sub
     } catch (error) {
-        return null;
+        return null
     }
 }

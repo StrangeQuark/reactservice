@@ -3,7 +3,7 @@
 
 import React from 'react'
 import Toolbar from '../components/Toolbar'
-import ConfirmEmailMessage from '../components/ConfirmEmailMessage';
+import ConfirmEmailMessage from '../components/ConfirmEmailMessage'
 
 const ConfirmEmail = () => {
     return(
@@ -15,4 +15,4 @@ const ConfirmEmail = () => {
     )
 }
 
-export default ConfirmEmail;
+export default ConfirmEmail

@@ -3,7 +3,7 @@
 
 import React from 'react'
 import Toolbar from './../components/Toolbar'
-import ResetPasswordSearchForm from './../components/ResetPasswordSearchForm';
+import ResetPasswordSearchForm from './../components/ResetPasswordSearchForm'
 
 const ResetPasswordSearch = () => {
     return(
@@ -15,4 +15,4 @@ const ResetPasswordSearch = () => {
     )
 }
 
-export default ResetPasswordSearch;
+export default ResetPasswordSearch

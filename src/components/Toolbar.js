@@ -27,14 +27,14 @@ const Toolbar = () => {
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
-            event.preventDefault();
+            event.preventDefault()
             // Insert search logic here
         }
-    };
+    }
 
     /* Integration function start: Auth */
     const logout = () => {
-        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
         window.location.href="/"
     }
     /* Integration function end: Auth */

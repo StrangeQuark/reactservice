@@ -1,5 +1,5 @@
-import React from 'react';
-import Toolbar from './../components/Toolbar';
+import React from 'react'
+import Toolbar from './../components/Toolbar'
 
 const Home = () => {
     return(
@@ -9,4 +9,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Home

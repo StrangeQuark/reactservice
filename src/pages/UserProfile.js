@@ -1,8 +1,8 @@
 // Integration file: Auth
 
-import React from "react";
-import { verifyRefreshToken } from "../utility/AuthUtility";
-import Toolbar from './../components/Toolbar';
+import React from "react"
+import { verifyRefreshToken } from "../utility/AuthUtility"
+import Toolbar from './../components/Toolbar'
 
 const UserProfile = () => {
     
@@ -15,4 +15,4 @@ const UserProfile = () => {
     )
 }
 
-export default UserProfile;
+export default UserProfile

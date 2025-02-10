@@ -1,11 +1,11 @@
-import Home from './pages/Home';
-import Login from './pages/Login'; // Integration line: Auth
-import Register from './pages/Register'; // Integration line: Auth
-import UserProfile from './pages/UserProfile'; // Integration line: Auth
-import ResetPassword from './pages/ResetPassword'; // Integration line: Email
-import ResetPasswordSearch from './pages/ResetPasswordSearch'; // Integration line: Auth - Integration line: Email
-import ConfirmEmail from './pages/ConfirmEmail'; // Integration line: Auth - Integration line: Email
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import Home from './pages/Home'
+import Login from './pages/Login' // Integration line: Auth
+import Register from './pages/Register' // Integration line: Auth
+import UserProfile from './pages/UserProfile' // Integration line: Auth
+import ResetPassword from './pages/ResetPassword' // Integration line: Email
+import ResetPasswordSearch from './pages/ResetPasswordSearch' // Integration line: Auth - Integration line: Email
+import ConfirmEmail from './pages/ConfirmEmail' // Integration line: Auth - Integration line: Email
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 const App = () => {
   return (
@@ -20,7 +20,7 @@ const App = () => {
             <Route path='/confirm-email' Component={ConfirmEmail}/> {/* Integration line: Auth - Integration line: Email */}
           </Routes>
         </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
