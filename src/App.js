@@ -5,6 +5,7 @@ import UserProfile from './pages/UserProfile' // Integration line: Auth
 import ResetPassword from './pages/ResetPassword' // Integration line: Email
 import ResetPasswordSearch from './pages/ResetPasswordSearch' // Integration line: Auth - Integration line: Email
 import ConfirmEmail from './pages/ConfirmEmail' // Integration line: Auth - Integration line: Email
+import Settings from './pages/Settings' // Integration line: Auth
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const router = createBrowserRouter(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
     { path: "/new-password", element: <ResetPassword /> }, // Integration line: Email
     { path: "/user/:id", element: <UserProfile /> }, // Integration line: Auth - Integration line: Email
     { path: "/confirm-email", element: <ConfirmEmail /> }, // Integration line: Auth - Integration line: Email
+    { path: "/settings", element: <Settings /> }, // Integration line: Auth
   ],
   {
     future: {

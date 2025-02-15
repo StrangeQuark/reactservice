@@ -35,16 +35,20 @@ const Toolbar = () => {
     /* Integration function start: Auth */
     const logout = () => {
         document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-        window.location.href="/"
+        window.location.href = "/"
     }
     /* Integration function end: Auth */
 
     const navigateToUserProfile = () => {
-        window.location.href="/user/" + username
+        window.location.href = "/user/" + username
     }
 
     const navigateToLoginPage = () => {
-        window.location.href="login"
+        window.location.href = "login"
+    }
+
+    const navigateToSettings = () => {
+        window.location.href = "settings"
     }
 
     return (
@@ -67,7 +71,7 @@ const Toolbar = () => {
                 {/* Integration function start: Auth */
                 displayPopout && (<div id='center-popout-container' className="center-popout-container">
                     <button onClick={() => {navigateToUserProfile()}}>Profile</button>
-                    <button>Settings</button>
+                    <button onClick={() => {navigateToSettings()}}>Settings</button>
                     <button onClick={() => {logout()}}>Logout</button>
                 </div>)
                 /* Integration function end: Auth */}

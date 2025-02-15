@@ -41,3 +41,7 @@ export const getUsernameFromJWT = () => {
         return null
     }
 }
+
+export const getRefreshToken = () => {
+    return document.cookie.split("; ").find((row) => row.startsWith("refresh_token="))?.split("=")[1]
+}
