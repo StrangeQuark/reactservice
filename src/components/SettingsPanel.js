@@ -1,16 +1,16 @@
-import { getRefreshToken } from "../utility/AuthUtility" /* Integration line: Auth */
+import { getAccessToken } from "../utility/AuthUtility" /* Integration line: Auth */
 
 const SettingsPanel = () => {
 
     const deleteProfile = () => {
-        const refreshToken = getRefreshToken()
+        const accessToken = getAccessToken()
 
         var credentialsJson = { "credentials": "t", "password": "t" }
 
         fetch('http://localhost:6001/deleteUser', {
             method: "POST",
             headers: {
-                'Authorization': "Bearer " + refreshToken,
+                'Authorization': "Bearer " + accessToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentialsJson)
