@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import "./css/Toolbar.css"
 import logo from "../res/logo.png"
-import { IoMdSettings } from "react-icons/io"
 import { RiLoginCircleLine } from "react-icons/ri"
 import { GiHamburgerMenu } from "react-icons/gi"
 import { verifyRefreshToken, getUsernameFromJWT } from "../utility/AuthUtility" /* Integration line: Auth */
@@ -45,11 +44,11 @@ const Toolbar = () => {
     }
 
     const navigateToLoginPage = () => {
-        window.location.href = "login"
+        window.location.href = "/login"
     }
 
     const navigateToSettings = () => {
-        window.location.href = "settings"
+        window.location.href = "/settings"
     }
 
     return (
@@ -67,7 +66,6 @@ const Toolbar = () => {
             </div>
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>
-                <IoMdSettings size={"2em"}/>
                 { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> }
                 {/* Integration function start: Auth */
                 displayPopout && (<div id='center-popout-container' className="center-popout-container">
