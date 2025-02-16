@@ -2,12 +2,15 @@ import { getAccessToken } from "../utility/AuthUtility" /* Integration line: Aut
 
 const SettingsPanel = () => {
 
-    const deleteProfile = () => {
+    const deleteProfile = async () => {
         const accessToken = getAccessToken()
 
-        var credentialsJson = { "credentials": "t", "password": "t" }
+        var credentialsJson = {
+            "credentials": "t",
+            "password": "t"
+        }
 
-        fetch('http://localhost:6001/deleteUser', {
+        fetch('http://localhost:6001/user/deleteUser', {
             method: "POST",
             headers: {
                 'Authorization': "Bearer " + accessToken,
@@ -15,7 +18,10 @@ const SettingsPanel = () => {
             },
             body: JSON.stringify(credentialsJson)
         }).then(response => response.json().then((data) => {
-            console.log(data)
+            document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+            document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+
+            window.location.href="/"
         }))
     }
 
