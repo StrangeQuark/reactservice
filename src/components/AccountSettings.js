@@ -2,7 +2,7 @@
 
 import { getAccessToken } from "../utility/AuthUtility"
 
-const SettingsPanel = () => {
+const AccountSettings = () => {
 
     const deleteProfile = async () => {
         const accessToken = getAccessToken()
@@ -32,4 +32,4 @@ const SettingsPanel = () => {
     )
 }
 
-export default SettingsPanel
+export default AccountSettings

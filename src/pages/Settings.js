@@ -2,14 +2,15 @@
 
 import React from 'react'
 import Toolbar from './../components/Toolbar'
-import SettingsPanel from '../components/SettingsPanel'
+import SettingsContent from '../components/SettingsContent'
+
 
 const Settings = () => {
     return(
         <>
             <Toolbar />
 
-            <SettingsPanel />
+            <SettingsContent />
         </>
     )
 }

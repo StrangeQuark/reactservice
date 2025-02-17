@@ -1,0 +1,11 @@
+/* Integration file: Auth */
+
+
+.main-settings-container {
+    display: flex;
+}
+
+.settings-content {
+    margin-left: 20px;
+    flex-grow: 1;
+}
