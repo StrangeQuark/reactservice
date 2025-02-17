@@ -1,4 +1,6 @@
-import { getAccessToken } from "../utility/AuthUtility" /* Integration line: Auth */
+// Integration file: Auth
+
+import { getAccessToken } from "../utility/AuthUtility"
 
 const SettingsPanel = () => {
 

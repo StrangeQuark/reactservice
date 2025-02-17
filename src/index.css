@@ -21,6 +21,7 @@ input[data-autocompleted] {
     background-color: transparent !important;
 }
 
+/* Integration function start: Auth */
 .auth-div {
   border-radius: 20px;
   background-color: #282c34;
@@ -99,3 +100,5 @@ input[data-autocompleted] {
   height: 100px;
   display: flex;
 }
+
+/* Integration function end: Auth */
