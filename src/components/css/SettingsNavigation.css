@@ -10,4 +10,12 @@
     margin: 5px 0;
     padding: 10px;
     cursor: pointer;
+    border-radius: 25px;
+    border: none;
+    background: none;
+    transition: background-color 0.3s ease;
+}
+
+.settings-navigation button.selected {
+    background-color: lightblue;
 }
