@@ -1,0 +1,60 @@
+.account-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section, .update-section, .delete-section {
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.account-settings h2, h3 {
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.account-settings p {
+    margin: 8px 0;
+    color: #555;
+}
+
+.account-settings input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.account-settings button {
+    margin-top: 12px;
+    padding: 10px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.account-settings button:hover {
+    background-color: #45a049;
+}
+
+.delete-section button {
+    background-color: #f44336;
+}
+
+.delete-section button:hover {
+    background-color: #d32f2f;
+}
