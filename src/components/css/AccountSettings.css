@@ -10,7 +10,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.profile-section, .update-section, .delete-section {
+.account-section, .update-section, .delete-section {
     background-color: white;
     padding: 16px;
     border-radius: 8px;
@@ -57,4 +57,10 @@
 
 .delete-section button:hover {
     background-color: #d32f2f;
+}
+
+.account-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
