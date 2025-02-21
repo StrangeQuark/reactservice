@@ -36,22 +36,14 @@
     font-size: 14px;
 }
 
-.account-settings button {
+.delete-section button {
     margin-top: 12px;
     padding: 10px 16px;
-    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.account-settings button:hover {
-    background-color: #45a049;
-}
-
-.delete-section button {
     background-color: #f44336;
 }
 
