@@ -18,8 +18,8 @@ const InputPopup = ({ label, defaultValue, onSubmit, onClose }) => {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                 />
-                <button onClick={handleSubmit}>Save</button>
-                <button onClick={onClose}>Cancel</button>
+                <button className="submit-button" onClick={handleSubmit}>Save</button>
+                <button className="cancel-button" onClick={onClose}>Cancel</button>
             </div>
         </div>
     )

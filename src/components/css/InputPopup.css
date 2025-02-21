@@ -16,3 +16,33 @@
     border-radius: 8px;
     text-align: center;
 }
+
+.popup-content button {
+    margin: 15px;
+    padding: 10px 16px;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-content input {
+    width: 90%;
+}
+
+.submit-button {
+    background-color: green;
+}
+
+.cancel-button {
+    background-color: #f44336;
+}
+
+.submit-button:hover {
+    background-color: darkgreen;
+}
+
+.cancel-button:hover {
+    background-color: #d32f2f;
+}
