@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import "./FilesList.css"
 
 const FilesList = () => {
     const [files, setFiles] = useState([])
+    const fileInputRef = useRef(null)
 
     useEffect(() => {
         fetchFiles()
@@ -18,13 +19,8 @@ const FilesList = () => {
         }
     }
 
-    const handleDownload = async (fileName) => {
-        try {
-            await fetch(`http://localhost:6010/download/${fileName}`)
-            fetchFiles()
-        } catch (error) {
-            console.error("Download failed", error)
-        }
+    const handleDownload = (fileName) => {
+        window.location.href = `http://localhost:6010/download/${fileName}`
     }
 
     const handleDelete = async (fileName) => {
@@ -54,10 +50,17 @@ const FilesList = () => {
         }
     }
 
+    const openFilePicker = () => {
+        fileInputRef.current.click()
+    }
+
     return (
         <div className="files-list">
-            <h2>Uploaded Files</h2>
-            <input type="file" onChange={handleFileUpload} className="fileInput" />
+            <div className="files-list-header">
+                <h2>Uploaded Files</h2>
+                <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hiddenInput" />
+                <button onClick={openFilePicker} className="fileButton">Upload</button>
+            </div>
             <ul>
                 {files.map((file, index) => (
                     <li key={index} className="file-item">

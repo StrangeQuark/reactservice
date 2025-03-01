@@ -56,16 +56,27 @@ ul {
     background-color: #b71c1c;
 }
 
-.fileInput {
+.hiddenInput {
+    display: none;
+}
+
+.fileButton {
     cursor: pointer;
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     background-color: #007bff;
     color: white;
     font-size: 16px;
     border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.2s;
 }
 
-.fileInput:hover {
+.fileButton:hover {
     background-color: #0056b3;
+}
+
+.files-list-header {
+    display: flex;
+    justify-content: space-between;
 }
