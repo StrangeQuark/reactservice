@@ -29,6 +29,7 @@ ul {
     border-bottom: none;
 }
 
+.view-btn,
 .download-btn,
 .delete-btn {
     padding: 8px 12px;
@@ -56,6 +57,14 @@ ul {
     background-color: #b71c1c;
 }
 
+.view-btn {
+    background-color: #28a745;
+}
+
+.view-btn:hover {
+    background-color: #218838;
+}
+
 .hiddenInput {
     display: none;
 }
@@ -79,4 +88,9 @@ ul {
 .files-list-header {
     display: flex;
     justify-content: space-between;
+}
+
+.file-item-button-div {
+    display: flex;
+    flex-wrap: nowrap;
 }
