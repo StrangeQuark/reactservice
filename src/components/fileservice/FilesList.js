@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 import StreamPlayer from "./StreamPlayer"
+import ImageViewer from "./ImageViewer"
 import "./FilesList.css"
 
 const FilesList = () => {
     const [files, setFiles] = useState([])
-    const [selectedFile, setSelectedFile] = useState(null)
+    const [selectedStreamFile, setSelectedStreamFile] = useState(null)
+    const [selectedImageFile, setSelectedImageFile] = useState(null)
     const fileInputRef = useRef(null)
 
     const mediaExtensions = ["mp4", "webm", "ogg", "mp3", "wav", "flac", "aac", "m4a"]
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "avif"];
 
     useEffect(() => {
         fetchFiles()
@@ -58,13 +61,20 @@ const FilesList = () => {
         fileInputRef.current.click()
     }
 
-    const handleView = (fileName) => {
-        setSelectedFile(`http://localhost:6010/stream/${fileName}`)
+    const handleStream = (fileName) => {
+        setSelectedStreamFile(`http://localhost:6010/stream/${fileName}`)
     }
 
     const closePlayer = () => {
-        console.log("debug")
-        setSelectedFile(null)
+        setSelectedStreamFile(null)
+    }
+
+    const handleImage = (fileName) => {
+        setSelectedImageFile(`http://localhost:6010/stream/${fileName}`)
+    }
+
+    const closeViewer = () => {
+        setSelectedImageFile(null)
     }
 
     return (
@@ -78,12 +88,14 @@ const FilesList = () => {
                 {files.map((file, index) => {
                     const fileExtension = file.split('.').pop().toLowerCase()
                     const isMedia = mediaExtensions.includes(fileExtension)
+                    const isImage = imageExtensions.includes(fileExtension)
 
                     return(
                         <li key={index} className="file-item">
                             <span>{file}</span>
                             <div className="file-item-button-div">
-                                {isMedia && <button onClick={() => handleView(file)} className="view-btn">View</button>}
+                                {isMedia && <button onClick={() => handleStream(file)} className="stream-btn">Stream</button>}
+                                {isImage && <button onClick={() => handleImage(file)} className="view-btn">View</button>}
                                 <button onClick={() => handleDownload(file)} className="download-btn">Download</button>
                                 <button onClick={() => handleDelete(file)} className="delete-btn">Delete</button>
                             </div>
@@ -92,7 +104,8 @@ const FilesList = () => {
                 })}
             </ul>
             
-            {selectedFile && <StreamPlayer streamUrl={selectedFile} onClose={closePlayer} />}
+            {selectedStreamFile && <StreamPlayer streamUrl={selectedStreamFile} onClose={closePlayer} />}
+            {selectedImageFile && <ImageViewer imageUrl={selectedImageFile} onClose={closeViewer} />}
         </div>
     )
 }
