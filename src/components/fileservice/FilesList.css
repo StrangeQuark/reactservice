@@ -30,6 +30,7 @@ ul {
 }
 
 .view-btn,
+.stream-btn,
 .download-btn,
 .delete-btn {
     padding: 8px 12px;
@@ -57,11 +58,13 @@ ul {
     background-color: #b71c1c;
 }
 
-.view-btn {
+.view-btn,
+.stream-btn {
     background-color: #28a745;
 }
 
-.view-btn:hover {
+.view-btn:hover,
+.stream-btn:hover {
     background-color: #218838;
 }
 
