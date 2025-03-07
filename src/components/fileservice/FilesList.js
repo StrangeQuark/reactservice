@@ -81,8 +81,8 @@ const FilesList = () => {
         <div className="files-list">
             <div className="files-list-header">
                 <h2>Uploaded Files</h2>
-                <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hiddenInput" />
-                <button onClick={openFilePicker} className="fileButton">Upload</button>
+                <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
+                <button onClick={openFilePicker} className="file-button">Upload</button>
             </div>
             <ul>
                 {files.map((file, index) => {

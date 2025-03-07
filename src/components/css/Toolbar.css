@@ -1,12 +1,11 @@
-.Toolbar {
+.toolbar {
   width: 100%;
-  /* background-color: #282c34; */
   border-bottom: 1px solid lightgrey;
   position: relative;
   height: 6vh;
 }
 
-.Toolbar a {
+.toolbar a {
   cursor: pointer;
   padding: 1% 20px;
   color: #595959;
@@ -15,10 +14,32 @@
   text-decoration: none;
 }
 
-.Toolbar img {
+.toolbar img {
   cursor: pointer;
   height: 5vh;
   padding: 0 1vw;
+}
+
+.toolbar svg {
+  cursor: pointer;
+  padding: 0 1vw;
+}
+
+.toolbar input {
+  border-radius: 5px;
+  font-size: 12px;
+  height: 4vh;
+  width: 10vw;
+}
+
+.toolbar select {
+  cursor: pointer;
+  font-size: 15px;
+  max-width: 50%;
+  color: #595959;
+  font-weight: 1000;
+  text-decoration: none;
+  height: 6vh;
 }
 
 .center-popout-container {
@@ -60,29 +81,6 @@
   top: 50%;
   left: 100%;
   transform: translate(-100%, -50%);
-}
-
-.Toolbar svg {
-  cursor: pointer;
-  padding: 0 1vw;
-}
-
-.Toolbar input {
-  border-radius: 5px;
-  font-size: 12px;
-  height: 4vh;
-  width: 10vw;
-}
-
-.Toolbar select {
-  cursor: pointer;
-  /* border: none; */
-  font-size: 15px;
-  max-width: 50%;
-  color: #595959;
-  font-weight: 1000;
-  text-decoration: none;
-  height: 6vh;
 }
 
 .option {

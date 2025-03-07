@@ -9,7 +9,7 @@ const StreamPlayer = ({ streamUrl, onClose }) => {
             <div className="popup-content">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <div>
-                <video ref={videoRef} className="videoPlayer" controls>
+                <video ref={videoRef} className="video-player" controls>
                     <source src={streamUrl} type="video/mp4" />
                     Your browser does not support the video tag
                 </video>
