@@ -3,7 +3,7 @@
 
 import React from 'react'
 import Toolbar from './../components/Toolbar'
-import ResetPasswordSearchForm from './../components/ResetPasswordSearchForm'
+import ResetPasswordSearchForm from './../components/authservice/ResetPasswordSearchForm'
 
 const ResetPasswordSearch = () => {
     return(

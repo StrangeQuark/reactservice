@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Toolbar from '../components/Toolbar'
-import UserRegisterForm from '../components/UserRegisterForm'
+import UserRegisterForm from '../components/authservice/UserRegisterForm'
 
 const Register = () => {
     return(

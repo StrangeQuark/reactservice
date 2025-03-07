@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
 import { FaCheckCircle } from "react-icons/fa"
-import { verifyEmailRegex } from "../utility/EmailUtility"
+import { verifyEmailRegex } from "../../utility/EmailUtility"
 import "./css/UserRegisterForm.css"
 
 

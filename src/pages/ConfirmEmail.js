@@ -3,7 +3,7 @@
 
 import React from 'react'
 import Toolbar from '../components/Toolbar'
-import ConfirmEmailMessage from '../components/ConfirmEmailMessage'
+import ConfirmEmailMessage from '../components/authservice/ConfirmEmailMessage'
 
 const ConfirmEmail = () => {
     return(

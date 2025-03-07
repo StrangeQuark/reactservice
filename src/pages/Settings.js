@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Toolbar from './../components/Toolbar'
-import SettingsContent from '../components/SettingsContent'
+import SettingsContent from '../components/authservice/SettingsContent'
 
 
 const Settings = () => {
