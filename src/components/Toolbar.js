@@ -50,7 +50,7 @@ const Toolbar = () => {
     }
 
     return (
-        <div className="Toolbar">
+        <div className="toolbar">
             <div className="left-div">
                 <GiHamburgerMenu size={"1em"}/>
                 <img alt="Logo" src={ logo } />
