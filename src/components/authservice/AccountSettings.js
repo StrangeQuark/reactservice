@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { getAccessToken } from "../utility/AuthUtility"
+import { getAccessToken } from "../../utility/AuthUtility"
 import { SlPencil } from "react-icons/sl"
 import "./css/AccountSettings.css"
-import InputPopup from "./InputPopup"
+import InputPopup from "../InputPopup"
 
 const AccountSettings = () => {
     const [username, setUsername] = useState("test")
