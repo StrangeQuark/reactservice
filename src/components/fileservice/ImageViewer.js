@@ -1,4 +1,4 @@
-import "./ImageViewer.css"
+import "./css/ImageViewer.css"
 
 const ImageViewer = ({ imageUrl, onClose }) => {
     return (
@@ -6,7 +6,7 @@ const ImageViewer = ({ imageUrl, onClose }) => {
             <div className="popup-content">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <div>
-                    <img src={imageUrl} />
+                    <img src={imageUrl} alt=""/>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import StreamPlayer from "./StreamPlayer"
 import ImageViewer from "./ImageViewer"
-import "./FilesList.css"
+import "./css/FilesList.css"
 
 const FilesList = () => {
     const [files, setFiles] = useState([])

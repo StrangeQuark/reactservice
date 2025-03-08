@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import "./StreamPlayer.css"
+import "./css/StreamPlayer.css"
 
 const StreamPlayer = ({ streamUrl, onClose }) => {
     const videoRef = useRef(null)
