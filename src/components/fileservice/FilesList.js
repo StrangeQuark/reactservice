@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react"
-import StreamPlayer from "./StreamPlayer"
+import VideoPlayer from "./VideoPlayer"
 import ImageViewer from "./ImageViewer"
+import MusicPlayer from "./MusicPlayer"
 import "./css/FilesList.css"
 
 const FilesList = () => {
     const [files, setFiles] = useState([])
-    const [selectedStreamFile, setSelectedStreamFile] = useState(null)
+    const [selectedVideoFile, setSelectedVideoFile] = useState(null)
     const [selectedImageFile, setSelectedImageFile] = useState(null)
+    const [selectedAudioFile, setSelectedAudioFile] = useState(null)
     const fileInputRef = useRef(null)
 
-    const mediaExtensions = ["mp4", "webm", "ogg", "mp3", "wav", "flac", "aac", "m4a"]
+    const videoExtensions = ["mp4", "webm", "ogg"];
+    const audioExtensions = ["mp3", "wav", "flac", "aac", "m4a", "ogg"];
     const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "avif"];
 
     useEffect(() => {
@@ -61,20 +64,28 @@ const FilesList = () => {
         fileInputRef.current.click()
     }
 
-    const handleStream = (fileName) => {
-        setSelectedStreamFile(`http://localhost:6010/stream/${fileName}`)
+    const handleVideo = (fileName) => {
+        setSelectedVideoFile(`http://localhost:6010/stream/${fileName}`)
     }
 
-    const closePlayer = () => {
-        setSelectedStreamFile(null)
+    const closeVideo = () => {
+        setSelectedVideoFile(null)
     }
 
     const handleImage = (fileName) => {
         setSelectedImageFile(`http://localhost:6010/stream/${fileName}`)
     }
 
-    const closeViewer = () => {
+    const closeImage = () => {
         setSelectedImageFile(null)
+    }
+
+    const handleAudio = (fileName) => {
+        setSelectedAudioFile(`http://localhost:6010/stream/${fileName}`)
+    }
+
+    const closeAudio = () => {
+        setSelectedAudioFile(null)
     }
 
     return (
@@ -87,15 +98,17 @@ const FilesList = () => {
             <ul>
                 {files.map((file, index) => {
                     const fileExtension = file.split('.').pop().toLowerCase()
-                    const isMedia = mediaExtensions.includes(fileExtension)
+                    const isVideo = videoExtensions.includes(fileExtension)
                     const isImage = imageExtensions.includes(fileExtension)
+                    const isAudio = audioExtensions.includes(fileExtension)
 
                     return(
                         <li key={index} className="file-item">
                             <span>{file}</span>
                             <div className="file-item-button-div">
-                                {isMedia && <button onClick={() => handleStream(file)} className="stream-btn">Stream</button>}
+                                {isVideo && <button onClick={() => handleVideo(file)} className="stream-btn">Stream</button>}
                                 {isImage && <button onClick={() => handleImage(file)} className="view-btn">View</button>}
+                                {isAudio && <button onClick={() => handleAudio(file)} className="listen-btn">Listen</button>}
                                 <button onClick={() => handleDownload(file)} className="download-btn">Download</button>
                                 <button onClick={() => handleDelete(file)} className="delete-btn">Delete</button>
                             </div>
@@ -104,8 +117,9 @@ const FilesList = () => {
                 })}
             </ul>
             
-            {selectedStreamFile && <StreamPlayer streamUrl={selectedStreamFile} onClose={closePlayer} />}
-            {selectedImageFile && <ImageViewer imageUrl={selectedImageFile} onClose={closeViewer} />}
+            {selectedVideoFile && <VideoPlayer videoUrl={selectedVideoFile} onClose={closeVideo} />}
+            {selectedImageFile && <ImageViewer imageUrl={selectedImageFile} onClose={closeImage} />}
+            {selectedAudioFile && <MusicPlayer audioUrl={selectedAudioFile} onClose={closeAudio} />}
         </div>
     )
 }

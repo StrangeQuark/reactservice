@@ -29,6 +29,7 @@ ul {
     border-bottom: none;
 }
 
+.listen-btn,
 .view-btn,
 .stream-btn,
 .download-btn,
@@ -58,11 +59,13 @@ ul {
     background-color: #b71c1c;
 }
 
+.listen-btn,
 .view-btn,
 .stream-btn {
     background-color: #28a745;
 }
 
+.listen-btn:hover,
 .view-btn:hover,
 .stream-btn:hover {
     background-color: #218838;

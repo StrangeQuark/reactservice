@@ -1,7 +1,7 @@
 import { useRef } from "react"
-import "./css/StreamPlayer.css"
+import "./css/VideoPlayer.css"
 
-const StreamPlayer = ({ streamUrl, onClose }) => {
+const StreamPlayer = ({ videoUrl, onClose }) => {
     const videoRef = useRef(null)
 
     return (
@@ -9,10 +9,10 @@ const StreamPlayer = ({ streamUrl, onClose }) => {
             <div className="popup-content">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <div>
-                <video ref={videoRef} className="video-player" controls>
-                    <source src={streamUrl} type="video/mp4" />
-                    Your browser does not support the video tag
-                </video>
+                    <video ref={videoRef} className="video-player" controls>
+                        <source src={videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag
+                    </video>
                 </div>
             </div>
         </div>
