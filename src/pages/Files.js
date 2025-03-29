@@ -1,4 +1,4 @@
-// Integration file: Email
+// Integration file: Files
 
 import React from 'react'
 import Toolbar from '../components/Toolbar'
