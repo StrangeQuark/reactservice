@@ -1,3 +1,5 @@
+// Integration file: Files
+
 import { useEffect, useRef, useState } from "react"
 import VideoPlayer from "./VideoPlayer"
 import ImageViewer from "./ImageViewer"

@@ -1,3 +1,5 @@
+// Integration file: Files
+
 import "./css/ImageViewer.css"
 
 const ImageViewer = ({ imageUrl, onClose }) => {
