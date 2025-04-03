@@ -1,3 +1,5 @@
+// Integration file: Auth
+
 import { useState } from "react"
 import { getAccessToken } from "../../utility/AuthUtility"
 import { SlPencil } from "react-icons/sl"
