@@ -8,7 +8,7 @@ export const verifyRefreshToken = async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:6001/access', {
+        const response = await fetch('http://localhost:6001/auth/access', {
             headers: {
                 'Authorization': "Bearer " + jwtToken,
                 'Content-Type': 'application/json'
