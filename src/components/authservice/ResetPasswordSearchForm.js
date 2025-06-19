@@ -1,7 +1,7 @@
 // Integration file: Email
 // Integration file: Auth
 
-import React, { useState } from "react"
+import { useState } from "react"
 
 const ResetPasswordSearchForm = () => {
     const[credentials, setCredentials] = useState("")

@@ -1,6 +1,6 @@
 // Integration file: Auth
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import SettingsNavigation from './SettingsNavigation'
 import AccountSettings from './AccountSettings'
 import SecuritySettings from './SecuritySettings'
