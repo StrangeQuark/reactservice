@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { RiLoginCircleLine } from "react-icons/ri"

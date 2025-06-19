@@ -1,6 +1,6 @@
 // Integration file: Auth
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import "./css/SettingsNavigation.css"
 
 const SettingsNavigation = ({ setSelectedSection }) => {
