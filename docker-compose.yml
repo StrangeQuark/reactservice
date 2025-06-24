@@ -4,7 +4,7 @@ services:
     networks:
       - shared-network
     ports:
-      - "3001:3001"
+      - "6000:6000"
     container_name: react-service
 networks:
   shared-network:
