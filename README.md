@@ -9,7 +9,7 @@ You can run the service locally by running `npm start`
 You can also build the service in a docker container with the following commands:
 
 ```docker image build -t reactservice .```
-```docker run -dp 3001:3001 --name reactservice reactservice```
+```docker run -dp 6080:6080 --name reactservice reactservice```
 
 This application also supports docker compose, it assumes that an external network is available with the name shared-network:
 

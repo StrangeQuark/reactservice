@@ -13,7 +13,7 @@ const AccountSettings = () => {
 
     const updateUsername = async (newUsername) => {
         const accessToken = getAccessToken()
-        await fetch("http://localhost:6001/user/updateUsername", {
+        await fetch("http://localhost:6001/api/auth/user/update-username", {
             method: "PATCH",
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -27,7 +27,7 @@ const AccountSettings = () => {
 
     const updateEmail = async (newEmail) => {
         const accessToken = getAccessToken()
-        await fetch("http://localhost:6001/user/updateEmail", {
+        await fetch("http://localhost:6001/api/auth/user/update-email", {
             method: "PATCH",
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -47,7 +47,7 @@ const AccountSettings = () => {
             password: "t",
         }
 
-        fetch("http://localhost:6001/user/deleteUser", {
+        fetch("http://localhost:6001/api/auth/user/delete-user", {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + accessToken,

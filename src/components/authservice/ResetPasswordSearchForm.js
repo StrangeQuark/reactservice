@@ -22,7 +22,7 @@ const ResetPasswordSearchForm = () => {
             return
         }
 
-        fetch('http://localhost:6001/user/verify-user-and-send-email', {
+        fetch('http://localhost:6001/api/auth/user/verify-user-and-send-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

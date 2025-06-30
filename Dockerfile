@@ -6,8 +6,8 @@ COPY public ./public
 COPY src ./src
 COPY package.json ./
 
-ENV PORT=6000
-EXPOSE 6000
+ENV PORT=6080
+EXPOSE 6080
 
 RUN npm install
 

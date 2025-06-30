@@ -33,7 +33,7 @@ const ResetPasswordForm = () => {
             return
         }
 
-        fetch('http://localhost:6005/email/confirmToken?token=' + token, {
+        fetch('http://localhost:6005/api/email/confirm-token?token=' + token, {
             method: 'GET',
             }).then(response => response.json().then(
                 (data) => {
