@@ -9,7 +9,7 @@ const ConfirmEmailMessage = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search)
         const token = urlParams.get("token")
-        fetch('http://localhost:6005/email/enableUser?token=' + token, {
+        fetch('http://localhost:6005/api/email/enable-user?token=' + token, {
             method: 'GET',
             }).then(response => response.json().then(
                 (data) => {

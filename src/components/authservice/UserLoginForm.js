@@ -28,7 +28,7 @@ const UserLoginForm = () => {
             return
         }
 
-        fetch('http://localhost:6001/auth/authenticate', {
+        fetch('http://localhost:6001/api/auth/authenticate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -23,7 +23,7 @@ const FilesList = () => {
 
     const fetchFiles = async () => {
         try {
-            const response = await fetch("http://localhost:6010/file/getAll")
+            const response = await fetch("http://localhost:6010/api/file/get-all")
             const data = await response.json()
             setFiles(data)
         } catch (error) {
@@ -32,12 +32,12 @@ const FilesList = () => {
     }
 
     const handleDownload = (fileName) => {
-        window.location.href = `http://localhost:6010/download/${fileName}`
+        window.location.href = `http://localhost:6010/api/file/download/${fileName}`
     }
 
     const handleDelete = async (fileName) => {
         try {
-            await fetch(`http://localhost:6010/file/delete/${fileName}`)
+            await fetch(`http://localhost:6010/api/file/delete/${fileName}`)
             fetchFiles()
         } catch (error) {
             console.error("Delete failed", error)
@@ -52,7 +52,7 @@ const FilesList = () => {
         formData.append("file", file)
 
         try {
-            await fetch("http://localhost:6010/upload", {
+            await fetch("http://localhost:6010/api/file/upload", {
                 method: "POST",
                 body: formData,
             })
@@ -67,7 +67,7 @@ const FilesList = () => {
     }
 
     const handleVideo = (fileName) => {
-        setSelectedVideoFile(`http://localhost:6010/stream/${fileName}`)
+        setSelectedVideoFile(`http://localhost:6010/api/file/stream/${fileName}`)
     }
 
     const closeVideo = () => {
@@ -75,7 +75,7 @@ const FilesList = () => {
     }
 
     const handleImage = (fileName) => {
-        setSelectedImageFile(`http://localhost:6010/stream/${fileName}`)
+        setSelectedImageFile(`http://localhost:6010/api/file/stream/${fileName}`)
     }
 
     const closeImage = () => {
@@ -83,7 +83,7 @@ const FilesList = () => {
     }
 
     const handleAudio = (fileName) => {
-        setSelectedAudioFile(`http://localhost:6010/stream/${fileName}`)
+        setSelectedAudioFile(`http://localhost:6010/api/file/stream/${fileName}`)
     }
 
     const closeAudio = () => {

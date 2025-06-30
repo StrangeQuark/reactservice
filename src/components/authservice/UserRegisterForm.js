@@ -64,7 +64,7 @@ const UserRegisterForm = () => {
 
     var registerJSON = {"username": username, "password": password, "email": email}
 
-    fetch('http://localhost:6001/auth/register', {
+    fetch('http://localhost:6001/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
