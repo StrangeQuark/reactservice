@@ -1,5 +1,7 @@
 /* Integration file: Auth */
 
+import { AUTH_ENDPOINTS } from "../config"
+
 export const verifyRefreshToken = async () => {
     const jwtToken = document.cookie.split("; ").find((row) => row.startsWith("refresh_token="))?.split("=")[1]
 
@@ -8,7 +10,7 @@ export const verifyRefreshToken = async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:6001/api/auth/access', {
+        const response = await fetch(AUTH_ENDPOINTS.ACCESS, {
             headers: {
                 'Authorization': "Bearer " + jwtToken,
                 'Content-Type': 'application/json'

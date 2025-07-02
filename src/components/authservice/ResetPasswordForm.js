@@ -1,6 +1,7 @@
 // Integration file: Email
 
 import { useState } from "react"
+import { EMAIL_ENDPOINTS } from "../../config"
 
 const ResetPasswordForm = () => {
     const[isSuccess, setIsSuccess] = useState(false)
@@ -33,7 +34,7 @@ const ResetPasswordForm = () => {
             return
         }
 
-        fetch('http://localhost:6005/api/email/confirm-token?token=' + token, {
+        fetch(EMAIL_ENDPOINTS.CONFIRM_TOKEN + token, {
             method: 'GET',
             }).then(response => response.json().then(
                 (data) => {

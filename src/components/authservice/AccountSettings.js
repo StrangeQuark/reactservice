@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { getAccessToken } from "../../utility/AuthUtility"
 import { SlPencil } from "react-icons/sl"
+import { AUTH_ENDPOINTS } from "../../config"
 import "./css/AccountSettings.css"
 import InputPopup from "../InputPopup"
 
@@ -13,7 +14,7 @@ const AccountSettings = () => {
 
     const updateUsername = async (newUsername) => {
         const accessToken = getAccessToken()
-        await fetch("http://localhost:6001/api/auth/user/update-username", {
+        await fetch("/api/auth/user/update-username", {
             method: "PATCH",
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -27,7 +28,7 @@ const AccountSettings = () => {
 
     const updateEmail = async (newEmail) => {
         const accessToken = getAccessToken()
-        await fetch("http://localhost:6001/api/auth/user/update-email", {
+        await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "PATCH",
             headers: {
                 Authorization: "Bearer " + accessToken,
@@ -47,7 +48,7 @@ const AccountSettings = () => {
             password: "t",
         }
 
-        fetch("http://localhost:6001/api/auth/user/delete-user", {
+        fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + accessToken,
