@@ -1,6 +1,7 @@
 // Integration file: Auth
 
 import { useState } from "react"
+import { AUTH_ENDPOINTS } from "../../config"
 import "./css/UserLoginForm.css"
 
 const UserLoginForm = () => {
@@ -28,7 +29,7 @@ const UserLoginForm = () => {
             return
         }
 
-        fetch('http://localhost:6001/api/auth/authenticate', {
+        fetch(AUTH_ENDPOINTS.AUTHENTICATE, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

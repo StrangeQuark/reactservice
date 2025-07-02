@@ -4,6 +4,7 @@ import { useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
 import { FaCheckCircle } from "react-icons/fa"
 import { verifyEmailRegex } from "../../utility/EmailUtility"
+import { AUTH_ENDPOINTS } from "../../config";
 import "./css/UserRegisterForm.css"
 
 
@@ -64,7 +65,8 @@ const UserRegisterForm = () => {
 
     var registerJSON = {"username": username, "password": password, "email": email}
 
-    fetch('http://localhost:6001/api/auth/register', {
+    console.log("Attempting to register: " + AUTH_ENDPOINTS.REGISTER)
+    fetch(AUTH_ENDPOINTS.REGISTER, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

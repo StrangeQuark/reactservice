@@ -2,6 +2,7 @@
 // Integration file: Auth
 
 import { useState } from "react"
+import { AUTH_ENDPOINTS } from "../../config"
 
 const ResetPasswordSearchForm = () => {
     const[credentials, setCredentials] = useState("")
@@ -22,7 +23,7 @@ const ResetPasswordSearchForm = () => {
             return
         }
 
-        fetch('http://localhost:6001/api/auth/user/verify-user-and-send-email', {
+        fetch(AUTH_ENDPOINTS.PASSWORD_RESET, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

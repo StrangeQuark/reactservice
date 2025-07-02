@@ -5,6 +5,7 @@ import VideoPlayer from "./VideoPlayer"
 import ImageViewer from "./ImageViewer"
 import MusicPlayer from "./MusicPlayer"
 import "./css/FilesList.css"
+import { FILE_ENDPOINTS } from "../../config"
 
 const FilesList = () => {
     const [files, setFiles] = useState([])
@@ -23,7 +24,7 @@ const FilesList = () => {
 
     const fetchFiles = async () => {
         try {
-            const response = await fetch("http://localhost:6010/api/file/get-all")
+            const response = await fetch(FILE_ENDPOINTS.GET_ALL)
             const data = await response.json()
             setFiles(data)
         } catch (error) {
@@ -32,12 +33,12 @@ const FilesList = () => {
     }
 
     const handleDownload = (fileName) => {
-        window.location.href = `http://localhost:6010/api/file/download/${fileName}`
+        window.location.href = FILE_ENDPOINTS.DOWNLOAD + `/${fileName}`
     }
 
     const handleDelete = async (fileName) => {
         try {
-            await fetch(`http://localhost:6010/api/file/delete/${fileName}`)
+            await fetch(FILE_ENDPOINTS.DELETE + fileName)
             fetchFiles()
         } catch (error) {
             console.error("Delete failed", error)
@@ -52,7 +53,7 @@ const FilesList = () => {
         formData.append("file", file)
 
         try {
-            await fetch("http://localhost:6010/api/file/upload", {
+            await fetch(FILE_ENDPOINTS.UPLOAD, {
                 method: "POST",
                 body: formData,
             })
@@ -67,7 +68,7 @@ const FilesList = () => {
     }
 
     const handleVideo = (fileName) => {
-        setSelectedVideoFile(`http://localhost:6010/api/file/stream/${fileName}`)
+        setSelectedVideoFile(FILE_ENDPOINTS.STREAM + `/${fileName}`)
     }
 
     const closeVideo = () => {
@@ -75,7 +76,7 @@ const FilesList = () => {
     }
 
     const handleImage = (fileName) => {
-        setSelectedImageFile(`http://localhost:6010/api/file/stream/${fileName}`)
+        setSelectedImageFile(FILE_ENDPOINTS.STREAM + `/${fileName}`)
     }
 
     const closeImage = () => {
@@ -83,7 +84,7 @@ const FilesList = () => {
     }
 
     const handleAudio = (fileName) => {
-        setSelectedAudioFile(`http://localhost:6010/api/file/stream/${fileName}`)
+        setSelectedAudioFile(FILE_ENDPOINTS.STREAM + `/${fileName}`)
     }
 
     const closeAudio = () => {
