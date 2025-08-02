@@ -14,7 +14,7 @@ const AccountSettings = () => {
 
     const updateUsername = async (newUsername) => {
         const accessToken = getAccessToken()
-        await fetch("/api/auth/user/update-username", {
+        await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
             method: "PATCH",
             headers: {
                 Authorization: "Bearer " + accessToken,
