@@ -9,7 +9,8 @@ export const AUTH_ENDPOINTS = {
   ACCESS: `${AUTH_API_BASE_URL}/api/auth/access`,
   UPDATE_EMAIL: `${AUTH_API_BASE_URL}/api/auth/user/update-email`,
   DELETE_USER: `${AUTH_API_BASE_URL}/api/auth/user/delete-user`,
-  PASSWORD_RESET: `${AUTH_API_BASE_URL}/api/auth/user/send-password-reset-email`
+  PASSWORD_RESET: `${AUTH_API_BASE_URL}/api/auth/user/send-password-reset-email`,
+  UPDATE_USERNAME: `${AUTH_API_BASE_URL}/api/auth/user/update-username`
 }
 
 export const EMAIL_ENDPOINTS = {
