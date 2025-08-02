@@ -3,7 +3,7 @@ export const EMAIL_API_BASE_URL = process.env.REACT_APP_EMAIL_API_BASE_URL
 export const FILE_API_BASE_URL = process.env.REACT_APP_FILE_API_BASE_URL
 export const GATEWAY_BASE_URL = process.env.REACT_APP_GATEWAY_BASE_URL
 
-export const AUTH_ENDPOINTS = {
+let AUTH_ENDPOINTS = {
   REGISTER: `${AUTH_API_BASE_URL}/api/auth/register`,
   AUTHENTICATE: `${AUTH_API_BASE_URL}/api/auth/authenticate`,
   ACCESS: `${AUTH_API_BASE_URL}/api/auth/access`,
@@ -13,12 +13,12 @@ export const AUTH_ENDPOINTS = {
   UPDATE_USERNAME: `${AUTH_API_BASE_URL}/api/auth/user/update-username`
 }
 
-export const EMAIL_ENDPOINTS = {
+let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`
 }
 
-export const FILE_ENDPOINTS = {
+let FILE_ENDPOINTS = {
   GET_ALL: `${FILE_API_BASE_URL}/api/file/get-all`,
   DOWNLOAD: `${FILE_API_BASE_URL}/api/file/download`,
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
@@ -35,8 +35,14 @@ const replaceBaseUrl = (endpoints, newBase) => {
   )
 }
 
-export const GATEWAY_ENDPOINTS = {
-  ...replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL),
-  ...replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL),
-  ...replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL)
+// Integration function start: Gateway
+AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL)
+EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL)
+FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL)
+// Integration function end: Gateway
+
+export {
+  AUTH_ENDPOINTS,
+  EMAIL_ENDPOINTS,
+  FILE_ENDPOINTS
 }
