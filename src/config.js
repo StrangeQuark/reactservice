@@ -1,8 +1,9 @@
-export const AUTH_API_BASE_URL = process.env.REACT_APP_AUTH_API_BASE_URL
-export const EMAIL_API_BASE_URL = process.env.REACT_APP_EMAIL_API_BASE_URL
-export const FILE_API_BASE_URL = process.env.REACT_APP_FILE_API_BASE_URL
-export const GATEWAY_BASE_URL = process.env.REACT_APP_GATEWAY_BASE_URL
+export const AUTH_API_BASE_URL = process.env.REACT_APP_AUTH_API_BASE_URL// Integration line: Auth
+export const EMAIL_API_BASE_URL = process.env.REACT_APP_EMAIL_API_BASE_URL// Integration line: Email
+export const FILE_API_BASE_URL = process.env.REACT_APP_FILE_API_BASE_URL// Integration line: File
+export const GATEWAY_BASE_URL = process.env.REACT_APP_GATEWAY_BASE_URL// Integration line: Gateway
 
+// Integration function start: Auth
 let AUTH_ENDPOINTS = {
   REGISTER: `${AUTH_API_BASE_URL}/api/auth/register`,
   AUTHENTICATE: `${AUTH_API_BASE_URL}/api/auth/authenticate`,
@@ -11,20 +12,22 @@ let AUTH_ENDPOINTS = {
   DELETE_USER: `${AUTH_API_BASE_URL}/api/auth/user/delete-user`,
   PASSWORD_RESET: `${AUTH_API_BASE_URL}/api/auth/user/send-password-reset-email`,
   UPDATE_USERNAME: `${AUTH_API_BASE_URL}/api/auth/user/update-username`
-}
+}// Integration function end: Auth
 
+// Integration function start: Email
 let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`
-}
+}// Integration function end: Email
 
+// Integration function start: File
 let FILE_ENDPOINTS = {
   GET_ALL: `${FILE_API_BASE_URL}/api/file/get-all`,
   DOWNLOAD: `${FILE_API_BASE_URL}/api/file/download`,
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
   STREAM: `${FILE_API_BASE_URL}/api/file/stream`,
   DELETE: `${FILE_API_BASE_URL}/api/file/delete`
-}
+}// Integration function end: File
 
 const replaceBaseUrl = (endpoints, newBase) => {
   return Object.fromEntries(
@@ -42,7 +45,7 @@ FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL)
 // Integration function end: Gateway
 
 export {
-  AUTH_ENDPOINTS,
-  EMAIL_ENDPOINTS,
-  FILE_ENDPOINTS
+  AUTH_ENDPOINTS,// Integration line: Auth
+  EMAIL_ENDPOINTS,// Integration line: Email
+  FILE_ENDPOINTS// Integration line: File
 }
