@@ -1,7 +1,7 @@
-export const AUTH_API_BASE_URL = process.env.REACT_APP_AUTH_API_BASE_URL// Integration line: Auth
-export const EMAIL_API_BASE_URL = process.env.REACT_APP_EMAIL_API_BASE_URL// Integration line: Email
-export const FILE_API_BASE_URL = process.env.REACT_APP_FILE_API_BASE_URL// Integration line: File
-export const GATEWAY_BASE_URL = process.env.REACT_APP_GATEWAY_BASE_URL// Integration line: Gateway
+export const AUTH_API_BASE_URL = import.meta.env.VITE_AUTH_API_BASE_URL// Integration line: Auth
+export const EMAIL_API_BASE_URL = import.meta.env.VITE_EMAIL_API_BASE_URL// Integration line: Email
+export const FILE_API_BASE_URL = import.meta.env.VITE_FILE_API_BASE_URL// Integration line: File
+export const GATEWAY_BASE_URL = import.meta.env.VITE_GATEWAY_BASE_URL// Integration line: Gateway
 
 // Integration function start: Auth
 let AUTH_ENDPOINTS = {
