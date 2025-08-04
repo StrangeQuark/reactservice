@@ -1,20 +1,69 @@
-# Getting Started with the ReactService
+# Reactservice
+**Reactservice** is a React based frontend microservice built as a repository of commonly used components.<br><br>
+It also serves as a frontend for all of the other backend microservices of the MSINIT project.
+<br><br><br>
 
-Begin by installing the node modules with the `npm i` command
+## Features
+- Contains prebuilt - commonly used components such as toolbar and confirmation popups.
+- Integrates with all other MSINIT microservices
+- Ready-to-run Docker environment
+- Postman collection for testing and exploration
+  <br><br><br>
 
-You can run the service locally by running `npm start`
+## Technology Stack
+- Javascript
+- Vite
+- React
+- NPM
+- Docker & Docker Compose
+  <br><br><br>
 
-## Docker
+## Getting Started
 
-You can also build the service in a docker container with the following commands:
+### Prerequisites
+- Docker and Docker Compose installed
+  <br><br>
 
-```docker image build -t reactservice .```
-```docker run -dp 6080:6080 --name reactservice reactservice```
+### Running the Application
+Clone the repository and start the service using Docker Compose:
 
-This application also supports docker compose, it assumes that an external network is available with the name shared-network:
+```
+git clone https://github.com/StrangeQuark/reactservice.git
+cd reactservice
+docker-compose up --build
+```
+<br>
 
-```docker network create shared-network```
+### Environment Variables
+The `.env` file is required to provide necessary configuration such as encryption secrets and database credentials. Default values are provided in `.env` file so the application can run out-of-the-box for testing.
 
-Note that the above command needs only to be run once, you can then launch the container using the following command:
+⚠️ **Warning**: Do not deploy this application to production without properly changing your environment variables. The provided `.env` is not safe to use past local deployments!
+<br><br>
 
-```docker-compose up```
+## Testing
+Unit tests are provided for pages and components.
+<br><br>
+
+## Deployment
+This project includes a `Jenkinsfile` for use in CI/CD pipelines. Jenkins must be configured with:
+
+- Docker support
+- Secrets or environment variables for configuration
+- Access to any relevant private repositories, if needed
+  <br><br>
+
+## Optional: MSINIT Backend Integrations
+Reactservice can integrate with all of the MSINIT backend services. Find a list of all the different services below.
+
+- [Authservice GitHub Repository](https://github.com/StrangeQuark/authservice)
+- [Emailservice GitHub Repository](https://github.com/StrangeQuark/emailservice)
+- [Fileservice GitHub Repository](https://github.com/StrangeQuark/fileservice)
+- [Vaultservice GitHub Repository](https://github.com/StrangeQuark/vaultservice)
+<br><br>
+
+## License
+This project is licensed under the GNU General Public License. See `LICENSE.md` for details.
+<br><br>
+
+## Contributing
+Contributions are welcome! Feel free to open issues or submit pull requests.
