@@ -1,15 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+// import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   base: '/',
   plugins: [
     react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['icons/*.png']
-    })
+    // VitePWA({ // Uncomment to allow PWA
+    //   registerType: 'autoUpdate',
+    //   includeAssets: ['icons/*.png']
+    // })
   ],
   server: {
     port: 6080
