@@ -38,17 +38,7 @@ const UserLoginForm = () => {
             }).then(response => response.json().then(
                 (data) => {
                     if(response.status === 401) {
-                        setErrorMessage('Incorrect credentials')
-                        return
-                    }
-
-                    if(response.status === 409) {
-                        setErrorMessage("User is not enabled. Check your email to validate.")
-                        // setErrorMessage(
-                        // <span>
-                        //     User is not enabled. <a href="/contact-support">Click here</a> for support.
-                        // </span>
-                        // )
+                        setErrorMessage(data.errorMessage)
                         return
                     }
 

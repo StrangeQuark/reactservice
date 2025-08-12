@@ -18,9 +18,9 @@ const FilesList = () => {
     const audioExtensions = ["mp3", "wav", "flac", "aac", "m4a", "ogg"];
     const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "avif"];
 
-    useEffect(() => {
-        fetchFiles()
-    }, [])
+    // useEffect(() => {
+    //     fetchFiles()
+    // }, [])
 
     const fetchFiles = async () => {
         try {
