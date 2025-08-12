@@ -1,23 +1,19 @@
-// Integration file: Auth
-
 import { useState } from "react"
-import { getAccessToken } from "../../utility/AuthUtility"
 import { SlPencil } from "react-icons/sl"
 import { AUTH_ENDPOINTS } from "../../config"
 import "./css/AccountSettings.css"
 import InputPopup from "../InputPopup"
+import { useAuth } from "../../context/AuthContext"
 
 const AccountSettings = () => {
-    const [username, setUsername] = useState("test")
-    const [email, setEmail] = useState("test@test.com")
+    const { username, email, setUsername, setEmail, getAccessToken, logout } = useAuth()
     const [popupType, setPopupType] = useState(null)
 
     const updateUsername = async (newUsername) => {
-        const accessToken = getAccessToken()
         await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
             method: "PATCH",
             headers: {
-                Authorization: "Bearer " + accessToken,
+                Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ newUsername }),
@@ -27,7 +23,6 @@ const AccountSettings = () => {
     }
 
     const updateEmail = async (newEmail) => {
-        const accessToken = getAccessToken()
         await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "PATCH",
             headers: {
@@ -41,34 +36,21 @@ const AccountSettings = () => {
     }
 
     const deleteProfile = async () => {
-        const accessToken = getAccessToken()
-
         const credentialsJson = {
-            credentials: "t",
+            credentials: "t", // TODO: replace with real input
             password: "t",
         }
 
-        fetch(AUTH_ENDPOINTS.DELETE_USER, {
+        await fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(credentialsJson),
-        }).then((response) =>
-            response.json().then(() => {
-                document.cookie =
-                    "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-                document.cookie =
-                    "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        })
 
-                window.location.href = "/"
-            })
-        )
-    }
-
-    const closePopup = () => {
-        setPopupType(null)
+        logout()
     }
 
     return (
@@ -99,7 +81,7 @@ const AccountSettings = () => {
                     label="Username"
                     defaultValue={username}
                     onSubmit={updateUsername}
-                    onClose={closePopup}
+                    onClose={() => setPopupType(null)}
                 />
             )}
 
@@ -108,7 +90,7 @@ const AccountSettings = () => {
                     label="Email"
                     defaultValue={email}
                     onSubmit={updateEmail}
-                    onClose={closePopup}
+                    onClose={() => setPopupType(null)}
                 />
             )}
         </div>

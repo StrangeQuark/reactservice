@@ -3,42 +3,27 @@ import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { RiLoginCircleLine } from "react-icons/ri"
 import { GiHamburgerMenu } from "react-icons/gi"
-import { verifyRefreshToken, getUsernameFromJWT } from "../utility/AuthUtility" /* Integration line: Auth */
+import { useAuth } from "../context/AuthContext"
 
 const Toolbar = () => {
     /* Integration function start: Auth */
     const [displayPopout, setDisplayPopout] = useState(false)
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [username, setUsername] = useState("")
+    const { isLoggedIn, username, logout } = useAuth()
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            const isValid = await verifyRefreshToken()
-            if (isValid) {
-                setIsLoggedIn(true)
-                setUsername(getUsernameFromJWT())
-            }
-        }
+    // useEffect(() => {
+    //     const checkAuth = async () => {
+    //         const isValid = await verifyRefreshToken()
+    //         if (isValid) {
+    //             setIsLoggedIn(true)
+    //             setUsername(getUsernameFromJWT())
+    //         }
+    //     }
     
-        checkAuth()
-    }, [])
+    //     checkAuth()
+    // }, [])
 
-    const logout = () => {
-        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-        document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-        window.location.href = "/"
-    }
-
-    const navigateToUserProfile = () => {
-        window.location.href = "/user/" + username
-    }
-
-    const navigateToLoginPage = () => {
-        window.location.href = "/login"
-    }
-
-    const navigateToSettings = () => {
-        window.location.href = "/settings"
+    const navigateTo = (path) => {
+        window.location.href = path
     }
     /* Integration function end: Auth */
 
@@ -64,12 +49,12 @@ const Toolbar = () => {
             </div>
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>
-                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateToLoginPage()}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration line: Auth */}
+                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateTo("/login")}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration line: Auth */}
                 {/* Integration function start: Auth */
                 displayPopout && (<div id='center-popout-container' className="center-popout-container">
-                    <button onClick={() => {navigateToUserProfile()}}>Profile</button>
-                    <button onClick={() => {navigateToSettings()}}>Settings</button>
-                    <button onClick={() => {logout()}}>Logout</button>
+                    <button onClick={() => navigateTo(`/user/${username}`)}>Profile</button>
+                    <button onClick={() => navigateTo("/settings")}>Settings</button>
+                    <button onClick={logout}>Logout</button>
                 </div>)
                 /* Integration function end: Auth */}
             </div>
