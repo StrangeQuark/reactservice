@@ -26,7 +26,7 @@ const AccountSettings = () => {
         await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "POST",
             headers: {
-                Authorization: "Bearer " + accessToken,
+                Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ newEmail }),
@@ -44,7 +44,7 @@ const AccountSettings = () => {
         await fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
-                Authorization: "Bearer " + accessToken,
+                Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(credentialsJson),
@@ -90,9 +90,12 @@ const AccountSettings = () => {
 
             {popupType === "email" && (
                 <InputPopup
-                    label="Email"
-                    defaultValue={email}
-                    onSubmit={updateEmail}
+                    label="Edit email"
+                    inputs={[
+                        { name: "newEmail", labelValue: "New email", defaultValue: email },
+                        { name: "password", labelValue: "Password" }
+                    ]}
+                    onSubmit={(values) => updateEmail(values.newEmail, values.password)}
                     onClose={() => setPopupType(null)}
                 />
             )}
