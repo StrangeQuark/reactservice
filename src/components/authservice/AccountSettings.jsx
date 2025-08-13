@@ -9,14 +9,14 @@ const AccountSettings = () => {
     const { username, email, setUsername, setEmail, getAccessToken, logout } = useAuth()
     const [popupType, setPopupType] = useState(null)
 
-    const updateUsername = async (newUsername) => {
+    const updateUsername = async (newUsername, password) => {
         await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
-            method: "PATCH",
+            method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ newUsername }),
+            body: JSON.stringify({ newUsername, password }),
         })
 
         setUsername(newUsername)
@@ -24,7 +24,7 @@ const AccountSettings = () => {
 
     const updateEmail = async (newEmail) => {
         await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
-            method: "PATCH",
+            method: "POST",
             headers: {
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json",
@@ -78,9 +78,12 @@ const AccountSettings = () => {
 
             {popupType === "username" && (
                 <InputPopup
-                    label="Username"
-                    defaultValue={username}
-                    onSubmit={updateUsername}
+                    label="Edit username"
+                    inputs={[
+                        { name: "newUsername", labelValue: "New username", defaultValue: username },
+                        { name: "password", labelValue: "Password" }
+                    ]}
+                    onSubmit={(values) => updateUsername(values.newUsername, values.password)}
                     onClose={() => setPopupType(null)}
                 />
             )}

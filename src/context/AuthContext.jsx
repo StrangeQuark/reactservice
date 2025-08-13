@@ -1,4 +1,4 @@
-// src/context/AuthContext.js
+// Integration file: Auth
 import { createContext, useContext, useEffect, useState } from "react"
 import { AUTH_ENDPOINTS } from "../config"
 
@@ -11,10 +11,22 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const initAuth = async () => {
+            const accessToken = getCookie("access_token")
+
+            if (accessToken && !isTokenExpired(accessToken)) {
+                // Already logged in, skip refresh call
+                setIsLoggedIn(true)
+                setUsername(getUsernameFromJWT(accessToken))
+                setLoading(false)
+                return
+            }
+
+            // Only refresh if necessary
             const valid = await verifyRefreshToken()
             if (valid) {
+                const newAccessToken = getCookie("access_token")
                 setIsLoggedIn(true)
-                setUsername(getUsernameFromJWT())
+                setUsername(getUsernameFromJWT(newAccessToken))
             }
             setLoading(false)
         }
@@ -22,16 +34,27 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     const getCookie = (name) =>
-        document.cookie.split("; ").find(row => row.startsWith(name + "="))?.split("=")[1]
+        document.cookie.split("; ").find(row => row.startsWith(name + "="))?.split("=")[1] || null
+
+    const isTokenExpired = (token) => {
+        try {
+            const payloadBase64 = token.split(".")[1]
+            const payloadJson = atob(payloadBase64)
+            const { exp } = JSON.parse(payloadJson)
+            return Date.now() >= exp * 1000
+        } catch {
+            return true // Treat invalid tokens as expired
+        }
+    }
 
     const verifyRefreshToken = async () => {
-        const jwtToken = getCookie("refresh_token")
-        if (!jwtToken) return false
+        const refreshToken = getCookie("refresh_token")
+        if (!refreshToken) return false
 
         try {
             const response = await fetch(AUTH_ENDPOINTS.ACCESS, {
                 headers: {
-                    Authorization: "Bearer " + jwtToken,
+                    Authorization: "Bearer " + refreshToken,
                     "Content-Type": "application/json"
                 }
             })
@@ -45,10 +68,9 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const getUsernameFromJWT = () => {
+    const getUsernameFromJWT = (token) => {
         try {
-            const jwtToken = getCookie("refresh_token")
-            const payloadBase64 = jwtToken.split(".")[1]
+            const payloadBase64 = token.split(".")[1]
             const payloadJson = atob(payloadBase64)
             return JSON.parse(payloadJson).sub
         } catch {
@@ -64,13 +86,7 @@ export const AuthProvider = ({ children }) => {
         window.location.href = "/"
     }
 
-    const getAccessToken = () => {
-        return document.cookie
-            .split("; ")
-            .find(row => row.startsWith("access_token="))
-            ?.split("=")[1] || null
-    }
-
+    const getAccessToken = () => getCookie("access_token")
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, username, loading, setUsername, logout, getAccessToken }}>
