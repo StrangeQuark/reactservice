@@ -1,6 +1,7 @@
 // Integration file: Auth
 import { createContext, useContext, useEffect, useState } from "react"
 import { AUTH_ENDPOINTS } from "../config"
+import { Navigate } from "react-router-dom"
 
 const AuthContext = createContext(null)
 
@@ -14,14 +15,12 @@ export const AuthProvider = ({ children }) => {
             const accessToken = getCookie("access_token")
 
             if (accessToken && !isTokenExpired(accessToken)) {
-                // Already logged in, skip refresh call
                 setIsLoggedIn(true)
                 setUsername(getUsernameFromJWT(accessToken))
                 setLoading(false)
                 return
             }
 
-            // Only refresh if necessary
             const valid = await verifyRefreshToken()
             if (valid) {
                 const newAccessToken = getCookie("access_token")
@@ -96,3 +95,12 @@ export const AuthProvider = ({ children }) => {
 }
 
 export const useAuth = () => useContext(AuthContext)
+
+export const RequireAuth = ({ children }) => {
+    const { loading, isLoggedIn } = useAuth()
+
+    if (loading) return null // or <Spinner /> for nicer UX
+    if (!isLoggedIn) return <Navigate to="/login" replace />
+
+    return children
+}
