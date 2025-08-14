@@ -35,6 +35,19 @@ const AccountSettings = () => {
         setEmail(newEmail)
     }
 
+    const updatePassword = async (password, newPassword) => {
+        await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ password, newPassword }),
+        })
+
+        logout()
+    }
+
     const deleteProfile = async () => {
         const credentialsJson = {
             credentials: "t", // TODO: replace with real input
@@ -69,6 +82,7 @@ const AccountSettings = () => {
                     </p>
                     <SlPencil onClick={() => setPopupType("email")} />
                 </div>
+                <button onClick={() => setPopupType("password")}>Change password</button>
             </div>
 
             <div className="delete-section">
@@ -96,6 +110,18 @@ const AccountSettings = () => {
                         { name: "password", labelValue: "Password" }
                     ]}
                     onSubmit={(values) => updateEmail(values.newEmail, values.password)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {popupType === "password" && (
+                <InputPopup
+                    label="Edit password"
+                    inputs={[
+                        { name: "password", labelValue: "Current password"},
+                        { name: "newPassword", labelValue: "New Password" }
+                    ]}
+                    onSubmit={(values) => updatePassword(values.password, values.newPassword)}
                     onClose={() => setPopupType(null)}
                 />
             )}
