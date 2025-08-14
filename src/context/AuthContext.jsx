@@ -1,4 +1,5 @@
 // Integration file: Auth
+
 import { createContext, useContext, useEffect, useState } from "react"
 import { AUTH_ENDPOINTS } from "../config"
 import { Navigate } from "react-router-dom"

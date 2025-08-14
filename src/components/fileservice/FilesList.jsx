@@ -1,4 +1,4 @@
-// Integration file: Files
+// Integration file: File
 
 import { useEffect, useRef, useState } from "react"
 import VideoPlayer from "./VideoPlayer"

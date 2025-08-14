@@ -1,3 +1,5 @@
+// Integration file: Auth
+
 import { useState } from "react"
 import { SlPencil } from "react-icons/sl"
 import { AUTH_ENDPOINTS } from "../../config"

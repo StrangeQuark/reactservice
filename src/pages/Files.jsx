@@ -1,4 +1,4 @@
-// Integration file: Files
+// Integration file: File
 
 import Toolbar from '../components/Toolbar'
 import FilesList from '../components/fileservice/FilesList'
