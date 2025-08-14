@@ -48,19 +48,14 @@ const AccountSettings = () => {
         logout()
     }
 
-    const deleteProfile = async () => {
-        const credentialsJson = {
-            credentials: "t", // TODO: replace with real input
-            password: "t",
-        }
-
+    const deleteProfile = async (username, password) => {
         await fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(credentialsJson),
+            body: JSON.stringify({ username, password }),
         })
 
         logout()
@@ -87,7 +82,7 @@ const AccountSettings = () => {
 
             <div className="delete-section">
                 <h3>Delete Account</h3>
-                <button onClick={deleteProfile}>Delete Account</button>
+                <button onClick={() => setPopupType("delete")}>Delete Account</button>
             </div>
 
             {popupType === "username" && (
@@ -122,6 +117,18 @@ const AccountSettings = () => {
                         { name: "newPassword", labelValue: "New Password" }
                     ]}
                     onSubmit={(values) => updatePassword(values.password, values.newPassword)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {popupType === "delete" && (
+                <InputPopup
+                    label="Delete account"
+                    inputs={[
+                        { name: "username", labelValue: "Username"},
+                        { name: "password", labelValue: "Password" }
+                    ]}
+                    onSubmit={(values) => deleteProfile(values.username, values.password)}
                     onClose={() => setPopupType(null)}
                 />
             )}
