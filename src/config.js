@@ -11,7 +11,8 @@ let AUTH_ENDPOINTS = {
   UPDATE_EMAIL: `${AUTH_API_BASE_URL}/api/auth/user/update-email`,
   DELETE_USER: `${AUTH_API_BASE_URL}/api/auth/user/delete-user`,
   PASSWORD_RESET: `${AUTH_API_BASE_URL}/api/auth/user/send-password-reset-email`,
-  UPDATE_USERNAME: `${AUTH_API_BASE_URL}/api/auth/user/update-username`
+  UPDATE_USERNAME: `${AUTH_API_BASE_URL}/api/auth/user/update-username`,
+  UPDATE_PASSWORD: `${AUTH_API_BASE_URL}/api/auth/user/update-password`
 }// Integration function end: Auth
 
 // Integration function start: Email
@@ -23,6 +24,7 @@ let EMAIL_ENDPOINTS = {
 // Integration function start: File
 let FILE_ENDPOINTS = {
   GET_ALL: `${FILE_API_BASE_URL}/api/file/get-all`,
+  GET_ALL_COLLECTIONS: `${FILE_API_BASE_URL}/api/file/get-all-collections`,
   DOWNLOAD: `${FILE_API_BASE_URL}/api/file/download`,
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
   STREAM: `${FILE_API_BASE_URL}/api/file/stream`,

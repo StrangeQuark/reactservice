@@ -1,4 +1,4 @@
-// Integration file: Files
+// Integration file: File
 
 import { useRef } from "react"
 import "./css/MusicPlayer.css"

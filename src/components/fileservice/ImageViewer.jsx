@@ -1,4 +1,4 @@
-// Integration file: Files
+// Integration file: File
 
 import "./css/ImageViewer.css"
 

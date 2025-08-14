@@ -38,6 +38,25 @@
     font-size: 14px;
 }
 
+.account-settings svg {
+    cursor: pointer;
+}
+
+.account-settings button {
+    margin-top: 12px;
+    padding: 10px 16px;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #137dff;
+}
+
+.account-settings button:hover {
+    background-color: #135dff;
+}
+
 .delete-section button {
     margin-top: 12px;
     padding: 10px 16px;

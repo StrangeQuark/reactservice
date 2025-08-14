@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { RiLoginCircleLine } from "react-icons/ri"
@@ -9,18 +9,6 @@ const Toolbar = () => {
     /* Integration function start: Auth */
     const [displayPopout, setDisplayPopout] = useState(false)
     const { isLoggedIn, username, logout } = useAuth()
-
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isValid = await verifyRefreshToken()
-    //         if (isValid) {
-    //             setIsLoggedIn(true)
-    //             setUsername(getUsernameFromJWT())
-    //         }
-    //     }
-    
-    //     checkAuth()
-    // }, [])
 
     const navigateTo = (path) => {
         window.location.href = path

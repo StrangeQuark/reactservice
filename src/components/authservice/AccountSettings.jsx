@@ -1,3 +1,5 @@
+// Integration file: Auth
+
 import { useState } from "react"
 import { SlPencil } from "react-icons/sl"
 import { AUTH_ENDPOINTS } from "../../config"
@@ -35,19 +37,27 @@ const AccountSettings = () => {
         setEmail(newEmail)
     }
 
-    const deleteProfile = async () => {
-        const credentialsJson = {
-            credentials: "t", // TODO: replace with real input
-            password: "t",
-        }
+    const updatePassword = async (password, newPassword) => {
+        await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ password, newPassword }),
+        })
 
+        logout()
+    }
+
+    const deleteProfile = async (username, password) => {
         await fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(credentialsJson),
+            body: JSON.stringify({ username, password }),
         })
 
         logout()
@@ -69,11 +79,12 @@ const AccountSettings = () => {
                     </p>
                     <SlPencil onClick={() => setPopupType("email")} />
                 </div>
+                <button onClick={() => setPopupType("password")}>Change password</button>
             </div>
 
             <div className="delete-section">
                 <h3>Delete Account</h3>
-                <button onClick={deleteProfile}>Delete Account</button>
+                <button onClick={() => setPopupType("delete")}>Delete Account</button>
             </div>
 
             {popupType === "username" && (
@@ -96,6 +107,30 @@ const AccountSettings = () => {
                         { name: "password", labelValue: "Password" }
                     ]}
                     onSubmit={(values) => updateEmail(values.newEmail, values.password)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {popupType === "password" && (
+                <InputPopup
+                    label="Edit password"
+                    inputs={[
+                        { name: "password", labelValue: "Current password"},
+                        { name: "newPassword", labelValue: "New Password" }
+                    ]}
+                    onSubmit={(values) => updatePassword(values.password, values.newPassword)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {popupType === "delete" && (
+                <InputPopup
+                    label="Delete account"
+                    inputs={[
+                        { name: "username", labelValue: "Username"},
+                        { name: "password", labelValue: "Password" }
+                    ]}
+                    onSubmit={(values) => deleteProfile(values.username, values.password)}
                     onClose={() => setPopupType(null)}
                 />
             )}
