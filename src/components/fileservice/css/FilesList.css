@@ -1,4 +1,6 @@
-/* Integration file: File */
+.files-page {
+    padding: 30px;
+}
 
 .files-list {
     width: 80%;
@@ -101,4 +103,93 @@ ul {
 .file-item-button-div {
     display: flex;
     flex-wrap: nowrap;
+}
+
+.collections-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.collection-search {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    flex: 1;
+}
+
+.view-toggle button {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+}
+
+.view-toggle .active {
+    background: #007bff;
+    color: white;
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.collection-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.collection-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.collection-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.collection-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+}
+
+.collection-list {
+    list-style: none;
+    padding: 0;
+}
+
+.collection-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.collection-list li:hover {
+    background: #f0f0f0;
+}
+
+.back-button {
+    margin-left: 10px;
+    background: #ccc;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background: #aaa;
 }
