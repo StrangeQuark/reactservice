@@ -125,7 +125,11 @@ const VaultList = () => {
                 <select
                     value={selectedService}
                     onChange={(e) => {
+                        if(e.target.value === "")
+                            return
+
                         setSelectedService(e.target.value)
+                        setSelectedEnvironment("")
                         fetchEnvironments(e.target.value)
                     }}
                 >

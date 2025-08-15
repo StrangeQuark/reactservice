@@ -4,6 +4,7 @@
     padding: 20px;
     font-family: Arial, sans-serif;
     color: #333;
+    padding: 50px 20%;
 }
 
 /* Header toolbar */
@@ -82,6 +83,9 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    height: 70vh;
 }
 
 .vault-row {
@@ -90,8 +94,6 @@
     gap: 6px;
     padding: 8px;
     background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
