@@ -4,7 +4,7 @@ import Toolbar from '../components/Toolbar'
 import FilesList from '../components/fileservice/FilesList'
 import { RequireAuth } from '../context/AuthContext'
 
-const Upload = () => {
+const Files = () => {
     return(
         <RequireAuth>
             <Toolbar />
@@ -14,4 +14,4 @@ const Upload = () => {
     )
 }
 
-export default Upload
+export default Files
