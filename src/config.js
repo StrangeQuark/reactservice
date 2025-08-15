@@ -1,6 +1,7 @@
 export const AUTH_API_BASE_URL = import.meta.env.VITE_AUTH_API_BASE_URL// Integration line: Auth
 export const EMAIL_API_BASE_URL = import.meta.env.VITE_EMAIL_API_BASE_URL// Integration line: Email
 export const FILE_API_BASE_URL = import.meta.env.VITE_FILE_API_BASE_URL// Integration line: File
+export const VAULT_API_BASE_URL = import.meta.env.VITE_VAULT_API_BASE_URL// Integration line: Vault
 export const GATEWAY_BASE_URL = import.meta.env.VITE_GATEWAY_BASE_URL// Integration line: Gateway
 
 // Integration function start: Auth
@@ -31,6 +32,20 @@ let FILE_ENDPOINTS = {
   DELETE: `${FILE_API_BASE_URL}/api/file/delete`
 }// Integration function end: File
 
+// Integration function start: Vault
+let VAULT_ENDPOINTS = {
+  GET_ALL_SERVICES: `${VAULT_API_BASE_URL}/api/vault/get-all-services`,
+  GET_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-service`,
+  GET_ALL_ENVS_BY_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-environments-by-service`,
+  GET_ENV: `${VAULT_API_BASE_URL}/api/vault/get-environment`,
+  GET_VARS_BY_ENV: `${VAULT_API_BASE_URL}/api/vault/get-variables-by-environment`,
+  ADD_VAR: `${VAULT_API_BASE_URL}/api/vault/add-variable`,
+  UPDATE_VAR: `${VAULT_API_BASE_URL}/api/vault/update-variable`,
+  DELETE_VAR: `${VAULT_API_BASE_URL}/api/vault/delete-variable`,
+  ADD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/add-env-file`,
+  DOWNLOAD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/download-env-file`
+}// Integration function end: Vault
+
 const replaceBaseUrl = (endpoints, newBase) => {
   return Object.fromEntries(
     Object.entries(endpoints).map(([key, url]) => {
@@ -44,10 +59,12 @@ const replaceBaseUrl = (endpoints, newBase) => {
 AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL)
 EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL)
 FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL)
+VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL)
 // Integration function end: Gateway
 
 export {
   AUTH_ENDPOINTS,// Integration line: Auth
   EMAIL_ENDPOINTS,// Integration line: Email
-  FILE_ENDPOINTS// Integration line: File
+  FILE_ENDPOINTS,// Integration line: File
+  VAULT_ENDPOINTS// Integration line: Vault
 }

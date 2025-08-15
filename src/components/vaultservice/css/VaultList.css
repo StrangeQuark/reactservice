@@ -1,0 +1,153 @@
+/* Integration file: Vault */
+
+.vault-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Header toolbar */
+.vault-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.vault-header select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.vault-header button {
+    padding: 8px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+}
+.save-btn:hover {
+    background-color: #218838;
+}
+
+.add-btn {
+    background-color: #007bff;
+    color: white;
+}
+.add-btn:hover {
+    background-color: #0069d9;
+}
+
+/* Top control row */
+.vault-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.vault-controls button {
+    padding: 6px 12px;
+    font-size: 13px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.vault-controls button:hover {
+    background-color: #5a6268;
+}
+
+.vault-controls input {
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    flex: 1;
+}
+
+/* Variables list */
+.vault-table {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vault-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.vault-row input[type="text"],
+.vault-row input[type="password"] {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.vault-row button {
+    padding: 5px 8px;
+    font-size: 12px;
+    background-color: #e9ecef;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.vault-row button:hover {
+    background-color: #d6d8db;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 15px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
