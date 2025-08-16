@@ -37,7 +37,6 @@ const VaultList = () => {
     }, [searchTerm, variables])
 
     const fetchServices = async () => {
-        // shell for fetch
         const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_SERVICES}`, {
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
@@ -46,7 +45,6 @@ const VaultList = () => {
     }
 
     const fetchEnvironments = async (service) => {
-        // shell for fetch
         const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_ENVS_BY_SERVICE}/${service}`, {
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
@@ -55,7 +53,6 @@ const VaultList = () => {
     }
 
     const fetchVariables = async (service, environment) => {
-        // shell for fetch
         const response = await fetch(`${VAULT_ENDPOINTS.GET_VARS_BY_ENV}/${service}/${environment}`, {
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
@@ -68,7 +65,6 @@ const VaultList = () => {
     }
 
     const deleteVariable = async (service, environment, variable) => {
-        // shell for delete
         await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${service}/${environment}/${variable}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() }
@@ -101,7 +97,6 @@ const VaultList = () => {
     }
 
     const handleSave = async () => {
-        // shell for save
         // await fetch(`${VAULT_ENDPOINTS.GET_ALL}/${collectionName}`, {
         //     method: "PUT",
         //     headers: {
@@ -155,7 +150,9 @@ const VaultList = () => {
                 {changesMade && (
                     <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
-                <button className="add-btn" onClick={handleAddVar}>Add Var</button>
+                {selectedService && selectedEnvironment && (
+                    <button className="add-btn" onClick={handleAddVar}>Add Var</button>
+                )}
             </div>
 
             {selectedService && selectedEnvironment && (
