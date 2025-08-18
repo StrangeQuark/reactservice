@@ -82,6 +82,21 @@ const VaultList = () => {
         fetchEnvironments(selectedService)
     }
 
+     const addVariable = async (key, value) => {
+        let v = {key, value}
+
+        await fetch(`${VAULT_ENDPOINTS.ADD_VAR}/${selectedService}/${selectedEnvironment}`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getAccessToken() 
+            },
+            body: JSON.stringify(v)
+        })
+
+        fetchVariables(selectedService, selectedEnvironment)
+    }
+
     const deleteVariable = async (service, environment, variable) => {
         await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${service}/${environment}/${variable}`, {
             method: "DELETE",
@@ -102,11 +117,6 @@ const VaultList = () => {
 
     const copyValue = (value) => {
         navigator.clipboard.writeText(value)
-    }
-
-    const handleAddVar = () => {
-        setVariables(prev => [...prev, { key: "", value: "", masked: true, isNew: true }])
-        setChangesMade(true)
     }
 
     const handleChangeVar = (index, field, value) => {
@@ -171,7 +181,7 @@ const VaultList = () => {
                 )}
 
                 {selectedService && selectedEnvironment && (
-                    <button className="add-btn" onClick={handleAddVar}>Add Var</button>
+                    <button className="add-btn" onClick={() => setPopupType("add-variable")}>Add Var</button>
                 )}
 
                 {changesMade && (
@@ -255,6 +265,19 @@ const VaultList = () => {
                         { name: "environmentName", labelValue: "Environment name" }
                     ]}
                     onSubmit={(values) => createEnvironment(values.environmentName)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {/* Add variable popup */}
+            {popupType === "add-variable" && (
+                <InputPopup
+                    label={`Add a new variable for service/environment: ${selectedService}/${selectedEnvironment}`}
+                    inputs={[
+                        { name: "key", labelValue: "Key" },
+                        { name: "value", labelValue: "Value"}
+                    ]}
+                    onSubmit={(values) => addVariable(values.key, values.value)}
                     onClose={() => setPopupType(null)}
                 />
             )}
