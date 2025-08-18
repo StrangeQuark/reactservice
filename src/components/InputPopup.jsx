@@ -25,24 +25,28 @@ const InputPopup = ({ label, inputs, onSubmit, onClose }) => {
     return (
         <div className="popup-overlay">
             <div className="popup-content">
-                <h3>{label}</h3>
-                {inputs.map((input, index) => (
-                    <div key={index}>
-                        {input.labelValue && <label>{input.labelValue}</label>}
-                        <input
-                            type={input.type || "text"}
-                            placeholder={input.placeholder || ""}
-                            value={formValues[input.name] || ""}
-                            onChange={(e) => handleChange(input.name, e.target.value)}
-                        />
+                <h1>{label}</h1>
+                <div className="input-div">
+                    {inputs.map((input, index) => (
+                        <div key={index} className="input-row">
+                            {input.labelValue && <label>{input.labelValue}</label>}
+                            <input
+                                type={input.type || "text"}
+                                placeholder={input.placeholder || ""}
+                                value={formValues[input.name] || ""}
+                                onChange={(e) => handleChange(input.name, e.target.value)}
+                            />
+                        </div>
+                    ))}
                     </div>
-                ))}
-                <button className="submit-button" onClick={handleSubmit}>
-                    Save
-                </button>
-                <button className="cancel-button" onClick={onClose}>
-                    Cancel
-                </button>
+                <div>
+                    <button className="submit-button" onClick={handleSubmit}>
+                        Save
+                    </button>
+                    <button className="cancel-button" onClick={onClose}>
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     )
