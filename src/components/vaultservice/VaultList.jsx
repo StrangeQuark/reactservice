@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import "./css/VaultList.css"
 import { VAULT_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
+import InputPopup from "../InputPopup"
 
 const VaultList = () => {
     const { getAccessToken } = useAuth()
@@ -17,6 +18,7 @@ const VaultList = () => {
     const [searchTerm, setSearchTerm] = useState("")
     const [maskAll, setMaskAll] = useState(true)
     const [changesMade, setChangesMade] = useState(false)
+    const [popupType, setPopupType] = useState(null)
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1)
@@ -62,6 +64,22 @@ const VaultList = () => {
         setVariables(masked)
         setFilteredVariables(masked)
         setMaskAll(true)
+    }
+
+    const createService = async (serviceName) => {
+        const response = await fetch(`${VAULT_ENDPOINTS.CREATE_SERVICE}/${serviceName}`, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+        fetchServices()
+    }
+
+    const createEnvironment = async (environmentName) => {
+        const response = await fetch(`${VAULT_ENDPOINTS.CREATE_ENVIRONMENT}/${selectedService}/${environmentName}`, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+        fetchEnvironments(selectedService)
     }
 
     const deleteVariable = async (service, environment, variable) => {
@@ -117,6 +135,7 @@ const VaultList = () => {
     return (
         <div className="vault-page">
             <div className="vault-header">
+                <button className="add-btn" onClick={() => setPopupType("create-service")}>Create service</button>
                 <select
                     value={selectedService}
                     onChange={(e) => {
@@ -147,11 +166,16 @@ const VaultList = () => {
                     ))}
                 </select>
 
-                {changesMade && (
-                    <button className="save-btn" onClick={handleSave}>Save</button>
+                {selectedService && (
+                    <button className="add-btn" onClick={() => setPopupType("create-environment")}>Create environment</button>
                 )}
+
                 {selectedService && selectedEnvironment && (
                     <button className="add-btn" onClick={handleAddVar}>Add Var</button>
+                )}
+
+                {changesMade && (
+                    <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
             </div>
 
@@ -209,6 +233,30 @@ const VaultList = () => {
                         >→</button>
                     </div>
                 </>
+            )}
+
+            {/* Create service popup */}
+            {popupType === "create-service" && (
+                <InputPopup
+                    label="Create new service"
+                    inputs={[
+                        { name: "serviceName", labelValue: "Service name" }
+                    ]}
+                    onSubmit={(values) => createService(values.serviceName)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {/* Create environment popup */}
+            {popupType === "create-environment" && (
+                <InputPopup
+                    label={`Create new environment for service: ${selectedService}`}
+                    inputs={[
+                        { name: "environmentName", labelValue: "Environment name" }
+                    ]}
+                    onSubmit={(values) => createEnvironment(values.environmentName)}
+                    onClose={() => setPopupType(null)}
+                />
             )}
         </div>
     )

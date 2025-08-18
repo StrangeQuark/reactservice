@@ -34,6 +34,8 @@ const Toolbar = () => {
             </div>
             <div className="center-div">
                 <a href="/">Home</a>
+                <a href="/files">Files</a> {/* Integration line: File */}
+                <a href="/vault">Vault</a> {/* Integration line: Vault */}
             </div>
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>

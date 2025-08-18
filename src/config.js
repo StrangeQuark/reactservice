@@ -39,6 +39,8 @@ let VAULT_ENDPOINTS = {
   GET_ALL_ENVS_BY_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-environments-by-service`,
   GET_ENV: `${VAULT_API_BASE_URL}/api/vault/get-environment`,
   GET_VARS_BY_ENV: `${VAULT_API_BASE_URL}/api/vault/get-variables-by-environment`,
+  CREATE_SERVICE: `${VAULT_API_BASE_URL}/api/vault/create-service`,
+  CREATE_ENVIRONMENT: `${VAULT_API_BASE_URL}/api/vault/create-environment`,
   ADD_VAR: `${VAULT_API_BASE_URL}/api/vault/add-variable`,
   UPDATE_VAR: `${VAULT_API_BASE_URL}/api/vault/update-variable`,
   DELETE_VAR: `${VAULT_API_BASE_URL}/api/vault/delete-variable`,
