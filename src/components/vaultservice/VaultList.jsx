@@ -71,6 +71,12 @@ const VaultList = () => {
             method: "POST",
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
+
+        if(!response.ok) {
+            alert("Error when creating service")
+            return
+        }
+
         fetchServices()
     }
 
@@ -79,13 +85,19 @@ const VaultList = () => {
             method: "POST",
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
+
+        if(!response.ok) {
+            alert("Error when creating environment")
+            return
+        }
+
         fetchEnvironments(selectedService)
     }
 
      const addVariable = async (key, value) => {
         let v = {key, value}
 
-        await fetch(`${VAULT_ENDPOINTS.ADD_VAR}/${selectedService}/${selectedEnvironment}`, {
+        const response = await fetch(`${VAULT_ENDPOINTS.ADD_VAR}/${selectedService}/${selectedEnvironment}`, {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
@@ -94,15 +106,49 @@ const VaultList = () => {
             body: JSON.stringify(v)
         })
 
+        if(!response.ok) {
+            alert("Error when adding variable")
+            return
+        }
+
         fetchVariables(selectedService, selectedEnvironment)
     }
 
-    const deleteVariable = async (service, environment, variable) => {
-        await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${service}/${environment}/${variable}`, {
+    const deleteVariable = async (variable) => {
+        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${selectedService}/${selectedEnvironment}/${variable}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
-        setVariables(prev => prev.filter(v => v.key !== key))
+
+        if(!response.ok) {
+            alert("Error when deleting variable")
+            return
+        }
+        
+        fetchVariables(selectedService, selectedEnvironment)
+    }
+
+    const handleSave = async () => {
+        const response = await fetch(`${VAULT_ENDPOINTS.UPDATE_VARS}/${selectedService}/${selectedEnvironment}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getAccessToken()
+            },
+            body: JSON.stringify(variables)
+        })
+
+        if(!response.ok) {
+            alert("Error when saving variables")
+            return
+        }
+
+        const data = await response.text()
+        if(data !== "All variables updated successfully") {
+            alert(data)
+        }
+
+        setChangesMade(false)
     }
 
     const toggleMaskAll = () => {
@@ -122,18 +168,6 @@ const VaultList = () => {
     const handleChangeVar = (index, field, value) => {
         setVariables(vars => vars.map((v, i) => i === index ? { ...v, [field]: value } : v))
         setChangesMade(true)
-    }
-
-    const handleSave = async () => {
-        // await fetch(`${VAULT_ENDPOINTS.GET_ALL}/${collectionName}`, {
-        //     method: "PUT",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         Authorization: "Bearer " + getAccessToken()
-        //     },
-        //     body: JSON.stringify(variables)
-        // })
-        setChangesMade(false)
     }
 
     // Pagination logic

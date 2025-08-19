@@ -42,7 +42,7 @@ let VAULT_ENDPOINTS = {
   CREATE_SERVICE: `${VAULT_API_BASE_URL}/api/vault/create-service`,
   CREATE_ENVIRONMENT: `${VAULT_API_BASE_URL}/api/vault/create-environment`,
   ADD_VAR: `${VAULT_API_BASE_URL}/api/vault/add-variable`,
-  UPDATE_VAR: `${VAULT_API_BASE_URL}/api/vault/update-variable`,
+  UPDATE_VARS: `${VAULT_API_BASE_URL}/api/vault/update-variables`,
   DELETE_VAR: `${VAULT_API_BASE_URL}/api/vault/delete-variable`,
   ADD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/add-env-file`,
   DOWNLOAD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/download-env-file`
