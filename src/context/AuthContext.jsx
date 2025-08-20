@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [refreshTimer, setRefreshTimer] = useState(null)
 
     useEffect(() => {
         const initAuth = async () => {
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }) => {
             if (accessToken && !isTokenExpired(accessToken)) {
                 setIsLoggedIn(true)
                 setUsername(getUsernameFromJWT(accessToken))
+                scheduleTokenRefresh(accessToken)
                 setLoading(false)
                 return
             }
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }) => {
                 const newAccessToken = getCookie("access_token")
                 setIsLoggedIn(true)
                 setUsername(getUsernameFromJWT(newAccessToken))
+                scheduleTokenRefresh(accessToken)
             }
             setLoading(false)
         }
@@ -79,6 +82,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = () => {
+        if (refreshTimer) 
+            clearTimeout(refreshTimer)
+
         document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
         document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
         setIsLoggedIn(false)
@@ -87,6 +93,46 @@ export const AuthProvider = ({ children }) => {
     }
 
     const getAccessToken = () => getCookie("access_token")
+
+    const scheduleTokenRefresh = (token) => {
+        try {
+            console.log("Start")
+            const payloadBase64 = token.split(".")[1]
+            const payloadJson = atob(payloadBase64)
+            const { exp } = JSON.parse(payloadJson)
+
+            const expiresAt = exp * 1000
+            const timeout = expiresAt - Date.now() - 60000  
+
+            console.log("Mid")
+
+            if (timeout > 0) {
+                if (refreshTimer) 
+                    clearTimeout(refreshTimer)
+
+                const timerId = setTimeout(async () => {
+                    const valid = await verifyRefreshToken()
+                    
+                    if (!valid) {
+                        logout()
+                    } else {
+                        const newAccessToken = getCookie("access_token")
+                        scheduleTokenRefresh(newAccessToken)
+                    }
+                }, timeout)
+
+                setRefreshTimer(timerId)
+            } else {
+                verifyRefreshToken().then((valid) => {
+                    if (!valid) 
+                        logout()
+                })
+            }
+        } catch {
+            console.log("Break")
+            // logout()
+        }
+    }
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, username, loading, setUsername, logout, getAccessToken }}>
