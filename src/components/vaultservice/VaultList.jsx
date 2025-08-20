@@ -244,6 +244,8 @@ const VaultList = () => {
                             placeholder="Search variables..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            autoComplete="off"
+                            name="search-input"
                         />
                     </div>
 
@@ -256,11 +258,15 @@ const VaultList = () => {
                                     disabled
                                 />
                                 <input
-                                    type={v.masked ? "password" : "text"}
+                                    type="text"
                                     value={v.value}
-                                    onChange={(e) => handleChangeVar(indexOfFirstVar + index, "value", e.target.value)}
+                                    onChange={(e) =>
+                                        handleChangeVar(indexOfFirstVar + index, "value", e.target.value)
+                                    }
+                                    className={v.masked ? "masked-input" : ""}
                                     placeholder="value"
                                     autoComplete="off"
+                                    name={`vault-var-${indexOfFirstVar + index}`}
                                 />
                                 <FaEye className="row-icon" onClick={() => toggleMaskOne(indexOfFirstVar + index)} />
                                 <FaRegClipboard className="row-icon" onClick={() => copyValue(v.value)} />
