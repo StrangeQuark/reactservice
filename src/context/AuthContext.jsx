@@ -96,15 +96,12 @@ export const AuthProvider = ({ children }) => {
 
     const scheduleTokenRefresh = (token) => {
         try {
-            console.log("Start")
             const payloadBase64 = token.split(".")[1]
             const payloadJson = atob(payloadBase64)
             const { exp } = JSON.parse(payloadJson)
 
             const expiresAt = exp * 1000
             const timeout = expiresAt - Date.now() - 60000  
-
-            console.log("Mid")
 
             if (timeout > 0) {
                 if (refreshTimer) 
@@ -129,8 +126,7 @@ export const AuthProvider = ({ children }) => {
                 })
             }
         } catch {
-            console.log("Break")
-            // logout()
+            logout()
         }
     }
 
