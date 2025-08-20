@@ -5,6 +5,7 @@ import "./css/VaultList.css"
 import { VAULT_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
 import InputPopup from "../InputPopup"
+import { FaEye, FaTrash, FaRegClipboard } from "react-icons/fa";
 
 const VaultList = () => {
     const { getAccessToken } = useAuth()
@@ -22,7 +23,7 @@ const VaultList = () => {
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1)
-    const varsPerPage = 5
+    const varsPerPage = 10
 
     useEffect(() => {
         fetchServices()
@@ -73,7 +74,8 @@ const VaultList = () => {
         })
 
         if(!response.ok) {
-            alert("Error when creating service")
+            const message = await response.json()
+            alert(message.errorMessage)
             return
         }
 
@@ -87,7 +89,8 @@ const VaultList = () => {
         })
 
         if(!response.ok) {
-            alert("Error when creating environment")
+            const message = await response.json()
+            alert(message.errorMessage)
             return
         }
 
@@ -107,7 +110,8 @@ const VaultList = () => {
         })
 
         if(!response.ok) {
-            alert("Error when adding variable")
+            const message = await response.json()
+            alert(message.errorMessage)
             return
         }
 
@@ -115,13 +119,17 @@ const VaultList = () => {
     }
 
     const deleteVariable = async (variable) => {
+        if(!confirm("Are you sure you want to delete variable: " + variable))
+            return
+
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${selectedService}/${selectedEnvironment}/${variable}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
 
         if(!response.ok) {
-            alert("Error when deleting variable")
+            const message = await response.json()
+            alert(message.errorMessage)
             return
         }
         
@@ -139,7 +147,8 @@ const VaultList = () => {
         })
 
         if(!response.ok) {
-            alert("Error when saving variables")
+            const message = await response.json()
+            alert(message.errorMessage)
             return
         }
 
@@ -200,6 +209,9 @@ const VaultList = () => {
                 <select
                     value={selectedEnvironment}
                     onChange={(e) => {
+                        if(e.target.value === "")
+                            return
+
                         setSelectedEnvironment(e.target.value)
                         fetchVariables(selectedService, e.target.value)
                     }}
@@ -232,6 +244,8 @@ const VaultList = () => {
                             placeholder="Search variables..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            autoComplete="off"
+                            name="search-input"
                         />
                     </div>
 
@@ -241,18 +255,22 @@ const VaultList = () => {
                                 <input
                                     type="text"
                                     value={v.key}
-                                    onChange={(e) => handleChangeVar(indexOfFirstVar + index, "key", e.target.value)}
-                                    placeholder="key"
+                                    disabled
                                 />
                                 <input
-                                    type={v.masked ? "password" : "text"}
+                                    type="text"
                                     value={v.value}
-                                    onChange={(e) => handleChangeVar(indexOfFirstVar + index, "value", e.target.value)}
+                                    onChange={(e) =>
+                                        handleChangeVar(indexOfFirstVar + index, "value", e.target.value)
+                                    }
+                                    className={v.masked ? "masked-input" : ""}
                                     placeholder="value"
+                                    autoComplete="off"
+                                    name={`vault-var-${indexOfFirstVar + index}`}
                                 />
-                                <button onClick={() => toggleMaskOne(indexOfFirstVar + index)}>U</button>
-                                <button onClick={() => copyValue(v.value)}>C</button>
-                                <button onClick={() => deleteVariable(v.key)}>D</button>
+                                <FaEye className="row-icon" onClick={() => toggleMaskOne(indexOfFirstVar + index)} />
+                                <FaRegClipboard className="row-icon" onClick={() => copyValue(v.value)} />
+                                <FaTrash className="row-icon" onClick={() => deleteVariable(v.key)} />
                             </div>
                         ))}
                     </div>
