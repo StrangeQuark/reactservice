@@ -45,11 +45,28 @@ const UserLoginForm = () => {
                     //Save the JWT token to the cookies
                     document.cookie = "refresh_token=" + data.jwtToken
 
-                    // //Navigate back, or go to homepage if coming from the registration page
-                    // if(!document.referrer.endsWith('/register'))
-                    //     window.history.back()
-                    // else
-                    window.location.href="/"
+                    // Fetch access token
+                    fetch(AUTH_ENDPOINTS.ACCESS, {
+                        headers: {
+                            Authorization: "Bearer " + data.jwtToken,
+                            "Content-Type": "application/json"
+                        }
+                    }).then(res => res.json().then(
+                        (d) => {
+                            if(!res.ok) {
+                                setErrorMessage(d.errorMessage)
+                                return
+                            }
+
+                            document.cookie = "access_token=" + d.jwtToken
+
+                            // //Navigate back, or go to homepage if coming from the registration page
+                            // if(!document.referrer.endsWith('/register'))
+                            //     window.history.back()
+                            // else
+                            window.location.href="/"
+                        }
+                    ))
                 }
             ))
     }
