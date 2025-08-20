@@ -80,9 +80,8 @@
 
 /* Variables list */
 .vault-table {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-rows: repeat(10, 1fr); /* always 10 equal slots */
     border: 1px solid #ddd;
     border-radius: 6px;
     height: 70vh;
@@ -101,14 +100,14 @@
 .vault-row input[type="password"] {
     flex: 1;
     padding: 6px 8px;
-    font-size: 14px;
+    font-size: 21px;
     border-radius: 4px;
     border: 1px solid #ccc;
 }
 
-.vault-row button {
+.row-icon {
     padding: 5px 8px;
-    font-size: 12px;
+    font-size: 18px;
     background-color: #e9ecef;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -116,7 +115,7 @@
     transition: background-color 0.15s ease;
 }
 
-.vault-row button:hover {
+.row-icon:hover {
     background-color: #d6d8db;
 }
 
