@@ -6,6 +6,7 @@ import { VAULT_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
 import InputPopup from "../InputPopup"
 import { FaEye, FaTrash, FaRegClipboard } from "react-icons/fa";
+import UserManagementPopup from "../authservice/UserManagementPopup"
 
 const VaultList = () => {
     const { getAccessToken } = useAuth()
@@ -233,6 +234,8 @@ const VaultList = () => {
                 {changesMade && (
                     <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
+
+                <button onClick={() => setPopupType("user-management")}>Manage users</button>
             </div>
 
             {selectedService && selectedEnvironment && (
@@ -330,6 +333,12 @@ const VaultList = () => {
                         { name: "value", labelValue: "Value"}
                     ]}
                     onSubmit={(values) => addVariable(values.key, values.value)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {popupType === "user-management" && (
+                <UserManagementPopup
                     onClose={() => setPopupType(null)}
                 />
             )}
