@@ -45,7 +45,8 @@ let VAULT_ENDPOINTS = {
   UPDATE_VARS: `${VAULT_API_BASE_URL}/api/vault/update-variables`,
   DELETE_VAR: `${VAULT_API_BASE_URL}/api/vault/delete-variable`,
   ADD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/add-env-file`,
-  DOWNLOAD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/download-env-file`
+  DOWNLOAD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/download-env-file`,
+  GET_USERS_BY_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-users-by-service`
 }// Integration function end: Vault
 
 const replaceBaseUrl = (endpoints, newBase) => {
