@@ -68,6 +68,14 @@ const VaultList = () => {
         setMaskAll(true)
     }
 
+    const fetchUsers = async () => {
+        const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`)
+
+        const data = await response.json()
+
+        return data
+    }
+
     const createService = async (serviceName) => {
         const response = await fetch(`${VAULT_ENDPOINTS.CREATE_SERVICE}/${serviceName}`, {
             method: "POST",
@@ -339,6 +347,7 @@ const VaultList = () => {
 
             {popupType === "user-management" && (
                 <UserManagementPopup
+                    loadUsers={() => fetchUsers()}
                     onClose={() => setPopupType(null)}
                 />
             )}
