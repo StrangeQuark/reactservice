@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import "./css/UserManagementPopup.css"
 import { useAuth } from "../../context/AuthContext"
 import { FaTrash, FaUserCog, FaTimes } from "react-icons/fa"
+import { AUTH_ENDPOINTS } from "../../config"
 
 const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole }) => {
     const { getAccessToken } = useAuth()
@@ -21,14 +22,37 @@ const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole })
     }, [])
 
     const fetchUsers = async () => {
-        const data = await loadUsers(getAccessToken())
-        setUsers(data)
+        const data = await loadUsers()
+        const request = []
+
+        for(let i = 0; i < data.length; i++) {
+            request.push(data[i].userId)
+        }
+
+        const response = await fetch(`${AUTH_ENDPOINTS.GET_USER_DETAILS_BY_IDS}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getAccessToken() 
+            },
+            body: JSON.stringify(request)
+        })
+
+        const userData = await response.json()
+
+        // Merge the data and userData objects into one
+        const merged = data.map((d, i) => ({
+            ...d,
+            ...userData[i]
+        }))
+
+        setUsers(merged)
     }
 
     const handleSearch = async () => {
         if (!searchTerm.trim()) return
 
-        const response = await fetch(`/auth/search?query=${encodeURIComponent(searchTerm)}`, {
+        const response = await fetch(`${AUTH_ENDPOINTS.SEARCH_USERS}?query=${encodeURIComponent(searchTerm)}`, {
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
         if (!response.ok) return
