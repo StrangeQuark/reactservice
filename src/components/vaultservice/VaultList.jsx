@@ -243,7 +243,9 @@ const VaultList = () => {
                     <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
 
-                <button onClick={() => setPopupType("user-management")}>Manage users</button>
+                {selectedService && (
+                    <button onClick={() => setPopupType("user-management")}>Manage users</button>
+                )}
             </div>
 
             {selectedService && selectedEnvironment && (
