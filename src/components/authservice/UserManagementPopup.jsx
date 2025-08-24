@@ -86,7 +86,7 @@ const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole })
         if (!confirm(`Remove user ${user.username}?`)) 
             return
 
-        await deleteUser(user, getAccessToken())
+        await deleteUser(user)
         fetchUsers()
     }
 

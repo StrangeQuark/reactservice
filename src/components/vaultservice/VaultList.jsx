@@ -68,12 +68,35 @@ const VaultList = () => {
         setMaskAll(true)
     }
 
-    const fetchUsers = async () => {
+    const loadUsers = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`)
 
         const data = await response.json()
 
         return data
+    }
+
+    const deleteUser = async (user) => {
+        const request = {
+            serviceName: selectedService,
+            username: user.username
+        }
+
+        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_USER_FROM_SERVICE}`, {
+            method: "POST",
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+             },
+            body: JSON.stringify(request)
+        })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+        }
+
+        loadUsers()
     }
 
     const createService = async (serviceName) => {
@@ -349,7 +372,8 @@ const VaultList = () => {
 
             {popupType === "user-management" && (
                 <UserManagementPopup
-                    loadUsers={() => fetchUsers()}
+                    deleteUser={(user) => deleteUser(user)}
+                    loadUsers={() => loadUsers()}
                     onClose={() => setPopupType(null)}
                 />
             )}
