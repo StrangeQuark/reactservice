@@ -40,10 +40,16 @@ const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole })
 
         const userData = await response.json()
 
-        // Merge the data and userData objects into one
-        const merged = data.map((d, i) => ({
+        console.log(data)
+        console.log(userData)
+
+        // Build a lookup map for userData by userId
+        const userDataMap = new Map(userData.map(u => [u.userId, u]))
+
+        // Merge the two datasets based on userId
+        const merged = data.map(d => ({
             ...d,
-            ...userData[i]
+            ...(userDataMap.get(d.userId) || {})
         }))
 
         setUsers(merged)
