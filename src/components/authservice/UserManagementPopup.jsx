@@ -4,12 +4,12 @@ import { useAuth } from "../../context/AuthContext"
 import { FaTrash, FaUserCog, FaTimes } from "react-icons/fa"
 import { AUTH_ENDPOINTS } from "../../config"
 
-const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole }) => {
+const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUserRole }) => {
     const { getAccessToken } = useAuth()
 
     const [users, setUsers] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
-    const [searchResults, setSearchResults] = useState([])
+    const [searchResult, setSearchResult] = useState(null)
     const [editingUser, setEditingUser] = useState(null)
     const [newRole, setNewRole] = useState("")
 
@@ -56,15 +56,22 @@ const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole })
     }
 
     const handleSearch = async () => {
-        if (!searchTerm.trim()) return
+        setSearchResult(null)
+        
+        if (!searchTerm.trim())
+            return
 
         const response = await fetch(`${AUTH_ENDPOINTS.SEARCH_USERS}?query=${encodeURIComponent(searchTerm)}`, {
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
-        if (!response.ok) return
 
-        const results = await response.json()
-        setSearchResults(results.slice(0, 5)) // keep top 5
+        if (!response.ok)
+            return
+
+        const result = await response.json()
+
+
+        setSearchResult(result) // keep top 5
     }
 
     const handleAddUser = async (user) => {
@@ -83,7 +90,7 @@ const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole })
             return
         }
 
-        setSearchResults([])
+        setSearchResult(null)
         setSearchTerm("")
         fetchUsers()
     }
@@ -135,17 +142,9 @@ const UserManagementPopup = ({ onClose, loadUsers, deleteUser, updateUserRole })
                     />
                     <button onClick={handleSearch}>Search</button>
 
-                    {searchResults.length > 0 && (
+                    {searchResult && (
                         <div className="search-dropdown">
-                            {searchResults.map((user, idx) => (
-                                <div 
-                                    key={idx} 
-                                    className="search-result" 
-                                    onClick={() => handleAddUser(user)}
-                                >
-                                    {user.username} ({user.email})
-                                </div>
-                            ))}
+                            <div className="search-result" onClick={() => handleAddUser(searchResult)}> {searchResult.username} ({searchResult.email}) </div>
                         </div>
                     )}
                 </div>
