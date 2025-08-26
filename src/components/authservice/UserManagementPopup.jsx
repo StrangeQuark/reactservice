@@ -40,9 +40,6 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
 
         const userData = await response.json()
 
-        console.log(data)
-        console.log(userData)
-
         // Build a lookup map for userData by userId
         const userDataMap = new Map(userData.map(u => [u.userId, u]))
 
@@ -57,7 +54,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
 
     const handleSearch = async () => {
         setSearchResult(null)
-        
+
         if (!searchTerm.trim())
             return
 
