@@ -40,9 +40,6 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
 
         const userData = await response.json()
 
-        console.log(data)
-        console.log(userData)
-
         // Build a lookup map for userData by userId
         const userDataMap = new Map(userData.map(u => [u.userId, u]))
 
@@ -57,7 +54,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
 
     const handleSearch = async () => {
         setSearchResult(null)
-        
+
         if (!searchTerm.trim())
             return
 
@@ -71,24 +68,11 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
         const result = await response.json()
 
 
-        setSearchResult(result) // keep top 5
+        setSearchResult(result)
     }
 
-    const handleAddUser = async (user) => {
-        const response = await fetch(`/auth/addUser`, {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + getAccessToken() 
-            },
-            body: JSON.stringify({ username: user.username })
-        })
-
-        if (!response.ok) {
-            const msg = await response.json()
-            alert(msg.errorMessage)
-            return
-        }
+    const handleAddUser = async (username) => {
+        await addUser(username)
 
         setSearchResult(null)
         setSearchTerm("")
@@ -108,11 +92,9 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
         setNewRole(user.role)
     }
 
-    const handleSaveRole = async () => {
-        const user = users.find(u => u.username === editingUser)
-        if (!user) return
+    const handleSaveRole = async (user) => {
+        await updateUserRole(user, newRole)
 
-        await updateUserRole(user, newRole, getAccessToken())
         setEditingUser(null)
         setNewRole("")
         fetchUsers()

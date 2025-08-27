@@ -76,6 +76,30 @@ const VaultList = () => {
         return data
     }
 
+    const addUser = async (user) => {
+        const request = {
+            serviceName: selectedService,
+            username: user.username,
+            role: "MAINTAINER"
+        }
+
+        const response = await fetch(`${VAULT_ENDPOINTS.ADD_USER_TO_SERVICE}`, {
+            method: "POST",
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+             },
+            body: JSON.stringify(request)
+        })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+        }
+
+        loadUsers()
+    }
+
     const deleteUser = async (user) => {
         const request = {
             serviceName: selectedService,
@@ -372,6 +396,7 @@ const VaultList = () => {
 
             {popupType === "user-management" && (
                 <UserManagementPopup
+                    addUser={(user) => addUser(user)}
                     deleteUser={(user) => deleteUser(user)}
                     loadUsers={() => loadUsers()}
                     onClose={() => setPopupType(null)}

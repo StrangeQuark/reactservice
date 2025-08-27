@@ -65,7 +65,6 @@ const UserRegisterForm = () => {
 
     var registerJSON = {"username": username, "password": password, "email": email}
 
-    console.log("Attempting to register: " + AUTH_ENDPOINTS.REGISTER)
     fetch(AUTH_ENDPOINTS.REGISTER, {
       method: 'POST',
       headers: {
