@@ -49,6 +49,7 @@ let VAULT_ENDPOINTS = {
   ADD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/add-env-file`,
   DOWNLOAD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/download-env-file`,
   GET_USERS_BY_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-users-by-service`,
+  ADD_USER_TO_SERVICE: `${VAULT_API_BASE_URL}/api/vault/add-user-to-service`,
   DELETE_USER_FROM_SERVICE: `${VAULT_API_BASE_URL}/api/vault/delete-user-from-service`
 }// Integration function end: Vault
 
