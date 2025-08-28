@@ -76,6 +76,36 @@ const VaultList = () => {
         return data
     }
 
+    const getAllRoles = async () => {
+        const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_ROLES}`)
+
+        const data = await response.json()
+
+        return data
+    }
+
+    const updateUserRole = async (username, newRole) => {
+        const request = {
+            serviceName: selectedService,
+            username: username,
+            role: newRole
+        }
+
+        const response = await fetch(`${VAULT_ENDPOINTS.UPDATE_USER_ROLE}`, {
+            method: "POST",
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+             },
+            body: JSON.stringify(request)
+        })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+        }
+    }
+
     const addUser = async (user) => {
         const request = {
             serviceName: selectedService,
@@ -396,10 +426,12 @@ const VaultList = () => {
 
             {popupType === "user-management" && (
                 <UserManagementPopup
+                    onClose={() => setPopupType(null)}
+                    loadUsers={() => loadUsers()}
                     addUser={(user) => addUser(user)}
                     deleteUser={(user) => deleteUser(user)}
-                    loadUsers={() => loadUsers()}
-                    onClose={() => setPopupType(null)}
+                    getAllRoles={() => getAllRoles()}
+                    updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
                 />
             )}
         </div>
