@@ -4,13 +4,14 @@ import { useAuth } from "../../context/AuthContext"
 import { FaTrash, FaUserCog, FaTimes } from "react-icons/fa"
 import { AUTH_ENDPOINTS } from "../../config"
 
-const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUserRole }) => {
+const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRoles, updateUserRole }) => {
     const { getAccessToken } = useAuth()
 
     const [users, setUsers] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
     const [searchResult, setSearchResult] = useState(null)
     const [editingUser, setEditingUser] = useState(null)
+    const [roles, setRoles] = useState([])
     const [newRole, setNewRole] = useState("")
 
     // Pagination
@@ -19,6 +20,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
 
     useEffect(() => {
         fetchUsers()
+        fetchRoles()
     }, [])
 
     const fetchUsers = async () => {
@@ -50,6 +52,12 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
         }))
 
         setUsers(merged)
+    }
+
+    const fetchRoles = async () => {
+        const data = await getAllRoles()
+
+        setRoles(data)
     }
 
     const handleSearch = async () => {
@@ -92,8 +100,8 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
         setNewRole(user.role)
     }
 
-    const handleSaveRole = async (user) => {
-        await updateUserRole(user, newRole)
+    const handleSaveRole = async (username) => {
+        await updateUserRole(username, newRole)
 
         setEditingUser(null)
         setNewRole("")
@@ -145,14 +153,10 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
                             <span>{user.email}</span>
                             <span>
                                 {editingUser === user.username ? (
-                                    <select
-                                        value={newRole}
-                                        onChange={(e) => setNewRole(e.target.value)}
-                                    >
-                                        <option value="admin">Admin</option>
-                                        <option value="editor">Editor</option>
-                                        <option value="viewer">Viewer</option>
-                                        {/* roles can be extended */}
+                                    <select value={newRole} onChange={(e) => setNewRole(e.target.value)}>
+                                        {roles.map((role) => (
+                                            <option key={role} value={role}>{role}</option>
+                                        ))}
                                     </select>
                                 ) : (
                                     user.role
@@ -161,7 +165,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, updateUs
                             <span className="actions">
                                 {editingUser === user.username ? (
                                     <>
-                                        <button onClick={handleSaveRole}>Save</button>
+                                        <button onClick={() => handleSaveRole(user.username)}>Save</button>
                                         <button onClick={() => setEditingUser(null)}>Cancel</button>
                                     </>
                                 ) : (
