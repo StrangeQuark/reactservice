@@ -46,11 +46,14 @@ let VAULT_ENDPOINTS = {
   ADD_VAR: `${VAULT_API_BASE_URL}/api/vault/add-variable`,
   UPDATE_VARS: `${VAULT_API_BASE_URL}/api/vault/update-variables`,
   DELETE_VAR: `${VAULT_API_BASE_URL}/api/vault/delete-variable`,
+  DELETE_ENVIRONMENT: `${VAULT_API_BASE_URL}/api/vault/delete-environment`,
+  DELETE_SERVICE: `${VAULT_API_BASE_URL}/api/vault/delete-service`,
   ADD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/add-env-file`,
   DOWNLOAD_ENV_FILE: `${VAULT_API_BASE_URL}/api/vault/download-env-file`,
   GET_USERS_BY_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-users-by-service`,
   ADD_USER_TO_SERVICE: `${VAULT_API_BASE_URL}/api/vault/add-user-to-service`,
   DELETE_USER_FROM_SERVICE: `${VAULT_API_BASE_URL}/api/vault/delete-user-from-service`,
+  GET_CURRENT_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/get-current-user-role`,
   GET_ALL_ROLES: `${VAULT_API_BASE_URL}/api/vault/get-all-roles`,
   UPDATE_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/update-user-role`
 }// Integration function end: Vault
