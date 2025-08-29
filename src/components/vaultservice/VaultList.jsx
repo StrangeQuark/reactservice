@@ -1,6 +1,6 @@
 // Integration file: Vault
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import "./css/VaultList.css"
 import { VAULT_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
@@ -21,6 +21,7 @@ const VaultList = () => {
     const [maskAll, setMaskAll] = useState(true)
     const [changesMade, setChangesMade] = useState(false)
     const [popupType, setPopupType] = useState(null)
+    const fileInputRef = useRef(null)
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1)
@@ -37,8 +38,11 @@ const VaultList = () => {
             const regex = new RegExp(searchTerm, "i")
             setFilteredVariables(variables.filter(v => regex.test(v.key)))
         }
-        setCurrentPage(1)
     }, [searchTerm, variables])
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [searchTerm])
 
     const fetchServices = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_SERVICES}`, {
@@ -57,15 +61,42 @@ const VaultList = () => {
     }
 
     const fetchVariables = async (service, environment) => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_VARS_BY_ENV}/${service}/${environment}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
-        })
-        const data = await response.json()
-        // mask all initially
-        const masked = data.map(v => ({ ...v, masked: true }))
-        setVariables(masked)
-        setFilteredVariables(masked)
-        setMaskAll(true)
+        try {
+            const response = await fetch(`${VAULT_ENDPOINTS.GET_VARS_BY_ENV}/${service}/${environment}`, {
+                headers: { Authorization: "Bearer " + getAccessToken() }
+            })
+
+            if (!response.ok) {
+                const message = await response.json()
+                throw new Error(message.errorMessage || "Failed to fetch variables")
+            }
+
+            const data = await response.json()
+
+            // mask all initially
+            const masked = data.map(v => ({ ...v, masked: true }))
+
+            setVariables(masked)
+
+            // preserve searchTerm when refetching
+            setFilteredVariables(prev =>
+                searchTerm.trim() === ""
+                    ? masked
+                    : masked.filter(v => v.key.toLowerCase().includes(searchTerm.toLowerCase()))
+            )
+
+            // reset maskAll if you want
+            setMaskAll(true)
+
+            // adjust pagination if currentPage is now out of range
+            const newTotalPages = Math.ceil(masked.length / varsPerPage)
+            if (currentPage > newTotalPages) {
+                setCurrentPage(newTotalPages === 0 ? 1 : newTotalPages)
+            }
+        } catch (err) {
+            console.error("fetchVariables error:", err)
+            alert(err.message)
+        }
     }
 
     const loadUsers = async () => {
@@ -201,7 +232,17 @@ const VaultList = () => {
             return
         }
 
-        fetchVariables(selectedService, selectedEnvironment)
+        setVariables(prevVars => {
+            const updated = [...prevVars, { ...v, masked: true }]
+            const newTotalPages = Math.ceil(updated.length / varsPerPage)
+
+            // If adding created a new last page, jump there
+            if (newTotalPages > Math.ceil(prevVars.length / varsPerPage)) {
+                setCurrentPage(newTotalPages)
+            }
+
+            return updated
+        })
     }
 
     const deleteVariable = async (variable) => {
@@ -219,7 +260,17 @@ const VaultList = () => {
             return
         }
         
-        fetchVariables(selectedService, selectedEnvironment)
+        setVariables(prevVars => {
+            const updated = prevVars.filter(v => v.key !== variable)
+            const newTotalPages = Math.ceil(updated.length / varsPerPage)
+
+            // If current page is now invalid, move back
+            if (currentPage > newTotalPages) {
+                setCurrentPage(newTotalPages === 0 ? 1 : newTotalPages)
+            }
+
+            return updated
+        })
     }
 
     const handleSave = async () => {
@@ -244,6 +295,55 @@ const VaultList = () => {
         }
 
         setChangesMade(false)
+    }
+
+    const uploadEnvFile = async (event) => {
+        const file = event.target.files[0]
+        if (!file) 
+            return
+
+        const formData = new FormData()
+        formData.append("file", file)
+
+        try {
+            await fetch(`${VAULT_ENDPOINTS.ADD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
+                method: "POST",
+                body: formData,
+                headers: { Authorization: "Bearer " + getAccessToken() }
+            })
+            
+            fetchVariables(selectedService, selectedEnvironment)
+        } catch (error) {
+            console.error("Upload failed", error)
+        }
+    }
+
+    const openFilePicker = () => {
+        fileInputRef.current.click()
+    }
+
+    const downloadEnvFile = async () => {
+        try {
+            const res = await fetch(`${VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
+                    method: "GET",
+                    headers: { Authorization: "Bearer " + getAccessToken() }
+                })
+
+            if (!res.ok) 
+                throw new Error("Failed to download file")
+
+            const blob = await res.blob()
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = `${selectedService}.${selectedEnvironment}.env`
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            window.URL.revokeObjectURL(url)
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     const toggleMaskAll = () => {
@@ -313,7 +413,12 @@ const VaultList = () => {
                 )}
 
                 {selectedService && selectedEnvironment && (
-                    <button className="add-btn" onClick={() => setPopupType("add-variable")}>Add Var</button>
+                    <>
+                        <button className="add-btn" onClick={() => setPopupType("add-variable")}>Add Var</button>
+                        <button className="add-btn" onClick={() => openFilePicker()}>Upload ENV file</button>
+                        <button className="add-btn" onClick={() => downloadEnvFile()}>Download ENV file</button>
+                        <input type="file" ref={fileInputRef} onChange={uploadEnvFile} className="hidden-input" />
+                    </>
                 )}
 
                 {changesMade && (
@@ -321,7 +426,14 @@ const VaultList = () => {
                 )}
 
                 {selectedService && (
-                    <button onClick={() => setPopupType("user-management")}>Manage users</button>
+                    <>
+                        <button className="add-btn" onClick={() => setPopupType("user-management")}>Manage users</button>
+                        <button className="vault-delete-btn" onClick={() => downloadEnvFile()}>Delete service</button>
+                    </>
+                )}
+
+                {selectedService && selectedEnvironment && (
+                    <button className="vault-delete-btn" onClick={() => downloadEnvFile()}>Delete environment</button>
                 )}
             </div>
 

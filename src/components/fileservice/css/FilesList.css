@@ -37,7 +37,7 @@ ul {
 .view-btn,
 .stream-btn,
 .download-btn,
-.delete-btn {
+.file-delete-btn {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -55,11 +55,11 @@ ul {
     background-color: #0056b3;
 }
 
-.delete-btn {
+.file-delete-btn {
     background-color: #dc3545;
 }
 
-.delete-btn:hover {
+.file-delete-btn:hover {
     background-color: #b71c1c;
 }
 
@@ -73,10 +73,6 @@ ul {
 .view-btn:hover,
 .stream-btn:hover {
     background-color: #218838;
-}
-
-.hidden-input {
-    display: none;
 }
 
 .file-button {
