@@ -49,6 +49,15 @@
     background-color: #0069d9;
 }
 
+.vault-delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.vault-delete-btn:hover {
+    background-color: #b71c1c;
+}
+
 /* Top control row */
 .vault-controls {
     display: flex;

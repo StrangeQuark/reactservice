@@ -77,7 +77,8 @@ const FilesList = () => {
                     headers: { Authorization: "Bearer " + getAccessToken() }
                 })
 
-            if (!res.ok) throw new Error("Failed to download file")
+            if (!res.ok) 
+                throw new Error("Failed to download file")
 
             const blob = await res.blob()
             const url = window.URL.createObjectURL(blob)
@@ -108,7 +109,8 @@ const FilesList = () => {
 
     const handleFileUpload = async (event) => {
         const file = event.target.files[0]
-        if (!file) return
+        if (!file) 
+            return
 
         const formData = new FormData()
         formData.append("file", file)
@@ -119,6 +121,7 @@ const FilesList = () => {
                 body: formData,
                 headers: { Authorization: "Bearer " + getAccessToken() }
             })
+
             fetchFiles(selectedCollection.name)
         } catch (error) {
             console.error("Upload failed", error)
@@ -203,7 +206,7 @@ const FilesList = () => {
                                         {isImage && <button onClick={() => handleImage(file)} className="view-btn">View</button>}
                                         {isAudio && <button onClick={() => handleAudio(file)} className="listen-btn">Listen</button>}
                                         <button onClick={() => handleDownload(file)} className="download-btn">Download</button>
-                                        <button onClick={() => handleDelete(file)} className="delete-btn">Delete</button>
+                                        <button onClick={() => handleDelete(file)} className="file-delete-btn">Delete</button>
                                     </div>
                                 </li>
                             )

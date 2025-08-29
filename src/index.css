@@ -25,6 +25,10 @@ input[data-autocompleted] {
   -webkit-text-security: disc;
 }
 
+.hidden-input {
+    display: none;
+}
+
 /* Integration function start: Auth */
 .auth-div {
   border-radius: 20px;
