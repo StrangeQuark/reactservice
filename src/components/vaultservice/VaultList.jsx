@@ -5,7 +5,7 @@ import "./css/VaultList.css"
 import { VAULT_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
 import InputPopup from "../InputPopup"
-import { FaEye, FaTrash, FaRegClipboard } from "react-icons/fa";
+import { FaEye, FaTrash, FaRegClipboard, FaFileUpload, FaFileDownload, FaCog } from "react-icons/fa";
 import UserManagementPopup from "../authservice/UserManagementPopup"
 
 const VaultList = () => {
@@ -21,6 +21,8 @@ const VaultList = () => {
     const [maskAll, setMaskAll] = useState(true)
     const [changesMade, setChangesMade] = useState(false)
     const [popupType, setPopupType] = useState(null)
+    const [displayPopout, setDisplayPopout] = useState(false)
+    const [currentUserRole, setCurrentUserRole] = useState(null)
     const fileInputRef = useRef(null)
 
     // Pagination
@@ -105,6 +107,16 @@ const VaultList = () => {
         const data = await response.json()
 
         return data
+    }
+
+    const getCurrentUserRole = async (service) => {
+        const response = await fetch(`${VAULT_ENDPOINTS.GET_CURRENT_USER_ROLE}/${service}`, {
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+
+        const data = await response.json()
+
+        setCurrentUserRole(data)
     }
 
     const getAllRoles = async () => {
@@ -273,6 +285,46 @@ const VaultList = () => {
         })
     }
 
+    const deleteEnvironment = async () => {
+        if(!confirm("Are you sure you want to delete environment: " + selectedEnvironment))
+            return
+
+        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_ENVIRONMENT}/${selectedService}/${selectedEnvironment}`, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+
+        if(!response.ok) {
+            const message = await response.json()
+            alert(message.errorMessage)
+            return
+        }
+
+        fetchEnvironments(selectedService)
+        setSelectedEnvironment("")
+    }
+
+    const deleteService = async () => {
+        if(!confirm("Are you sure you want to delete service: " + selectedService))
+            return
+
+        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_SERVICE}/${selectedService}`, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+
+        if(!response.ok) {
+            const message = await response.json()
+            alert(message.errorMessage)
+            return
+        }
+
+        fetchServices()
+        setEnvironments([])
+        setSelectedService("")
+        setSelectedEnvironment("")
+    }
+
     const handleSave = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.UPDATE_VARS}/${selectedService}/${selectedEnvironment}`, {
             method: "POST",
@@ -382,6 +434,7 @@ const VaultList = () => {
                             return
 
                         setSelectedService(e.target.value)
+                        getCurrentUserRole(e.target.value)
                         setSelectedEnvironment("")
                         fetchEnvironments(e.target.value)
                     }}
@@ -408,15 +461,15 @@ const VaultList = () => {
                     ))}
                 </select>
 
-                {selectedService && (
+                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
                     <button className="add-btn" onClick={() => setPopupType("create-environment")}>Create environment</button>
                 )}
 
                 {selectedService && selectedEnvironment && (
                     <>
                         <button className="add-btn" onClick={() => setPopupType("add-variable")}>Add Var</button>
-                        <button className="add-btn" onClick={() => openFilePicker()}>Upload ENV file</button>
-                        <button className="add-btn" onClick={() => downloadEnvFile()}>Download ENV file</button>
+                        <FaFileUpload onClick={() => openFilePicker()}/>
+                        <FaFileDownload onClick={() => downloadEnvFile()}/>
                         <input type="file" ref={fileInputRef} onChange={uploadEnvFile} className="hidden-input" />
                     </>
                 )}
@@ -425,15 +478,41 @@ const VaultList = () => {
                     <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
 
-                {selectedService && (
-                    <>
-                        <button className="add-btn" onClick={() => setPopupType("user-management")}>Manage users</button>
-                        <button className="vault-delete-btn" onClick={() => downloadEnvFile()}>Delete service</button>
-                    </>
-                )}
+                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (<div className="cog-wrapper">
+                        {selectedService && (
+                            <FaCog
+                            className="cursor-pointer text-xl"
+                            onClick={() => setDisplayPopout(!displayPopout)}
+                            />
+                        )}
 
-                {selectedService && selectedEnvironment && (
-                    <button className="vault-delete-btn" onClick={() => downloadEnvFile()}>Delete environment</button>
+                        {displayPopout && (
+                            <div id="vault-popout-container" className="vault-popout-container">
+                            <button onClick={() => { 
+                                    setPopupType("user-management") 
+                                    setDisplayPopout(false) 
+                                }}>
+                                Manage Users
+                            </button>
+                            {currentUserRole === "OWNER" && (
+                                <button onClick={() => {
+                                    deleteService()
+                                    setDisplayPopout(false)
+                                }}>
+                                Delete Service
+                                </button>
+                            )}
+                            {selectedEnvironment && (
+                                <button onClick={() => {
+                                    deleteEnvironment()
+                                    setDisplayPopout(false)
+                                }}>
+                                Delete Environment
+                                </button>
+                            )}
+                            </div>
+                        )}
+                    </div>
                 )}
             </div>
 
