@@ -615,6 +615,7 @@ const VaultList = () => {
                 />
             )}
 
+            {/* User management popup */}
             {popupType === "user-management" && (
                 <UserManagementPopup
                     onClose={() => setPopupType(null)}

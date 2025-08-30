@@ -28,6 +28,7 @@ let EMAIL_ENDPOINTS = {
 let FILE_ENDPOINTS = {
   GET_ALL: `${FILE_API_BASE_URL}/api/file/get-all`,
   GET_ALL_COLLECTIONS: `${FILE_API_BASE_URL}/api/file/get-all-collections`,
+  NEW_COLLECTION: `${FILE_API_BASE_URL}/api/file/new-collection`,
   DOWNLOAD: `${FILE_API_BASE_URL}/api/file/download`,
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
   STREAM: `${FILE_API_BASE_URL}/api/file/stream`,

@@ -1,7 +1,6 @@
 /* Integration file: Vault */
 
 .vault-page {
-    padding: 20px;
     font-family: Arial, sans-serif;
     color: #333;
     padding: 50px 20%;
@@ -77,7 +76,6 @@
   background: #f3f4f6;
 }
 
-
 .save-btn {
     background-color: #28a745;
     color: white;
@@ -120,6 +118,7 @@
     border-radius: 6px;
     cursor: pointer;
 }
+
 .vault-controls button:hover {
     background-color: #5a6268;
 }

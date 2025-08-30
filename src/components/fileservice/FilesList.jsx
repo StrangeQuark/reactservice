@@ -7,6 +7,7 @@ import MusicPlayer from "./MusicPlayer"
 import "./css/FilesList.css"
 import { FILE_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
+import InputPopup from "../InputPopup"
 
 const FilesList = () => {
     const [collections, setCollections] = useState([])
@@ -18,6 +19,7 @@ const FilesList = () => {
     const [selectedVideoFile, setSelectedVideoFile] = useState(null)
     const [selectedImageFile, setSelectedImageFile] = useState(null)
     const [selectedAudioFile, setSelectedAudioFile] = useState(null)
+    const [popupType, setPopupType] = useState("")
     const fileInputRef = useRef(null)
     const { getAccessToken } = useAuth()
 
@@ -51,6 +53,28 @@ const FilesList = () => {
         const data = await response.json()
         setCollections(data)
         setFilteredCollections(data)
+    }
+
+    const createCollection = async (collectionName) => {
+        const response = await fetch(`${FILE_ENDPOINTS.NEW_COLLECTION}/${collectionName}`, {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + getAccessToken()
+            }
+        })
+
+        if(!response.ok) {
+            const message = await response.json()
+            alert(message.errorMessage)
+            return
+        }
+
+        const data = await response.text()
+        if(data !== "New collection successfully created") {
+            alert(data)
+        }
+
+        fetchCollections()
     }
 
     const fetchFiles = async (collectionName) => {
@@ -132,9 +156,9 @@ const FilesList = () => {
         fileInputRef.current.click()
     }
 
-    const handleVideo = (fileName) => setSelectedVideoFile(FILE_ENDPOINTS.STREAM + `/${fileName}`)
-    const handleImage = (fileName) => setSelectedImageFile(FILE_ENDPOINTS.STREAM + `/${fileName}`)
-    const handleAudio = (fileName) => setSelectedAudioFile(FILE_ENDPOINTS.STREAM + `/${fileName}`)
+    const handleVideo = (fileName) => setSelectedVideoFile(FILE_ENDPOINTS.STREAM + `/${selectedCollection.name}/${fileName}`)
+    const handleImage = (fileName) => setSelectedImageFile(FILE_ENDPOINTS.STREAM + `/${selectedCollection.name}/${fileName}`)
+    const handleAudio = (fileName) => setSelectedAudioFile(FILE_ENDPOINTS.STREAM + `/${selectedCollection.name}/${fileName}`)
     const closeVideo = () => setSelectedVideoFile(null)
     const closeImage = () => setSelectedImageFile(null)
     const closeAudio = () => setSelectedAudioFile(null)
@@ -156,6 +180,7 @@ const FilesList = () => {
                             <button onClick={() => setViewMode("grid")} className={viewMode === "grid" ? "active" : ""}>Grid</button>
                             <button onClick={() => setViewMode("list")} className={viewMode === "list" ? "active" : ""}>List</button>
                         </div>
+                        <button className="collection-add-btn" onClick={() => setPopupType("create-collection")}>Create collection</button>
                     </div>
 
                     {viewMode === "grid" ? (
@@ -217,6 +242,30 @@ const FilesList = () => {
                     {selectedImageFile && <ImageViewer imageUrl={selectedImageFile} onClose={closeImage} />}
                     {selectedAudioFile && <MusicPlayer audioUrl={selectedAudioFile} onClose={closeAudio} />}
                 </div>
+            )}
+
+            {/* Create collection popup */}
+            {popupType === "create-collection" && (
+                <InputPopup
+                    label={"Create a new collection"}
+                    inputs={[
+                        { name: "collectionName", labelValue: "Collection name" }
+                    ]}
+                    onSubmit={(values) => createCollection(values.collectionName)}
+                    onClose={() => setPopupType(null)}
+                />
+            )}
+
+            {/* User management popup */}
+            {popupType === "user-management" && (
+                <UserManagementPopup
+                    onClose={() => setPopupType(null)}
+                    loadUsers={() => loadUsers()}
+                    addUser={(user) => addUser(user)}
+                    deleteUser={(user) => deleteUser(user)}
+                    getAllRoles={() => getAllRoles()}
+                    updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
+                />
             )}
         </div>
     )
