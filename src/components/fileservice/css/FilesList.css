@@ -1,5 +1,13 @@
 .files-page {
-    padding: 30px;
+    padding: 50px 20%;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.files-page button {
+    padding: 14px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .files-list {
@@ -14,6 +22,7 @@
 .files-list h2 {
     text-align: center;
     color: #333;
+    margin: 8px;
 }
 
 ul {
@@ -38,11 +47,8 @@ ul {
 .stream-btn,
 .download-btn,
 .file-delete-btn {
-    padding: 8px 12px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
     color: white;
     margin-left: 10px;
 }
@@ -76,12 +82,9 @@ ul {
 }
 
 .file-button {
-    cursor: pointer;
-    padding: 10px 20px;
     border: none;
     background-color: #007bff;
     color: white;
-    font-size: 16px;
     border-radius: 5px;
     text-align: center;
     transition: background-color 0.2s;
@@ -109,18 +112,28 @@ ul {
     gap: 10px;
 }
 
+.collection-add-btn {
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    background-color: #007bff;
+    color: white;
+}
+
+.collection-add-btn:hover {
+    background-color: #0069d9;
+}
+
 .collection-search {
-    padding: 8px;
+    padding: 14px;
     border-radius: 6px;
     border: 1px solid #ccc;
     flex: 1;
 }
 
 .view-toggle button {
-    padding: 6px 12px;
     border: 1px solid #ccc;
     background: white;
-    cursor: pointer;
 }
 
 .view-toggle .active {
@@ -181,9 +194,7 @@ ul {
     margin-left: 10px;
     background: #ccc;
     border: none;
-    padding: 8px 12px;
     border-radius: 6px;
-    cursor: pointer;
 }
 
 .back-button:hover {
