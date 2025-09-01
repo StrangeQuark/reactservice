@@ -8,6 +8,8 @@ import "./css/FilesList.css"
 import { FILE_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
 import InputPopup from "../InputPopup"
+import { FaCog } from "react-icons/fa"
+import UserManagementPopup from "../authservice/UserManagementPopup"
 
 const FilesList = () => {
     const [collections, setCollections] = useState([])
@@ -20,6 +22,8 @@ const FilesList = () => {
     const [selectedImageFile, setSelectedImageFile] = useState(null)
     const [selectedAudioFile, setSelectedAudioFile] = useState(null)
     const [popupType, setPopupType] = useState("")
+    const [displayPopout, setDisplayPopout] = useState(false)
+    const [currentUserRole, setCurrentUserRole] = useState(null)
     const fileInputRef = useRef(null)
     const { getAccessToken } = useAuth()
 
@@ -77,6 +81,16 @@ const FilesList = () => {
         fetchCollections()
     }
 
+    const getCurrentUserRole = async (collectionName) => {
+        const response = await fetch(`${FILE_ENDPOINTS.GET_CURRENT_USER_ROLE}/${collectionName}`, {
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+
+        const data = await response.json()
+
+        setCurrentUserRole(data)
+    }
+
     const fetchFiles = async (collectionName) => {
         try {
             const response = await fetch(`${FILE_ENDPOINTS.GET_ALL}/${collectionName}`, {
@@ -92,6 +106,7 @@ const FilesList = () => {
     const handleCollectionSelect = (collection) => {
         setSelectedCollection(collection)
         fetchFiles(collection.name)
+        getCurrentUserRole(collection.name)
     }
 
     const handleDownload = async (fileName) => {
@@ -214,7 +229,33 @@ const FilesList = () => {
                         <button onClick={() => setSelectedCollection(null)} className="back-button">← Back</button>
                         <h2>{selectedCollection.name}</h2>
                         <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
-                        <button onClick={openFilePicker} className="file-button">Upload</button>
+                        <div className="files-list-right-div">
+                            <button onClick={openFilePicker} className="file-button">Upload</button>
+                            {(currentUserRole === "OWNER") && (
+                                <div className="cog-wrapper">
+                                    {selectedCollection && (
+                                        <FaCog onClick={() => setDisplayPopout(!displayPopout)}/>
+                                    )}
+
+                                    {displayPopout && (
+                                        <div id="file-popout-container" className="file-popout-container">
+                                            <button onClick={() => { 
+                                                    setPopupType("user-management") 
+                                                    setDisplayPopout(false) 
+                                                }}>
+                                                Manage Users
+                                            </button>
+                                            <button onClick={() => {
+                                                deleteCollection()
+                                                setDisplayPopout(false)
+                                            }}>
+                                            Delete Collection
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <ul>
                         {files.map((file, index) => {
