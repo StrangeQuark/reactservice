@@ -32,7 +32,8 @@ let FILE_ENDPOINTS = {
   DOWNLOAD: `${FILE_API_BASE_URL}/api/file/download`,
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
   STREAM: `${FILE_API_BASE_URL}/api/file/stream`,
-  DELETE: `${FILE_API_BASE_URL}/api/file/delete`
+  DELETE: `${FILE_API_BASE_URL}/api/file/delete`,
+  GET_CURRENT_USER_ROLE: `${FILE_API_BASE_URL}/api/file/get-current-user-role`
 }// Integration function end: File
 
 // Integration function start: Vault

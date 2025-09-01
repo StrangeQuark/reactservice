@@ -99,6 +99,17 @@ ul {
     justify-content: space-between;
 }
 
+.files-list-header svg {
+    padding: 0 8px;
+    width: 32px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.files-list-right-div {
+    display: flex;
+}
+
 .file-item-button-div {
     display: flex;
     flex-wrap: nowrap;
@@ -199,4 +210,36 @@ ul {
 
 .back-button:hover {
     background: #aaa;
+}
+
+.file-popout-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.file-popout-container button {
+  background: none;
+  border: none;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.15s ease;
+}
+
+.file-popout-container button:hover {
+  background: #f3f4f6;
 }

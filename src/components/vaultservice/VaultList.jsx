@@ -480,10 +480,7 @@ const VaultList = () => {
 
                 {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (<div className="cog-wrapper">
                         {selectedService && (
-                            <FaCog
-                            className="cursor-pointer text-xl"
-                            onClick={() => setDisplayPopout(!displayPopout)}
-                            />
+                            <FaCog onClick={() => setDisplayPopout(!displayPopout)}/>
                         )}
 
                         {displayPopout && (
