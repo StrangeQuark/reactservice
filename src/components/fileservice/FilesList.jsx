@@ -257,6 +257,25 @@ const FilesList = () => {
         }
     }
 
+    const deleteCollection = async () => {
+        if(!confirm("Are you sure you want to delete collection: " + selectedCollection.name))
+            return
+
+        const response = await fetch(`${FILE_ENDPOINTS.DELETE_COLLECTION}/${selectedCollection.name}`, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
+
+        if(!response.ok) {
+            const message = await response.json()
+            alert(message.errorMessage)
+            return
+        }
+
+        fetchCollections()
+        setSelectedCollection("")
+    }
+
     const openFilePicker = () => {
         fileInputRef.current.click()
     }
@@ -320,8 +339,10 @@ const FilesList = () => {
                         <h2>{selectedCollection.name}</h2>
                         <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
                         <div className="files-list-right-div">
-                            <button onClick={openFilePicker} className="file-button">Upload</button>
-                            {(currentUserRole === "OWNER") && (
+                            {(currentUserRole !== "READ") && (
+                                <button onClick={openFilePicker} className="file-button">Upload</button>
+                            )}
+                            {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
                                 <div className="cog-wrapper">
                                     {selectedCollection && (
                                         <FaCog onClick={() => setDisplayPopout(!displayPopout)}/>
@@ -335,12 +356,14 @@ const FilesList = () => {
                                                 }}>
                                                 Manage Users
                                             </button>
-                                            <button onClick={() => {
-                                                deleteCollection()
-                                                setDisplayPopout(false)
-                                            }}>
-                                            Delete Collection
-                                            </button>
+                                            {currentUserRole === "OWNER" && (
+                                                <button onClick={() => {
+                                                    deleteCollection()
+                                                    setDisplayPopout(false)
+                                                }}>
+                                                Delete Collection
+                                                </button>
+                                            )}
                                         </div>
                                     )}
                                 </div>
