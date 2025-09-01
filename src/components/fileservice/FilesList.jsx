@@ -91,6 +91,96 @@ const FilesList = () => {
         setCurrentUserRole(data)
     }
 
+    const loadUsers = async () => {
+        const response = await fetch(`${FILE_ENDPOINTS.GET_USERS_BY_COLLECTION}/${selectedCollection.name}`,{
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+            }
+        })
+
+        const data = await response.json()
+
+        return data
+    }
+
+    const getAllRoles = async () => {
+        const response = await fetch(`${FILE_ENDPOINTS.GET_ALL_ROLES}`)
+
+        const data = await response.json()
+
+        return data
+    }
+
+    const updateUserRole = async (username, newRole) => {
+        const request = {
+            collectionName: selectedCollection.name,
+            username: username,
+            role: newRole
+        }
+
+        const response = await fetch(`${FILE_ENDPOINTS.UPDATE_USER_ROLE}`, {
+            method: "POST",
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(request)
+        })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+        }
+    }
+
+    const addUser = async (user) => {
+        const request = {
+            collectionName: selectedCollection.name,
+            username: user.username,
+            role: "READ"
+        }
+
+        const response = await fetch(`${FILE_ENDPOINTS.ADD_USER_TO_COLLECTION}`, {
+            method: "POST",
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(request)
+        })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+        }
+
+        loadUsers()
+    }
+
+    const deleteUser = async (user) => {
+        const request = {
+            collectionName: selectedCollection.name,
+            username: user.username
+        }
+
+        const response = await fetch(`${FILE_ENDPOINTS.DELETE_USER_FROM_COLLECTION}`, {
+            method: "POST",
+            headers: { 
+                Authorization: "Bearer " + getAccessToken(),
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(request)
+        })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+        }
+
+        loadUsers()
+    }
+
     const fetchFiles = async (collectionName) => {
         try {
             const response = await fetch(`${FILE_ENDPOINTS.GET_ALL}/${collectionName}`, {

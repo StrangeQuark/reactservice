@@ -33,7 +33,13 @@ let FILE_ENDPOINTS = {
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
   STREAM: `${FILE_API_BASE_URL}/api/file/stream`,
   DELETE: `${FILE_API_BASE_URL}/api/file/delete`,
-  GET_CURRENT_USER_ROLE: `${FILE_API_BASE_URL}/api/file/get-current-user-role`
+  DELETE_COLLECTION: `${FILE_API_BASE_URL}/api/file/delete-collection`,
+  GET_CURRENT_USER_ROLE: `${FILE_API_BASE_URL}/api/file/get-current-user-role`,
+  GET_USERS_BY_COLLECTION: `${FILE_API_BASE_URL}/api/file/get-users-by-collection`,
+  GET_ALL_ROLES: `${FILE_API_BASE_URL}/api/file/get-all-roles`,
+  UPDATE_USER_ROLE: `${FILE_API_BASE_URL}/api/file/update-user-role`,
+  ADD_USER_TO_COLLECTION: `${FILE_API_BASE_URL}/api/file/add-user-to-collection`,
+  DELETE_USER_FROM_COLLECTION: `${FILE_API_BASE_URL}/api/file/delete-user-from-collection`
 }// Integration function end: File
 
 // Integration function start: Vault
