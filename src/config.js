@@ -15,6 +15,7 @@ let AUTH_ENDPOINTS = {
   UPDATE_USERNAME: `${AUTH_API_BASE_URL}/api/auth/user/update-username`,
   UPDATE_PASSWORD: `${AUTH_API_BASE_URL}/api/auth/user/update-password`,
   SEARCH_USERS: `${AUTH_API_BASE_URL}/api/auth/user/search-users`,
+  GET_USER_ID: `${AUTH_API_BASE_URL}/api/auth/user/get-user-id`,
   GET_USER_DETAILS_BY_IDS: `${AUTH_API_BASE_URL}/api/auth/user/get-user-details-by-ids`
 }// Integration function end: Auth
 
