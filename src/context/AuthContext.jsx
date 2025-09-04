@@ -89,7 +89,6 @@ export const AuthProvider = ({ children }) => {
         document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
         setIsLoggedIn(false)
         setUsername(null)
-        window.location.href = "/"
     }
 
     const getAccessToken = () => getCookie("access_token")

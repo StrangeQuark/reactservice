@@ -1,6 +1,6 @@
 // Integration file: Auth
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SlPencil } from "react-icons/sl"
 import { AUTH_ENDPOINTS } from "../../config"
 import "./css/AccountSettings.css"
@@ -8,11 +8,40 @@ import InputPopup from "../InputPopup"
 import { useAuth } from "../../context/AuthContext"
 
 const AccountSettings = () => {
-    const { username, email, setUsername, setEmail, getAccessToken, logout } = useAuth()
+    const { username, getAccessToken, logout } = useAuth()
     const [popupType, setPopupType] = useState(null)
+    const [email, setEmail] = useState(null)
+
+    useEffect(() => {
+            fetchAccountDetails()
+        }, [])
+
+    const fetchAccountDetails = async () => {
+        const data = await fetch(`${AUTH_ENDPOINTS.GET_USER_ID}?username=${encodeURIComponent(username)}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getAccessToken() 
+            }
+        }).then(res => res.json())
+
+        const request = [data]
+
+        const response = await fetch(`${AUTH_ENDPOINTS.GET_USER_DETAILS_BY_IDS}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + getAccessToken() 
+            },
+            body: JSON.stringify(request)
+        })
+
+        const userData = await response.json()
+
+        setEmail(userData[0].email)
+    }
 
     const updateUsername = async (newUsername, password) => {
-        await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
+        const response = await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
@@ -21,37 +50,55 @@ const AccountSettings = () => {
             body: JSON.stringify({ newUsername, password }),
         })
 
-        setUsername(newUsername)
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+            return
+        }
+
+        logout()
     }
 
-    const updateEmail = async (newEmail) => {
-        await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
+    const updateEmail = async (newEmail, password) => {
+        const response = await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ newEmail }),
+            body: JSON.stringify({ newEmail, password }),
         })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+            return
+        }
 
         setEmail(newEmail)
     }
 
     const updatePassword = async (password, newPassword) => {
-        await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
+        const response = await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ password, newPassword }),
+            body: JSON.stringify({ password, newPassword })
         })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+            return
+        }
 
         logout()
     }
 
     const deleteProfile = async (username, password) => {
-        await fetch(AUTH_ENDPOINTS.DELETE_USER, {
+        const response = await fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
@@ -59,6 +106,12 @@ const AccountSettings = () => {
             },
             body: JSON.stringify({ username, password }),
         })
+
+        if(!response.ok) {
+            const data = await response.json()
+            alert(data.errorMessage)
+            return
+        }
 
         logout()
     }
@@ -92,7 +145,7 @@ const AccountSettings = () => {
                     label="Edit username"
                     inputs={[
                         { name: "newUsername", labelValue: "New username", defaultValue: username },
-                        { name: "password", labelValue: "Password" }
+                        { name: "password", labelValue: "Password", className: "masked-input" }
                     ]}
                     onSubmit={(values) => updateUsername(values.newUsername, values.password)}
                     onClose={() => setPopupType(null)}
@@ -104,7 +157,7 @@ const AccountSettings = () => {
                     label="Edit email"
                     inputs={[
                         { name: "newEmail", labelValue: "New email", defaultValue: email },
-                        { name: "password", labelValue: "Password" }
+                        { name: "password", labelValue: "Password", className: "masked-input" }
                     ]}
                     onSubmit={(values) => updateEmail(values.newEmail, values.password)}
                     onClose={() => setPopupType(null)}
@@ -115,8 +168,8 @@ const AccountSettings = () => {
                 <InputPopup
                     label="Edit password"
                     inputs={[
-                        { name: "password", labelValue: "Current password"},
-                        { name: "newPassword", labelValue: "New Password" }
+                        { name: "password", labelValue: "Current password", className: "masked-input" },
+                        { name: "newPassword", labelValue: "New Password", className: "masked-input" }
                     ]}
                     onSubmit={(values) => updatePassword(values.password, values.newPassword)}
                     onClose={() => setPopupType(null)}
@@ -128,7 +181,7 @@ const AccountSettings = () => {
                     label="Delete account"
                     inputs={[
                         { name: "username", labelValue: "Username"},
-                        { name: "password", labelValue: "Password" }
+                        { name: "password", labelValue: "Password", className: "masked-input" }
                     ]}
                     onSubmit={(values) => deleteProfile(values.username, values.password)}
                     onClose={() => setPopupType(null)}

@@ -35,6 +35,7 @@ const InputPopup = ({ label, inputs, onSubmit, onClose }) => {
                                 placeholder={input.placeholder || ""}
                                 value={formValues[input.name] || ""}
                                 onChange={(e) => handleChange(input.name, e.target.value)}
+                                className={input.className}
                             />
                         </div>
                     ))}
