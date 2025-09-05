@@ -14,7 +14,7 @@ const SettingsNavigation = ({ setSelectedSection }) => {
     return (
         <div className="settings-navigation">
             <button className={selected === 'account' ? 'selected' : ''} onClick={() => handleSelection('account')}>Account Settings</button>
-            <button className={selected === 'security' ? 'selected' : ''} onClick={() => handleSelection('security')}>Security Settings</button>
+            {/* <button className={selected === 'security' ? 'selected' : ''} onClick={() => handleSelection('security')}>Security Settings</button> */}
         </div>
     )
 }

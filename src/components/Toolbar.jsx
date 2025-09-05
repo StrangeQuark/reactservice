@@ -39,7 +39,7 @@ const Toolbar = () => {
             </div>
             <div className="right-div">
                 <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>
-                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" size={"2em"} onClick={() => navigateTo("/login")}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration line: Auth */}
+                { !isLoggedIn ? <RiLoginCircleLine id="loginButton" data-testid="loginButton" size={"2em"} onClick={() => navigateTo("/login")}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration line: Auth */}
                 {/* Integration function start: Auth */
                 displayPopout && (<div id='center-popout-container' className="center-popout-container">
                     <button onClick={() => navigateTo(`/user/${username}`)}>Profile</button>

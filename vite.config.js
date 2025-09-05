@@ -18,4 +18,10 @@ export default defineConfig({
     include: ['react', 'react-dom'],
     force: true
   },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/test/setupTests.js", // optional: like jest setup
+    include: ["src/test/**/*.{test,spec}.{js,jsx}"]
+  },
 })
