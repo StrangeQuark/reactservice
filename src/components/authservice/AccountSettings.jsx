@@ -121,23 +121,23 @@ const AccountSettings = () => {
             <div className="account-section">
                 <h2>Account Information</h2>
                 <div className="account-info">
-                    <p>
+                    <p data-testid="username">
                         <strong>Username:</strong> {username}
                     </p>
-                    <SlPencil onClick={() => setPopupType("username")} />
+                    <SlPencil data-testid="update-username" onClick={() => setPopupType("username")} />
                 </div>
                 <div className="account-info">
-                    <p>
+                    <p data-testid="email">
                         <strong>Email:</strong> {email}
                     </p>
-                    <SlPencil onClick={() => setPopupType("email")} />
+                    <SlPencil data-testid="update-email" onClick={() => setPopupType("email")} />
                 </div>
-                <button onClick={() => setPopupType("password")}>Change password</button>
+                <button data-testid="update-password" onClick={() => setPopupType("password")}>Change password</button>
             </div>
 
             <div className="delete-section">
                 <h3>Delete Account</h3>
-                <button onClick={() => setPopupType("delete")}>Delete Account</button>
+                <button data-testid="delete-account-button" onClick={() => setPopupType("delete")}>Delete Account</button>
             </div>
 
             {popupType === "username" && (
@@ -169,7 +169,7 @@ const AccountSettings = () => {
                     label="Edit password"
                     inputs={[
                         { name: "password", labelValue: "Current password", className: "masked-input" },
-                        { name: "newPassword", labelValue: "New Password", className: "masked-input" }
+                        { name: "newPassword", labelValue: "New password", className: "masked-input" }
                     ]}
                     onSubmit={(values) => updatePassword(values.password, values.newPassword)}
                     onClose={() => setPopupType(null)}
