@@ -119,7 +119,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
             <div className="user-manager-popup">
                 <div className="popup-header">
                     <h2>Manage Users</h2>
-                    <FaTimes className="close-icon" onClick={onClose} />
+                    <FaTimes data-testid="close-button" className="close-icon" onClick={onClose} />
                 </div>
 
                 {/* Search section */}
@@ -171,10 +171,12 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
                                 ) : (
                                     <>
                                         <FaUserCog
+                                            data-testid="edit-user-role-button"
                                             className="row-icon"
                                             onClick={() => startEditRole(user)}
                                         />
                                         <FaTrash
+                                            data-testid="delete-user-button"
                                             className="row-icon"
                                             onClick={() => handleDeleteUser(user)}
                                         />

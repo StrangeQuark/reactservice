@@ -11,8 +11,6 @@ describe("ResetPasswordForm", () => {
     vi.clearAllMocks()
     global.fetch = vi.fn()
 
-    // Reset mock URL with token
-    delete window.location
     window.location = { search: "?token=abc123" }
   })
 
