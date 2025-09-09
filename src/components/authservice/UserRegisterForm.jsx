@@ -41,16 +41,30 @@ const UserRegisterForm = () => {
     setIsUsernameValid(username !== '')
     setUsernameErrorMessage(username !== '' ? "" : "Username must not be blank")
 
-    setIsEmailValid(email !== ''  && verifyEmailRegex(email))
-    setEmailErrorMessage(email !== '' ? "" : "Email must not be blank")
-    setEmailErrorMessage(verifyEmailRegex(email) ? "" : "Not a valid email")
+    if (email === '') {
+      setIsEmailValid(false)
+      setEmailErrorMessage("Email must not be blank")
+    } else if (!verifyEmailRegex(email)) {
+      setIsEmailValid(false)
+      setEmailErrorMessage("Not a valid email")
+    } else {
+      setIsEmailValid(true)
+      setEmailErrorMessage("")
+    }
 
     setIsPasswordValid(password !== '')
     setPasswordErrorMessage(password !== '' ? "" : "Password must not be blank")
 
-    setIsConfirmPasswordValid(confirmPassword !== '' && confirmPassword === password)
-    setConfirmPasswordErrorMessage(confirmPassword !== '' ? "" : "Confirmation password must not be blank")
-    setConfirmPasswordErrorMessage(confirmPassword === password ? "" : "Passwords must match")
+    if (confirmPassword === '') {
+      setIsConfirmPasswordValid(false)
+      setConfirmPasswordErrorMessage("Confirmation password must not be blank")
+    } else if (confirmPassword !== password) {
+      setIsConfirmPasswordValid(false)
+      setConfirmPasswordErrorMessage("Passwords must match")
+    } else {
+      setIsConfirmPasswordValid(true)
+      setConfirmPasswordErrorMessage("")
+    }
 
     const isFormValid =
       username !== '' &&
