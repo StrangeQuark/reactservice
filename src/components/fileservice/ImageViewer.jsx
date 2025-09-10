@@ -8,7 +8,7 @@ const ImageViewer = ({ imageUrl, onClose }) => {
             <div className="popup-content">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <div>
-                    <img src={imageUrl} alt=""/>
+                    <img data-testid="image" src={imageUrl} alt=""/>
                 </div>
             </div>
         </div>
