@@ -4,7 +4,6 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import UserRegisterForm from "../../components/authservice/UserRegisterForm"
-import { AUTH_ENDPOINTS } from "../../config"
 import * as EmailUtility from "../../utility/EmailUtility"
 
 describe("UserRegisterForm component", () => {
