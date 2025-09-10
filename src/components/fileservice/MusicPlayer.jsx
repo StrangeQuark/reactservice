@@ -24,7 +24,7 @@ const MusicPlayer = ({ audioUrl, onClose }) => {
             <div className="popup-content">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <div>
-                    <audio controls>
+                    <audio data-testid="audio-player" controls>
                         <source src={audioUrl} type={getMimeType(audioUrl)} />
                         Your browser does not support the audio tag.
                     </audio>

@@ -4,7 +4,7 @@ import "./css/VideoPlayer.css"
 import { useRef, useEffect, useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 
-const StreamPlayer = ({ videoUrl, onClose, token }) => {
+const VideoPlayer = ({ videoUrl, onClose, token }) => {
     const videoRef = useRef(null)
     const [blobUrl, setBlobUrl] = useState(null)
     const { getAccessToken } = useAuth()
@@ -23,7 +23,8 @@ const StreamPlayer = ({ videoUrl, onClose, token }) => {
         loadVideo()
 
         return () => {
-            if (blobUrl) URL.revokeObjectURL(blobUrl)
+            if (blobUrl) 
+                URL.revokeObjectURL(blobUrl)
         }
     }, [videoUrl, token])
 
@@ -32,7 +33,7 @@ const StreamPlayer = ({ videoUrl, onClose, token }) => {
             <div className="popup-content">
                 <button className="video-close-btn" onClick={onClose}>X</button>
                 <div>
-                    <video ref={videoRef} className="video-player" controls src={blobUrl}>
+                    <video data-testid="video-player" ref={videoRef} className="video-player" controls src={blobUrl}>
                         Your browser does not support the video tag
                     </video>
                 </div>
@@ -42,4 +43,4 @@ const StreamPlayer = ({ videoUrl, onClose, token }) => {
 }
 
 
-export default StreamPlayer
+export default VideoPlayer
