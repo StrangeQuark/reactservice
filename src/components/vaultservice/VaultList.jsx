@@ -478,9 +478,10 @@ const VaultList = () => {
                     <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
 
-                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (<div className="cog-wrapper">
+                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
+                    <div className="cog-wrapper">
                         {selectedService && (
-                            <FaCog onClick={() => setDisplayPopout(!displayPopout)}/>
+                            <FaCog data-testid="cog-icon" onClick={() => setDisplayPopout(!displayPopout)}/>
                         )}
 
                         {displayPopout && (
@@ -547,8 +548,8 @@ const VaultList = () => {
                                     name={`vault-var-${indexOfFirstVar + index}`}
                                 />
                                 <FaEye className="row-icon" onClick={() => toggleMaskOne(indexOfFirstVar + index)} />
-                                <FaRegClipboard className="row-icon" onClick={() => copyValue(v.value)} />
-                                <FaTrash className="row-icon" onClick={() => deleteVariable(v.key)} />
+                                <FaRegClipboard data-testid="clipboard-icon" className="row-icon" onClick={() => copyValue(v.value)} />
+                                <FaTrash data-testid="trash-icon" className="row-icon" onClick={() => deleteVariable(v.key)} />
                             </div>
                         ))}
                     </div>
