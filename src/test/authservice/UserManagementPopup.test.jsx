@@ -5,7 +5,6 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import UserManagementPopup from "../../components/authservice/UserManagementPopup"
 import { useAuth } from "../../context/AuthContext"
-import { AUTH_ENDPOINTS } from "../../config"
 
 vi.mock("../../context/AuthContext")
 
