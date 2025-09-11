@@ -88,11 +88,11 @@ describe("UserRegisterForm component", () => {
     })
   })
 
-  test("handles 409 conflict: username already taken", async () => {
+  test("handles 400 conflict: username already taken", async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
-      status: 409,
-      json: async () => ({ errorCode: 410 })
+      status: 400,
+      json: async () => ({ errorMessage: "Username already registered" })
     })
 
     render(<UserRegisterForm />)
@@ -109,11 +109,11 @@ describe("UserRegisterForm component", () => {
     })
   })
 
-  test("handles 409 conflict: email already taken", async () => {
+  test("handles 400 conflict: email already taken", async () => {
     global.fetch.mockResolvedValueOnce({
       ok: false,
-      status: 409,
-      json: async () => ({ errorCode: 401 })
+      status: 400,
+      json: async () => ({ errorMessage: "Email already registered" })
     })
 
     render(<UserRegisterForm />)

@@ -88,15 +88,13 @@ const UserRegisterForm = () => {
     })
       .then(async (response) => {
         if (!response.ok) {
-          if (response.status === 409) {
-            const data = await response.json().catch(() => ({}))
-            if (data.errorCode === 410) {
-              setIsUsernameValid(false)
-              setUsernameErrorMessage("Username is already taken")
-            } else if (data.errorCode === 401) {
-              setIsEmailValid(false)
-              setEmailErrorMessage("Email is already taken")
-            }
+          const data = await response.json().catch(() => ({}))
+          if (data.errorMessage === "Username already registered") {
+            setIsUsernameValid(false)
+            setUsernameErrorMessage("Username is already taken")
+          } else if (data.errorMessage === "Email already registered") {
+            setIsEmailValid(false)
+            setEmailErrorMessage("Email is already taken")
           }
         } else {
           setIsSuccess(true)
