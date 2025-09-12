@@ -2,15 +2,15 @@
 
 import Toolbar from '../components/Toolbar'
 import FilesList from '../components/fileservice/FilesList'
-import { RequireAuth } from '../context/AuthContext'
+import { RequireAuth } from '../context/AuthContext' // Integration line: Auth
 
 const Files = () => {
     return(
-        <RequireAuth>
+        <RequireAuth> {/* Integration line: Auth */}
             <Toolbar />
 
             <FilesList />
-        </RequireAuth>
+        </RequireAuth> // Integration line: Auth
     )
 }
 

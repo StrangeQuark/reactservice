@@ -3,11 +3,11 @@ services:
     build:
       context: .
       args:
-        - "VITE_AUTH_API_BASE_URL:${VITE_AUTH_API_BASE_URL}"
-        - "VITE_EMAIL_API_BASE_URL:${VITE_EMAIL_API_BASE_URL}"
-        - "VITE_FILE_API_BASE_URL:${VITE_FILE_API_BASE_URL}"
-        - "VITE_VAULT_API_BASE_URL:${VITE_VAULT_API_BASE_URL}"
-        - "VITE_GATEWAY_BASE_URL:${VITE_GATEWAY_BASE_URL}"
+        - "VITE_AUTH_API_BASE_URL:${VITE_AUTH_API_BASE_URL}" # Integration line: Auth
+        - "VITE_EMAIL_API_BASE_URL:${VITE_EMAIL_API_BASE_URL}" # Integration line: Email
+        - "VITE_FILE_API_BASE_URL:${VITE_FILE_API_BASE_URL}" # Integration line: File
+        - "VITE_VAULT_API_BASE_URL:${VITE_VAULT_API_BASE_URL}" # Integration line: Vault
+        - "VITE_GATEWAY_BASE_URL:${VITE_GATEWAY_BASE_URL}" # Integration line: Gateway
     networks:
       - shared-network
     ports:

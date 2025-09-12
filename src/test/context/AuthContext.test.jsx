@@ -1,4 +1,4 @@
-// Integration file: AuthContext.test.jsx
+// Integration file: Auth
 
 import "@testing-library/jest-dom"
 import { renderHook, act, waitFor } from "@testing-library/react"

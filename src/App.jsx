@@ -9,7 +9,7 @@ import Settings from './pages/Settings' // Integration line: Auth
 import Files from './pages/Files' // Integration line: Files
 import Vault from './pages/Vault' // Integration line: Vault
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './context/AuthContext' // Integration line: Auth
 
 const router = createBrowserRouter(
   [
@@ -33,9 +33,9 @@ const router = createBrowserRouter(
 
 const App = () => {
   return (
-    <AuthProvider>
+    <AuthProvider> {/* Integration line: Auth */}
       <RouterProvider router={router} />
-    </AuthProvider>
+    </AuthProvider> // Integration line: Auth
   )
 }
 

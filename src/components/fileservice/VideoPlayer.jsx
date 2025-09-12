@@ -2,18 +2,18 @@
 
 import "./css/VideoPlayer.css"
 import { useRef, useEffect, useState } from "react"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 
 const VideoPlayer = ({ videoUrl, onClose, token }) => {
     const videoRef = useRef(null)
     const [blobUrl, setBlobUrl] = useState(null)
-    const { getAccessToken } = useAuth()
+    const { getAccessToken } = useAuth() // Integration line: Auth
 
     useEffect(() => {
         const loadVideo = async () => {
             const response = await fetch(videoUrl, {
                 headers: {
-                    Authorization: "Bearer " + getAccessToken()
+                    Authorization: "Bearer " + getAccessToken() // Integration line: Auth
                 }
             })
             const blob = await response.blob()

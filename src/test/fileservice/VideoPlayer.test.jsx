@@ -1,14 +1,16 @@
+// Integration file: File
+
 import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import VideoPlayer from "../../components/fileservice/VideoPlayer"
 
-// Mock useAuth
+// Mock useAuth - Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: vi.fn(() => "mock-token"),
   }),
-}))
+})) // Integration function end: Auth
 
 describe("VideoPlayer", () => {
   let mockBlobUrl
@@ -35,9 +37,9 @@ describe("VideoPlayer", () => {
     render(<VideoPlayer videoUrl="/video/test" onClose={() => {}} token="t" />)
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith("/video/test", {
-        headers: { Authorization: "Bearer mock-token" },
-      })
+      expect(global.fetch).toHaveBeenCalledWith("/video/test"
+        , {headers: { Authorization: "Bearer mock-token" },}// Integration line: Auth
+      )
     })
   })
 

@@ -5,12 +5,12 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import FilesList from "../../components/fileservice/FilesList"
 
-// Mock AuthContext
+// Mock AuthContext - Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: () => "mock-token"
   })
-}))
+})) // Integration function end: Auth
 
 describe("FilesList", () => {
   beforeEach(() => {
@@ -63,10 +63,10 @@ describe("FilesList", () => {
       .mockResolvedValueOnce({
         json: async () => ["song.mp3", "movie.mp4"],
       })
-      // role fetch
+      // role fetch - Integration function start: Auth
       .mockResolvedValueOnce({
         json: async () => "OWNER",
-      })
+      }) // Integration function end: Auth
 
     render(<FilesList />)
 
@@ -98,9 +98,9 @@ describe("FilesList", () => {
       .mockResolvedValueOnce({
         json: async () => ["test.txt"],
       })
-      .mockResolvedValueOnce({
+      .mockResolvedValueOnce({ // Integration function start: Auth
         json: async () => "MANAGER",
-      })
+      }) // Integration function end: Auth
 
     render(<FilesList />)
 
