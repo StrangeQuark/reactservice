@@ -1,3 +1,5 @@
+// Integration file: Auth
+
 import { useEffect, useState } from "react"
 import "./css/UserManagementPopup.css"
 import { useAuth } from "../../context/AuthContext"

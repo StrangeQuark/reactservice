@@ -1,19 +1,32 @@
 # Stage 1: Build the application
 FROM node:22-alpine AS builder
 
-# Declare build-time variables
-ARG VITE_AUTH_API_BASE_URL
-ARG VITE_EMAIL_API_BASE_URL
-ARG VITE_FILE_API_BASE_URL
-ARG VITE_VAULT_API_BASE_URL
-ARG VITE_GATEWAY_BASE_URL
+# Declare build-time variables and export them so Vite can use them
 
-# Export them so Vite can use them
+# Integration function start: Auth
+ARG VITE_AUTH_API_BASE_URL
 ENV VITE_AUTH_API_BASE_URL=$VITE_AUTH_API_BASE_URL
+# Integration function end: Auth
+
+# Integration function start: Email
 ENV VITE_EMAIL_API_BASE_URL=$VITE_EMAIL_API_BASE_URL
+ARG VITE_EMAIL_API_BASE_URL
+# Integration function end: Email
+
+# Integration function start: File
 ENV VITE_FILE_API_BASE_URL=$VITE_FILE_API_BASE_URL
+ARG VITE_FILE_API_BASE_URL
+# Integration function end: File
+
+# Integration function start: Vault
 ENV VITE_VAULT_API_BASE_URL=$VITE_VAULT_API_BASE_URL
+ARG VITE_VAULT_API_BASE_URL
+# Integration function end: Vault
+
+# Integration function start: Gateway
 ENV VITE_GATEWAY_BASE_URL=$VITE_GATEWAY_BASE_URL
+ARG VITE_GATEWAY_BASE_URL
+# Integration function end: Gateway
 
 WORKDIR /reactservice
 

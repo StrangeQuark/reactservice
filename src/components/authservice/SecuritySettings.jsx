@@ -1,6 +1,5 @@
 // Integration file: Auth
 
-
 const SecuritySettings = () => {
 
     return(

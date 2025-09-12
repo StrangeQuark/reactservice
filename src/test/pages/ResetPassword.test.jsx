@@ -1,4 +1,5 @@
 // Integration file: Email
+// Integration file: Auth
 
 import { render, screen } from "@testing-library/react"
 import ResetPassword from "../../pages/ResetPassword"

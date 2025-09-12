@@ -3,7 +3,7 @@ import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { RiLoginCircleLine } from "react-icons/ri"
 import { GiHamburgerMenu } from "react-icons/gi"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext" // Integration line: Auth
 
 const Toolbar = () => {
     /* Integration function start: Auth */
@@ -12,8 +12,7 @@ const Toolbar = () => {
 
     const navigateTo = (path) => {
         window.location.href = path
-    }
-    /* Integration function end: Auth */
+    }/* Integration function end: Auth */
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {

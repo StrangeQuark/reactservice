@@ -6,10 +6,10 @@ import ImageViewer from "./ImageViewer"
 import MusicPlayer from "./MusicPlayer"
 import "./css/FilesList.css"
 import { FILE_ENDPOINTS } from "../../config"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 import InputPopup from "../InputPopup"
 import { FaCog } from "react-icons/fa"
-import UserManagementPopup from "../authservice/UserManagementPopup"
+import UserManagementPopup from "../authservice/UserManagementPopup" // Integration file: Auth
 
 const FilesList = () => {
     const [collections, setCollections] = useState([])
@@ -23,9 +23,9 @@ const FilesList = () => {
     const [selectedAudioFile, setSelectedAudioFile] = useState(null)
     const [popupType, setPopupType] = useState("")
     const [displayPopout, setDisplayPopout] = useState(false)
-    const [currentUserRole, setCurrentUserRole] = useState(null)
+    const [currentUserRole, setCurrentUserRole] = useState(null) // Integration line: Auth
     const fileInputRef = useRef(null)
-    const { getAccessToken } = useAuth()
+    const { getAccessToken } = useAuth() // Integration line: Auth
 
     const videoExtensions = ["mp4", "webm", "ogg"]
     const audioExtensions = ["mp3", "wav", "flac", "aac", "m4a", "ogg"]
@@ -51,7 +51,7 @@ const FilesList = () => {
         const response = await fetch(FILE_ENDPOINTS.GET_ALL_COLLECTIONS, {
             method: "GET",
             headers: {
-                Authorization: "Bearer " + getAccessToken()
+                Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             }
         })
         const data = await response.json()
@@ -63,7 +63,7 @@ const FilesList = () => {
         const response = await fetch(`${FILE_ENDPOINTS.NEW_COLLECTION}/${collectionName}`, {
             method: "POST",
             headers: {
-                Authorization: "Bearer " + getAccessToken()
+                Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             }
         })
 
@@ -81,6 +81,7 @@ const FilesList = () => {
         fetchCollections()
     }
 
+    // Integration function start: Auth
     const getCurrentUserRole = async (collectionName) => {
         const response = await fetch(`${FILE_ENDPOINTS.GET_CURRENT_USER_ROLE}/${collectionName}`, {
             headers: { Authorization: "Bearer " + getAccessToken() }
@@ -179,12 +180,12 @@ const FilesList = () => {
         }
 
         loadUsers()
-    }
+    }// Integration function end: Auth
 
     const fetchFiles = async (collectionName) => {
         try {
             const response = await fetch(`${FILE_ENDPOINTS.GET_ALL}/${collectionName}`, {
-                headers: { Authorization: "Bearer " + getAccessToken() }
+                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
             const data = await response.json()
             setFiles(data)
@@ -196,14 +197,14 @@ const FilesList = () => {
     const handleCollectionSelect = (collection) => {
         setSelectedCollection(collection)
         fetchFiles(collection.name)
-        getCurrentUserRole(collection.name)
+        getCurrentUserRole(collection.name) // Integration line: Auth
     }
 
     const handleDownload = async (fileName) => {
         try {
             const res = await fetch(`${FILE_ENDPOINTS.DOWNLOAD}/${selectedCollection.name}/${fileName}`, {
                     method: "GET",
-                    headers: { Authorization: "Bearer " + getAccessToken() }
+                    headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
                 })
 
             if (!res.ok) 
@@ -228,7 +229,7 @@ const FilesList = () => {
         try {
             await fetch(`${FILE_ENDPOINTS.DELETE}/${selectedCollection.name}/${fileName}`, {
                 method: "DELETE",
-                headers: { Authorization: "Bearer " + getAccessToken() }
+                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
             fetchFiles(selectedCollection.name)
         } catch (error) {
@@ -248,7 +249,7 @@ const FilesList = () => {
             await fetch(`${FILE_ENDPOINTS.UPLOAD}/${selectedCollection.name}`, {
                 method: "POST",
                 body: formData,
-                headers: { Authorization: "Bearer " + getAccessToken() }
+                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
 
             fetchFiles(selectedCollection.name)
@@ -263,7 +264,7 @@ const FilesList = () => {
 
         const response = await fetch(`${FILE_ENDPOINTS.DELETE_COLLECTION}/${selectedCollection.name}`, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
 
         if(!response.ok) {
@@ -339,10 +340,10 @@ const FilesList = () => {
                         <h2>{selectedCollection.name}</h2>
                         <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
                         <div className="files-list-right-div">
-                            {(currentUserRole !== "READ") && (
+                            {(currentUserRole !== "READ") && ( // Integration line: Auth
                                 <button onClick={openFilePicker} className="file-button">Upload</button>
-                            )}
-                            {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
+                            )} {/* Integration line: Auth */}
+                            {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
                                 <div className="cog-wrapper">
                                     {selectedCollection && (
                                         <FaCog onClick={() => setDisplayPopout(!displayPopout)}/>
@@ -350,24 +351,25 @@ const FilesList = () => {
 
                                     {displayPopout && (
                                         <div id="file-popout-container" className="file-popout-container">
+                                            {/* Integration function start: Auth */}
                                             <button onClick={() => { 
                                                     setPopupType("user-management") 
                                                     setDisplayPopout(false) 
                                                 }}>
                                                 Manage Users
-                                            </button>
-                                            {currentUserRole === "OWNER" && (
+                                            </button> {/* Integration function end: Auth */}
+                                            {currentUserRole === "OWNER" && ( // Integration line: Auth
                                                 <button onClick={() => {
                                                     deleteCollection()
                                                     setDisplayPopout(false)
                                                 }}>
                                                 Delete Collection
                                                 </button>
-                                            )}
+                                            )}{/* Integration line: Auth */}
                                         </div>
                                     )}
                                 </div>
-                            )}
+                            )}{/* Integration line: Auth */}
                         </div>
                     </div>
                     <ul>
@@ -410,7 +412,7 @@ const FilesList = () => {
                 />
             )}
 
-            {/* User management popup */}
+            {/* User management popup - Integration function start: Auth*/}
             {popupType === "user-management" && (
                 <UserManagementPopup
                     onClose={() => setPopupType(null)}
@@ -420,7 +422,7 @@ const FilesList = () => {
                     getAllRoles={() => getAllRoles()}
                     updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
                 />
-            )}
+            )}{/* Integration function end: Auth*/}
         </div>
     )
 }

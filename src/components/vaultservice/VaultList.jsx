@@ -3,13 +3,13 @@
 import { useEffect, useState, useRef } from "react"
 import "./css/VaultList.css"
 import { VAULT_ENDPOINTS } from "../../config"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 import InputPopup from "../InputPopup"
 import { FaEye, FaTrash, FaRegClipboard, FaFileUpload, FaFileDownload, FaCog } from "react-icons/fa";
-import UserManagementPopup from "../authservice/UserManagementPopup"
+import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
 
 const VaultList = () => {
-    const { getAccessToken } = useAuth()
+    const { getAccessToken } = useAuth() // Integration line: Auth
 
     const [services, setServices] = useState([])
     const [environments, setEnvironments] = useState([])
@@ -22,7 +22,7 @@ const VaultList = () => {
     const [changesMade, setChangesMade] = useState(false)
     const [popupType, setPopupType] = useState(null)
     const [displayPopout, setDisplayPopout] = useState(false)
-    const [currentUserRole, setCurrentUserRole] = useState(null)
+    const [currentUserRole, setCurrentUserRole] = useState(null)// Integration line: Auth
     const fileInputRef = useRef(null)
 
     // Pagination
@@ -48,7 +48,7 @@ const VaultList = () => {
 
     const fetchServices = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_SERVICES}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
         const data = await response.json()
         setServices(data)
@@ -56,7 +56,7 @@ const VaultList = () => {
 
     const fetchEnvironments = async (service) => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_ENVS_BY_SERVICE}/${service}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
         const data = await response.json()
         setEnvironments(data)
@@ -65,7 +65,7 @@ const VaultList = () => {
     const fetchVariables = async (service, environment) => {
         try {
             const response = await fetch(`${VAULT_ENDPOINTS.GET_VARS_BY_ENV}/${service}/${environment}`, {
-                headers: { Authorization: "Bearer " + getAccessToken() }
+                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
 
             if (!response.ok) {
@@ -101,6 +101,7 @@ const VaultList = () => {
         }
     }
 
+    // Integration function start: Auth
     const loadUsers = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`)
 
@@ -194,12 +195,12 @@ const VaultList = () => {
         }
 
         loadUsers()
-    }
+    } // Integration function end: Auth
 
     const createService = async (serviceName) => {
         const response = await fetch(`${VAULT_ENDPOINTS.CREATE_SERVICE}/${serviceName}`, {
             method: "POST",
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
 
         if(!response.ok) {
@@ -214,7 +215,7 @@ const VaultList = () => {
     const createEnvironment = async (environmentName) => {
         const response = await fetch(`${VAULT_ENDPOINTS.CREATE_ENVIRONMENT}/${selectedService}/${environmentName}`, {
             method: "POST",
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
 
         if(!response.ok) {
@@ -233,7 +234,7 @@ const VaultList = () => {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + getAccessToken() 
+                Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             },
             body: JSON.stringify(v)
         })
@@ -263,7 +264,7 @@ const VaultList = () => {
 
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${selectedService}/${selectedEnvironment}/${variable}`, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
 
         if(!response.ok) {
@@ -291,7 +292,7 @@ const VaultList = () => {
 
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_ENVIRONMENT}/${selectedService}/${selectedEnvironment}`, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
 
         if(!response.ok) {
@@ -310,7 +311,7 @@ const VaultList = () => {
 
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_SERVICE}/${selectedService}`, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
 
         if(!response.ok) {
@@ -330,7 +331,7 @@ const VaultList = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + getAccessToken()
+                Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             },
             body: JSON.stringify(variables)
         })
@@ -361,7 +362,7 @@ const VaultList = () => {
             await fetch(`${VAULT_ENDPOINTS.ADD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
                 method: "POST",
                 body: formData,
-                headers: { Authorization: "Bearer " + getAccessToken() }
+                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
             
             fetchVariables(selectedService, selectedEnvironment)
@@ -378,7 +379,7 @@ const VaultList = () => {
         try {
             const res = await fetch(`${VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
                     method: "GET",
-                    headers: { Authorization: "Bearer " + getAccessToken() }
+                    headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
                 })
 
             if (!res.ok) 
@@ -434,7 +435,7 @@ const VaultList = () => {
                             return
 
                         setSelectedService(e.target.value)
-                        getCurrentUserRole(e.target.value)
+                        getCurrentUserRole(e.target.value) // Integration line: Auth
                         setSelectedEnvironment("")
                         fetchEnvironments(e.target.value)
                     }}
@@ -461,9 +462,9 @@ const VaultList = () => {
                     ))}
                 </select>
 
-                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
+                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
                     <button className="add-btn" onClick={() => setPopupType("create-environment")}>Create environment</button>
-                )}
+                )} {/* Integration line: Auth */}
 
                 {selectedService && selectedEnvironment && (
                     <>
@@ -478,7 +479,7 @@ const VaultList = () => {
                     <button className="save-btn" onClick={handleSave}>Save</button>
                 )}
 
-                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
+                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
                     <div className="cog-wrapper">
                         {selectedService && (
                             <FaCog data-testid="cog-icon" onClick={() => setDisplayPopout(!displayPopout)}/>
@@ -486,20 +487,20 @@ const VaultList = () => {
 
                         {displayPopout && (
                             <div id="vault-popout-container" className="vault-popout-container">
-                            <button onClick={() => { 
+                            <button onClick={() => { // Integration function start: Auth
                                     setPopupType("user-management") 
                                     setDisplayPopout(false) 
                                 }}>
                                 Manage Users
-                            </button>
-                            {currentUserRole === "OWNER" && (
+                            </button> {/* Integration function end: Auth */}
+                            {currentUserRole === "OWNER" && ( // Integration line: Auth
                                 <button onClick={() => {
                                     deleteService()
                                     setDisplayPopout(false)
                                 }}>
                                 Delete Service
                                 </button>
-                            )}
+                            )} {/* Integration line: Auth */}
                             {selectedEnvironment && (
                                 <button onClick={() => {
                                     deleteEnvironment()
@@ -613,7 +614,7 @@ const VaultList = () => {
                 />
             )}
 
-            {/* User management popup */}
+            {/* User management popup - Integration function start: Auth*/}
             {popupType === "user-management" && (
                 <UserManagementPopup
                     onClose={() => setPopupType(null)}
@@ -623,7 +624,7 @@ const VaultList = () => {
                     getAllRoles={() => getAllRoles()}
                     updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
                 />
-            )}
+            )} {/* Integration function end: Auth */}
         </div>
     )
 }

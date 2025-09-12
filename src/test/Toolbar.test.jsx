@@ -4,12 +4,12 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import Toolbar from "../components/Toolbar"
 
-// Mock AuthContext since Toolbar depends on it
+// Mock AuthContext since Toolbar depends on it - Integration function start: Auth
 vi.mock("../context/AuthContext", () => ({
   useAuth: vi.fn(),
 }))
 
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext" // Integration function end: Auth
 
 describe("Toolbar component", () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe("Toolbar component", () => {
   })
 
   test("renders logo and navigation links", () => {
-    useAuth.mockReturnValue({ isLoggedIn: false })
+    useAuth.mockReturnValue({ isLoggedIn: false }) // Integration line: Auth
 
     render(<Toolbar />)
 
@@ -27,6 +27,7 @@ describe("Toolbar component", () => {
     expect(screen.getByText("Vault")).toBeInTheDocument()
   })
 
+  // Integration function start: Auth
   test("shows login button when not logged in", () => {
     useAuth.mockReturnValue({ isLoggedIn: false })
 
@@ -57,8 +58,8 @@ describe("Toolbar component", () => {
 
     render(<Toolbar />)
 
-    const userButton = screen.getByText("testuser")
-    fireEvent.click(userButton)
+    const userButton = screen.getByText("testuser") // Integration line: Auth
+    fireEvent.click(userButton) // Integration line: Auth
 
     expect(screen.getByText("Profile")).toBeInTheDocument()
     expect(screen.getByText("Settings")).toBeInTheDocument()
@@ -66,10 +67,10 @@ describe("Toolbar component", () => {
 
     fireEvent.click(screen.getByText("Logout"))
     expect(mockLogout).toHaveBeenCalled()
-  })
+  }) // Integration function end: Auth
 
   test("handles search bar Enter key", () => {
-    useAuth.mockReturnValue({ isLoggedIn: false })
+    useAuth.mockReturnValue({ isLoggedIn: false }) // Integration line: Auth
 
     render(<Toolbar />)
 
