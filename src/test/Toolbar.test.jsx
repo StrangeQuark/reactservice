@@ -23,8 +23,8 @@ describe("Toolbar component", () => {
 
     expect(screen.getByAltText("Logo")).toBeInTheDocument()
     expect(screen.getByText("Home")).toBeInTheDocument()
-    expect(screen.getByText("Files")).toBeInTheDocument()
-    expect(screen.getByText("Vault")).toBeInTheDocument()
+    expect(screen.getByText("Files")).toBeInTheDocument() // Integration line: File
+    expect(screen.getByText("Vault")).toBeInTheDocument() // Integration line: Vault
   })
 
   // Integration function start: Auth
