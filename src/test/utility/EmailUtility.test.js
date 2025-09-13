@@ -1,5 +1,3 @@
-// Integration file: Email
-
 import { describe, it, expect } from "vitest"
 import { verifyEmailRegex } from "../../utility/EmailUtility"
 

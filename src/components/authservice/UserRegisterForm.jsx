@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
 import { FaCheckCircle } from "react-icons/fa"
-import { verifyEmailRegex } from "../../utility/EmailUtility" // Integration line: Email
+import { verifyEmailRegex } from "../../utility/EmailUtility"
 import { AUTH_ENDPOINTS } from "../../config";
 import "./css/UserRegisterForm.css"
 
@@ -44,12 +44,10 @@ const UserRegisterForm = () => {
     if (email === '') {
       setIsEmailValid(false)
       setEmailErrorMessage("Email must not be blank")
-    }
-    else if (!verifyEmailRegex(email)) { // Integration function start: Email
+    } else if (!verifyEmailRegex(email)) {
       setIsEmailValid(false)
       setEmailErrorMessage("Not a valid email")
-    } // Integration function end: Email
-    else {
+    } else {
       setIsEmailValid(true)
       setEmailErrorMessage("")
     }
@@ -73,8 +71,8 @@ const UserRegisterForm = () => {
       email !== '' &&
       password !== '' &&
       confirmPassword !== '' &&
-      confirmPassword === password
-      && verifyEmailRegex(email) // Integration line: Email
+      confirmPassword === password &&
+      verifyEmailRegex(email)
 
     if (!isFormValid)
       return
