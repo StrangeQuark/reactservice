@@ -14,8 +14,8 @@ vi.mock("../../components/fileservice/FilesList", () => ({
 // Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
   RequireAuth: ({ children }) => <div data-testid="require-auth">{children}</div>,
-})) // Integration function end: Auth
-
+}))
+// Integration function end: Auth
 test("renders Files page with RequireAuth (If Auth integrated), Toolbar, and FilesList", () => {
   render(<Files />)
 

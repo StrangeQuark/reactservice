@@ -9,8 +9,8 @@ vi.mock("../context/AuthContext", () => ({
   useAuth: vi.fn(),
 }))
 
-import { useAuth } from "../context/AuthContext" // Integration function end: Auth
-
+import { useAuth } from "../context/AuthContext"
+// Integration function end: Auth
 describe("Toolbar component", () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -26,7 +26,6 @@ describe("Toolbar component", () => {
     expect(screen.getByText("Files")).toBeInTheDocument() // Integration line: File
     expect(screen.getByText("Vault")).toBeInTheDocument() // Integration line: Vault
   })
-
   // Integration function start: Auth
   test("shows login button when not logged in", () => {
     useAuth.mockReturnValue({ isLoggedIn: false })
@@ -58,8 +57,8 @@ describe("Toolbar component", () => {
 
     render(<Toolbar />)
 
-    const userButton = screen.getByText("testuser") // Integration line: Auth
-    fireEvent.click(userButton) // Integration line: Auth
+    const userButton = screen.getByText("testuser")
+    fireEvent.click(userButton)
 
     expect(screen.getByText("Profile")).toBeInTheDocument()
     expect(screen.getByText("Settings")).toBeInTheDocument()
