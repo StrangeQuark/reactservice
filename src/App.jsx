@@ -16,7 +16,7 @@ const router = createBrowserRouter(
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> }, // Integration line: Auth
     { path: "/register", element: <Register /> }, // Integration line: Auth
-    { path: "/password-reset", element: <ResetPasswordSearch /> }, // Integration line: Auth
+    { path: "/password-reset", element: <ResetPasswordSearch /> }, // Integration line: Auth - Integration line: Email
     { path: "/new-password", element: <ResetPassword /> }, // Integration line: Email
     { path: "/user/:id", element: <UserProfile /> }, // Integration line: Auth - Integration line: Email
     { path: "/confirm-email", element: <ConfirmEmail /> }, // Integration line: Auth - Integration line: Email
