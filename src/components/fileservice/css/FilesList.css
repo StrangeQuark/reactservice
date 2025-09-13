@@ -108,6 +108,11 @@ ul {
     cursor: pointer;
 }
 
+.cog-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .files-list-right-div {
     display: flex;
 }
