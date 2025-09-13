@@ -4,13 +4,13 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import UserRegisterForm from "../../components/authservice/UserRegisterForm"
-import * as EmailUtility from "../../utility/EmailUtility"
+import * as EmailUtility from "../../utility/EmailUtility" // Integration line: Email
 
 describe("UserRegisterForm component", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     global.fetch = vi.fn()
-    vi.spyOn(EmailUtility, "verifyEmailRegex").mockImplementation(() => true) // default valid
+    vi.spyOn(EmailUtility, "verifyEmailRegex").mockImplementation(() => true) // default valid - Integration line: Email
   })
 
   test("renders form fields and button", () => {
@@ -39,7 +39,7 @@ describe("UserRegisterForm component", () => {
 
   test("shows error when email is invalid", async () => {
     global.fetch.mockResolvedValueOnce({ ok: true })
-    EmailUtility.verifyEmailRegex.mockReturnValueOnce(false)
+    EmailUtility.verifyEmailRegex.mockReturnValueOnce(false) // Integration line: Email
 
     render(<UserRegisterForm />)
 
