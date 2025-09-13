@@ -6,11 +6,13 @@ import { RequireAuth } from '../context/AuthContext' // Integration line: Auth
 
 const Vault = () => {
     return(
+        <>
         <RequireAuth> {/* Integration line: Auth */}
             <Toolbar />
 
             <VaultList />
-        </RequireAuth> // Integration line: Auth
+        </RequireAuth> {/* Integration line: Auth */}
+        </>
     )
 }
 

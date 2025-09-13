@@ -9,7 +9,7 @@ import { FILE_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 import InputPopup from "../InputPopup"
 import { FaCog } from "react-icons/fa"
-import UserManagementPopup from "../authservice/UserManagementPopup" // Integration file: Auth
+import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
 
 const FilesList = () => {
     const [collections, setCollections] = useState([])
