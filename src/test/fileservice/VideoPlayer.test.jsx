@@ -32,16 +32,16 @@ describe("VideoPlayer", () => {
   afterEach(() => {
     cleanup()
   })
-
+  // Integration function start: Auth
   test("fetches video with Authorization header", async () => {
     render(<VideoPlayer videoUrl="/video/test" onClose={() => {}} token="t" />)
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith("/video/test"
-        , {headers: { Authorization: "Bearer mock-token" },}// Integration line: Auth
+        , {headers: { Authorization: "Bearer mock-token" },}
       )
     })
-  })
+  })// Integration function end: Auth
 
   test("creates blob URL and sets video src", async () => {
     render(<VideoPlayer videoUrl="/video/test" onClose={() => {}} token="t" />)

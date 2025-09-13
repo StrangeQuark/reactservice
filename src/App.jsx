@@ -6,7 +6,7 @@ import ResetPassword from './pages/ResetPassword' // Integration line: Email
 import ResetPasswordSearch from './pages/ResetPasswordSearch' // Integration line: Auth - Integration line: Email
 import ConfirmEmail from './pages/ConfirmEmail' // Integration line: Auth - Integration line: Email
 import Settings from './pages/Settings' // Integration line: Auth
-import Files from './pages/Files' // Integration line: Files
+import Files from './pages/Files' // Integration line: File
 import Vault from './pages/Vault' // Integration line: Vault
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext' // Integration line: Auth
@@ -21,8 +21,8 @@ const router = createBrowserRouter(
     { path: "/user/:id", element: <UserProfile /> }, // Integration line: Auth - Integration line: Email
     { path: "/confirm-email", element: <ConfirmEmail /> }, // Integration line: Auth - Integration line: Email
     { path: "/settings", element: <Settings /> }, // Integration line: Auth
-    { path: "/files", element: <Files /> }, // Integration line: Files
-    { path: "/vault", element: <Vault /> } // Integration line: Files
+    { path: "/files", element: <Files /> }, // Integration line: File
+    { path: "/vault", element: <Vault /> } // Integration line: Vault
   ],
   {
     future: {
