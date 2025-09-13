@@ -100,7 +100,6 @@ const VaultList = () => {
             alert(err.message)
         }
     }
-
     // Integration function start: Auth
     const loadUsers = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`)
@@ -492,8 +491,8 @@ const VaultList = () => {
                                     setDisplayPopout(false) 
                                 }}>
                                 Manage Users
-                            </button> {/* Integration function end: Auth */}
-                            {currentUserRole === "OWNER" && ( // Integration line: Auth
+                            </button>
+                            {currentUserRole === "OWNER" && ( // Integration function end: Auth
                                 <button onClick={() => {
                                     deleteService()
                                     setDisplayPopout(false)
@@ -512,7 +511,7 @@ const VaultList = () => {
                             </div>
                         )}
                     </div>
-                )}
+                )} // Integration line: Auth
             </div>
 
             {selectedService && selectedEnvironment && (

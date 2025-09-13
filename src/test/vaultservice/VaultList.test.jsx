@@ -10,8 +10,8 @@ vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: vi.fn(() => "mock-token"),
   }),
-})) // Integration function end: Auth
-
+}))
+// Integration function end: Auth
 // Mock window APIs
 global.confirm = vi.fn(() => true)
 global.URL.createObjectURL = vi.fn(() => "blob:mock-url")

@@ -28,7 +28,6 @@ input[data-autocompleted] {
 .hidden-input {
     display: none;
 }
-
 /* Integration function start: Auth */
 .auth-div {
   border-radius: 20px;
@@ -108,5 +107,4 @@ input[data-autocompleted] {
   height: 100px;
   display: flex;
 }
-
 /* Integration function end: Auth */

@@ -10,8 +10,8 @@ vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: vi.fn(() => "mock-token"),
   }),
-})) // Integration function end: Auth
-
+}))
+// Integration function end: Auth
 describe("VideoPlayer", () => {
   let mockBlobUrl
 

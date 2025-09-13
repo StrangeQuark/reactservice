@@ -14,8 +14,8 @@ vi.mock("../../components/vaultservice/VaultList", () => ({
 // Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
   RequireAuth: ({ children }) => <div>{children}</div>,
-})) // Integration function end: Auth
-
+}))
+// Integration function end: Auth
 test("renders Vault page with Toolbar and VaultList inside RequireAuth (If Auth integrated)", () => {
   render(<Vault />)
 

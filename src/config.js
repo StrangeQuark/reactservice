@@ -3,7 +3,6 @@ export const EMAIL_API_BASE_URL = import.meta.env.VITE_EMAIL_API_BASE_URL// Inte
 export const FILE_API_BASE_URL = import.meta.env.VITE_FILE_API_BASE_URL// Integration line: File
 export const VAULT_API_BASE_URL = import.meta.env.VITE_VAULT_API_BASE_URL// Integration line: Vault
 export const GATEWAY_BASE_URL = import.meta.env.VITE_GATEWAY_BASE_URL// Integration line: Gateway
-
 // Integration function start: Auth
 let AUTH_ENDPOINTS = {
   REGISTER: `${AUTH_API_BASE_URL}/api/auth/register`,
@@ -17,14 +16,14 @@ let AUTH_ENDPOINTS = {
   SEARCH_USERS: `${AUTH_API_BASE_URL}/api/auth/user/search-users`,
   GET_USER_ID: `${AUTH_API_BASE_URL}/api/auth/user/get-user-id`,
   GET_USER_DETAILS_BY_IDS: `${AUTH_API_BASE_URL}/api/auth/user/get-user-details-by-ids`
-}// Integration function end: Auth
-
+}
+// Integration function end: Auth
 // Integration function start: Email
 let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`
-}// Integration function end: Email
-
+}
+// Integration function end: Email
 // Integration function start: File
 let FILE_ENDPOINTS = {
   GET_ALL: `${FILE_API_BASE_URL}/api/file/get-all`,
@@ -41,8 +40,8 @@ let FILE_ENDPOINTS = {
   UPDATE_USER_ROLE: `${FILE_API_BASE_URL}/api/file/update-user-role`,
   ADD_USER_TO_COLLECTION: `${FILE_API_BASE_URL}/api/file/add-user-to-collection`,
   DELETE_USER_FROM_COLLECTION: `${FILE_API_BASE_URL}/api/file/delete-user-from-collection`
-}// Integration function end: File
-
+}
+// Integration function end: File
 // Integration function start: Vault
 let VAULT_ENDPOINTS = {
   GET_ALL_SERVICES: `${VAULT_API_BASE_URL}/api/vault/get-all-services`,
@@ -65,7 +64,8 @@ let VAULT_ENDPOINTS = {
   GET_CURRENT_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/get-current-user-role`,
   GET_ALL_ROLES: `${VAULT_API_BASE_URL}/api/vault/get-all-roles`,
   UPDATE_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/update-user-role`
-}// Integration function end: Vault
+}
+// Integration function end: Vault
 
 const replaceBaseUrl = (endpoints, newBase) => {
   return Object.fromEntries(
@@ -75,7 +75,6 @@ const replaceBaseUrl = (endpoints, newBase) => {
     })
   )
 }
-
 // Integration function start: Gateway
 AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL)
 EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL)

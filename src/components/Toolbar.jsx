@@ -12,8 +12,8 @@ const Toolbar = () => {
 
     const navigateTo = (path) => {
         window.location.href = path
-    }/* Integration function end: Auth */
-
+    }
+    /* Integration function end: Auth */
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
             event.preventDefault()

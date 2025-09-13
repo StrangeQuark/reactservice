@@ -80,7 +80,6 @@ const FilesList = () => {
 
         fetchCollections()
     }
-
     // Integration function start: Auth
     const getCurrentUserRole = async (collectionName) => {
         const response = await fetch(`${FILE_ENDPOINTS.GET_CURRENT_USER_ROLE}/${collectionName}`, {
@@ -357,8 +356,8 @@ const FilesList = () => {
                                                     setDisplayPopout(false) 
                                                 }}>
                                                 Manage Users
-                                            </button> {/* Integration function end: Auth */}
-                                            {currentUserRole === "OWNER" && ( // Integration line: Auth
+                                            </button>
+                                            {currentUserRole === "OWNER" && ( // Integration function end: Auth
                                                 <button onClick={() => {
                                                     deleteCollection()
                                                     setDisplayPopout(false)
