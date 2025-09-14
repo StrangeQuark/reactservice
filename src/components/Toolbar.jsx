@@ -41,9 +41,26 @@ const Toolbar = () => {
                 { !isLoggedIn ? <RiLoginCircleLine id="loginButton" data-testid="loginButton" size={"2em"} onClick={() => navigateTo("/login")}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration line: Auth */}
                 {/* Integration function start: Auth */
                 displayPopout && (<div id='center-popout-container' className="center-popout-container">
-                    <button onClick={() => navigateTo(`/user/${username}`)}>Profile</button>
-                    <button onClick={() => navigateTo("/settings")}>Settings</button>
-                    <button onClick={logout}>Logout</button>
+                    <button onClick={() => {
+                        navigateTo(`/user/${username}`)
+                        setDisplayPopout(false)
+                    }}>
+                        Profile
+                    </button>
+
+                    <button onClick={() => {
+                        navigateTo(`/settings`)
+                        setDisplayPopout(false)
+                    }}>
+                        Settings
+                    </button>
+
+                    <button onClick={() => {
+                        logout()
+                        setDisplayPopout(false)
+                    }}>
+                        Logout
+                    </button>
                 </div>)
                 /* Integration function end: Auth */}
             </div>
