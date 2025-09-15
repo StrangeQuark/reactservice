@@ -89,7 +89,7 @@ const UserLoginForm = () => {
             </form>
             <button id='submit-button' onClick={() => requestHandler()}>LOGIN</button>
             <div className="auth-help-div">
-                <a id="forgot-password-link" href="/password-reset">Forgot password?</a>
+                <a id="forgot-password-link" href="/password-reset">Forgot password?</a> {/* Integration line: Email */}
                 <a id="sign-up-link" href="/register">Sign up</a>
             </div>
         </div>
