@@ -511,7 +511,7 @@ const VaultList = () => {
                             </div>
                         )}
                     </div>
-                )} // Integration line: Auth
+                )} {/* Integration line: Auth */}
             </div>
 
             {selectedService && selectedEnvironment && (
