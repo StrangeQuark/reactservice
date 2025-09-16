@@ -23,6 +23,7 @@ const UserRegisterForm = () => {
 
   const[isSubmitted, setIsSubmitted] = useState(false)
   const[isSuccess, setIsSuccess] = useState(false)
+  const[registrationMessage, setRegistrationMessage] = useState("")
 
   const[usernameErrorMessage, setUsernameErrorMessage] = useState("")
   const[emailErrorMessage, setEmailErrorMessage] = useState("")
@@ -97,6 +98,13 @@ const UserRegisterForm = () => {
             setEmailErrorMessage("Email is already taken")
           }
         } else {
+          const data = await response.json()
+
+          if(data.message === "Registered without email")
+            setRegistrationMessage("Thank you for signing up!")
+          else
+            setRegistrationMessage(`Thank you for signing up! An email has been sent to ${email} with a confirmation link to activate your account.`)
+
           setIsSuccess(true)
         }
       })
@@ -146,10 +154,10 @@ const UserRegisterForm = () => {
 
       {isSuccess && (<div id="request-success-div" className="auth-div">
         <p id="request-success-text-field">
-          Thank you for signing up! An email has been sent to {email} with a confirmation link to activate your account.
+          {registrationMessage}
         </p>
         <p>
-          <a href="/login">Click here</a> to return to the login page.
+          <a className="request-success-anchor" href="/login">Click here</a> to return to the login page.
         </p>
       </div>)}
     </>
