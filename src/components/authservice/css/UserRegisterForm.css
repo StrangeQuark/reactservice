@@ -22,3 +22,7 @@
   position: relative;
   width: 100%;
 }
+
+.request-success-anchor {
+  text-decoration: underline !important;
+}

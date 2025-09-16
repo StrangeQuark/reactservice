@@ -70,8 +70,31 @@ describe("UserRegisterForm component", () => {
     })
   })
 
-  test("handles successful registration", async () => {
-    global.fetch.mockResolvedValueOnce({ ok: true })
+  test("handles successful registration with email integration", async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "" })
+    })
+
+    render(<UserRegisterForm />)
+
+    fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
+    fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } })
+    fireEvent.change(screen.getByLabelText("Password:"), { target: { value: "secret" } })
+    fireEvent.change(screen.getByLabelText("Confirm password:"), { target: { value: "secret" } })
+
+    fireEvent.click(screen.getByRole("button", { name: "SIGN UP" }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Thank you for signing up! An email has been sent to/i)).toBeInTheDocument()
+    })
+  })
+
+  test("handles successful registration without email integration", async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "Registered without email" })
+    })
 
     render(<UserRegisterForm />)
 
@@ -84,7 +107,7 @@ describe("UserRegisterForm component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Thank you for signing up!/i)).toBeInTheDocument()
-      expect(screen.getByText(/test@example.com/)).toBeInTheDocument()
+      expect(screen.queryByText(/An email has been sent to/i)).not.toBeInTheDocument()
     })
   })
 
