@@ -147,6 +147,8 @@ input[data-autocompleted] {
   border-radius: 30px;
   padding-top: 5px;
   padding-bottom: 5px;
+  height: 3.5vh;
+  cursor: pointer;
 }
 
 .error-div {
