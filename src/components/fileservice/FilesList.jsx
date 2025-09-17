@@ -255,6 +255,9 @@ const FilesList = () => {
         } catch (error) {
             console.error("Upload failed", error)
         }
+
+        // Reset the target value to always trigger onChange
+        event.target.value = "";
     }
 
     const deleteCollection = async () => {
