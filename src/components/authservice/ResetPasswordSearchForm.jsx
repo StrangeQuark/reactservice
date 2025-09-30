@@ -3,6 +3,8 @@
 
 import { useState } from "react"
 import { AUTH_ENDPOINTS } from "../../config"
+import { verifyEmailRegex } from "../../utility/EmailUtility"
+import { authenticateServiceAccount } from "../../utility/AuthUtility"
 
 const ResetPasswordSearchForm = () => {
     const[credentials, setCredentials] = useState("")
@@ -15,28 +17,32 @@ const ResetPasswordSearchForm = () => {
         }
     }
 
-    const requestHandler = () => {
-        var credentialsJson = {"credentials": credentials}
-
+    const requestHandler = async () => {
         //If the user enters nothing, do nothing
         if(credentials === "") {
             return
         }
 
+        var credentialsJson = {"username": credentials}
+        //If we're sending an email, then change the credentialsJson to send an email instead of a username
+        if(verifyEmailRegex(credentials))
+            credentialsJson = {"email": credentials}
+
         fetch(AUTH_ENDPOINTS.PASSWORD_RESET, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: "Bearer " + await authenticateServiceAccount() 
             },
             body: JSON.stringify(credentialsJson)
-            }).then(response => {
-                    if(response.status === 404) {
-                        setIsError(true)
-                        return
-                    }
-                    setIsSuccess(true)
+        }).then(response => {
+                if(!response.ok) {
+                    setIsError(true)
+                    return
                 }
-            )
+                setIsSuccess(true)
+            }
+        )
     }
 
     return(

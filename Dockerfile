@@ -3,6 +3,9 @@ FROM node:22-alpine AS builder
 # Integration function start: Auth
 ARG VITE_AUTH_API_BASE_URL
 ENV VITE_AUTH_API_BASE_URL=$VITE_AUTH_API_BASE_URL
+
+ARG VITE_SERVICE_SECRET_REACT
+ENV VITE_SERVICE_SECRET_REACT=$VITE_SERVICE_SECRET_REACT
 # Integration function end: Auth
 # Integration function start: Email
 ARG VITE_EMAIL_API_BASE_URL
