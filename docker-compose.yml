@@ -9,6 +9,7 @@ services:
         VITE_FILE_API_BASE_URL: ${VITE_FILE_API_BASE_URL} # Integration line: File
         VITE_VAULT_API_BASE_URL: ${VITE_VAULT_API_BASE_URL} # Integration line: Vault
         VITE_GATEWAY_BASE_URL: ${VITE_GATEWAY_BASE_URL} # Integration line: Gateway
+        VITE_SERVICE_SECRET_REACT: ${VITE_SERVICE_SECRET_REACT} # Integration line: Auth
     networks:
       - shared-network
     ports:
