@@ -22,7 +22,6 @@ export const authenticateServiceAccount = async () => {
     const data = await response.json()
 
     if(!response.ok) {
-        const data = await response.json()
         alert(data.errorMessage)
         return
     }

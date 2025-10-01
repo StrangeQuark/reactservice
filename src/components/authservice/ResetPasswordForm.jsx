@@ -3,6 +3,7 @@
 
 import { useState } from "react"
 import { EMAIL_ENDPOINTS } from "../../config"
+import { authenticateServiceAccount } from "../../utility/AuthUtility"
 
 const ResetPasswordForm = () => {
     const[isSuccess, setIsSuccess] = useState(false)
@@ -17,7 +18,7 @@ const ResetPasswordForm = () => {
         }
     }
 
-    const requestHandler = () => {
+    const requestHandler = async () => {
         //Get the search params
         const query = window.location.search
         const urlParameters = new URLSearchParams(query)
@@ -35,8 +36,9 @@ const ResetPasswordForm = () => {
             return
         }
 
-        fetch(EMAIL_ENDPOINTS.CONFIRM_TOKEN + token, {
-            method: 'GET',
+        fetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD + token + "&newPassword=" + password, {
+            method: 'POST',
+            Authorization: "Bearer " + await authenticateServiceAccount(),
             }).then(response => response.json().then(
                 (data) => {
                     if(!response.ok) {
@@ -44,7 +46,7 @@ const ResetPasswordForm = () => {
                         setIsError(true)
                         return
                     }
-                    
+
                     setIsSuccess(true)
                 }
             ))

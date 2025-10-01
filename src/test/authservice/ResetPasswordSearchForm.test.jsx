@@ -22,7 +22,15 @@ describe("ResetPasswordSearchForm", () => {
   })
 
   test("shows error if server returns 404", async () => {
-    global.fetch.mockResolvedValueOnce({ status: 404 })
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    })
+
+    global.fetch.mockResolvedValueOnce({
+      status: 404,
+      json: async () => ({ message: "ok" }),
+    })
 
     render(<ResetPasswordSearchForm />)
 
@@ -37,18 +45,30 @@ describe("ResetPasswordSearchForm", () => {
       ).toBeInTheDocument()
     })
 
-    expect(fetch).toHaveBeenCalledWith(
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
       AUTH_ENDPOINTS.PASSWORD_RESET,
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credentials: "wronguser@example.com" }),
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+          Authorization: expect.stringMatching(/^Bearer /),
+        }),
+        body: JSON.stringify({ email: "wronguser@example.com" }),
       })
     )
   })
 
   test("shows success if server returns 200", async () => {
-    global.fetch.mockResolvedValueOnce({ status: 200 })
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    })
+
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    })
 
     render(<ResetPasswordSearchForm />)
 
@@ -63,18 +83,30 @@ describe("ResetPasswordSearchForm", () => {
       ).toBeInTheDocument()
     })
 
-    expect(fetch).toHaveBeenCalledWith(
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
       AUTH_ENDPOINTS.PASSWORD_RESET,
       expect.objectContaining({
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credentials: "test@example.com" }),
+        headers: expect.objectContaining({
+          "Content-Type": "application/json",
+          Authorization: expect.stringMatching(/^Bearer /),
+        }),
+        body: JSON.stringify({ email: "test@example.com" }),
       })
     )
   })
 
   test("handles Enter key press to submit", async () => {
-    global.fetch.mockResolvedValueOnce({ status: 200 })
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    })
+
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "ok" }),
+    })
 
     render(<ResetPasswordSearchForm />)
 
