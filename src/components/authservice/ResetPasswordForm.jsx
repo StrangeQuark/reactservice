@@ -38,7 +38,9 @@ const ResetPasswordForm = () => {
 
         fetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD + token + "&newPassword=" + password, {
             method: 'POST',
-            Authorization: "Bearer " + await authenticateServiceAccount(),
+            headers: {
+                Authorization: "Bearer " + await authenticateServiceAccount(),
+            }
             }).then(response => response.json().then(
                 (data) => {
                     if(!response.ok) {
