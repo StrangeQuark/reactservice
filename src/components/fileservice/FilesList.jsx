@@ -348,7 +348,7 @@ const FilesList = () => {
                             {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
                                 <div className="cog-wrapper">
                                     {selectedCollection && (
-                                        <FaCog onClick={() => setDisplayPopout(!displayPopout)}/>
+                                        <FaCog data-testid="cog-icon" onClick={() => setDisplayPopout(!displayPopout)}/>
                                     )}
 
                                     {displayPopout && (
