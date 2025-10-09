@@ -1,17 +1,43 @@
 // Integration file: File
 
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import ImageViewer from "../../components/fileservice/ImageViewer"
 
+// Mock useAuth - Integration function start: Auth
+vi.mock("../../context/AuthContext", () => ({
+  useAuth: () => ({
+    getAccessToken: vi.fn(() => "mock-token"),
+  }),
+}))
+// Integration function end: Auth
 describe("ImageViewer", () => {
-  test("renders the image with given URL", () => {
-    const testUrl = "http://example.com/test.png"
-    render(<ImageViewer imageUrl={testUrl} onClose={() => {}} />)
+  let mockBlobUrl
+  
+  beforeEach(() => {
+    vi.clearAllMocks()
 
-    const img = screen.getByTestId("image")
-    expect(img).toHaveAttribute("src", testUrl)
+    mockBlobUrl = "blob:http://localhost/mock"
+    global.URL.createObjectURL = vi.fn(() => mockBlobUrl)
+    global.URL.revokeObjectURL = vi.fn()
+
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        blob: () => Promise.resolve(new Blob(["test"], { type: "image/png" })),
+      })
+    )
+  })
+
+  afterEach(() => {
+    cleanup()
+  })
+  
+  test("renders the image with given URL", async () => {
+    render(<ImageViewer imageUrl="http://example.com/test.png" onClose={() => {}} />)
+
+    const img = await screen.findByTestId("image")
+    expect(img).toHaveAttribute("src", mockBlobUrl)
   })
 
   test("calls onClose when close button is clicked", () => {
