@@ -1,17 +1,44 @@
 // Integration file: File
 
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import MusicPlayer from "../../components/fileservice/MusicPlayer"
 
+// Mock useAuth - Integration function start: Auth
+vi.mock("../../context/AuthContext", () => ({
+  useAuth: () => ({
+    getAccessToken: vi.fn(() => "mock-token"),
+  }),
+}))
+// Integration function end: Auth
 describe("MusicPlayer", () => {
-  test("renders audio element with given URL", () => {
-    const testUrl = "http://example.com/test.mp3"
-    render(<MusicPlayer audioUrl={testUrl} onClose={() => {}} />)
+  let mockBlobUrl
+  
+  beforeEach(() => {
+    vi.clearAllMocks()
 
-    const source = screen.getByTestId("audio-player").querySelector("source")
-    expect(source).toHaveAttribute("src", testUrl)
+    mockBlobUrl = "blob:http://localhost/mock"
+    global.URL.createObjectURL = vi.fn(() => mockBlobUrl)
+    global.URL.revokeObjectURL = vi.fn()
+
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        blob: () => Promise.resolve(new Blob(["test"], { type: "audio/mpeg" })),
+      })
+    )
+  })
+
+  afterEach(() => {
+    cleanup()
+  })
+  
+  test("renders audio element with given URL", async () => {
+    render(<MusicPlayer audioUrl="http://example.com/test.mp3" onClose={() => {}} />)
+
+    await waitFor(() =>
+      expect(screen.getByTestId("audio-source")).toHaveAttribute("src", mockBlobUrl)
+    )
   })
 
   test("sets correct MIME type for mp3", () => {

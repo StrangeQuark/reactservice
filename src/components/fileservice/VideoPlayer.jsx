@@ -1,11 +1,10 @@
 // Integration file: File
 
 import "./css/VideoPlayer.css"
-import { useRef, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 
 const VideoPlayer = ({ videoUrl, onClose, token }) => {
-    const videoRef = useRef(null)
     const [blobUrl, setBlobUrl] = useState(null)
     const { getAccessToken } = useAuth() // Integration line: Auth
 
@@ -33,7 +32,7 @@ const VideoPlayer = ({ videoUrl, onClose, token }) => {
             <div className="popup-content">
                 <button className="video-close-btn" onClick={onClose}>X</button>
                 <div>
-                    <video data-testid="video-player" ref={videoRef} className="video-player" controls src={blobUrl}>
+                    <video data-testid="video-player" className="video-player" controls src={blobUrl}>
                         Your browser does not support the video tag
                     </video>
                 </div>
