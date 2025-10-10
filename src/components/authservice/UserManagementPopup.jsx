@@ -127,6 +127,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
                 {/* Search section */}
                 <div className="user-controls">
                     <input
+                        id="search-users"
                         type="text"
                         placeholder="Search users..."
                         value={searchTerm}
@@ -136,7 +137,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
 
                     {searchResult && (
                         <div className="search-dropdown">
-                            <div className="search-result" onClick={() => handleAddUser(searchResult)}> {searchResult.username} ({searchResult.email}) </div>
+                            <div id="search-result" className="search-result" onClick={() => handleAddUser(searchResult)}> {searchResult.username} ({searchResult.email}) </div>
                         </div>
                     )}
                 </div>
@@ -155,7 +156,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
                             <span>{user.email}</span>
                             <span>
                                 {editingUser === user.username ? (
-                                    <select value={newRole} onChange={(e) => setNewRole(e.target.value)}>
+                                    <select data-testid="role-select" value={newRole} onChange={(e) => setNewRole(e.target.value)}>
                                         {roles.map((role) => (
                                             <option key={role} value={role}>{role}</option>
                                         ))}
