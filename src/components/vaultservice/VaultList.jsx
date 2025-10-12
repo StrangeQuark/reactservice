@@ -428,6 +428,7 @@ const VaultList = () => {
             <div className="vault-header">
                 <button className="add-btn" onClick={() => setPopupType("create-service")}>Create service</button>
                 <select
+                    id="service-select"
                     value={selectedService}
                     onChange={(e) => {
                         if(e.target.value === "")
@@ -446,6 +447,7 @@ const VaultList = () => {
                 </select>
 
                 <select
+                    id="environment-select"
                     value={selectedEnvironment}
                     onChange={(e) => {
                         if(e.target.value === "")
