@@ -470,8 +470,8 @@ const VaultList = () => {
                 {selectedService && selectedEnvironment && (
                     <>
                         <button className="add-btn" onClick={() => setPopupType("add-variable")}>Add Var</button>
-                        <FaFileUpload onClick={() => openFilePicker()}/>
-                        <FaFileDownload onClick={() => downloadEnvFile()}/>
+                        <FaFileUpload id="env-file-upload" onClick={() => openFilePicker()}/>
+                        <FaFileDownload id="env-file-download" onClick={() => downloadEnvFile()}/>
                         <input type="file" ref={fileInputRef} onChange={uploadEnvFile} className="hidden-input" />
                     </>
                 )}
@@ -534,11 +534,13 @@ const VaultList = () => {
                         {currentVars.map((v, index) => (
                             <div key={index} className="vault-row">
                                 <input
+                                    id={`key-${v.key}`}
                                     type="text"
                                     value={v.key}
                                     disabled
                                 />
                                 <input
+                                    id={`value-${v.key}`}
                                     type="text"
                                     value={v.value}
                                     onChange={(e) =>
@@ -549,9 +551,9 @@ const VaultList = () => {
                                     autoComplete="off"
                                     name={`vault-var-${indexOfFirstVar + index}`}
                                 />
-                                <FaEye className="row-icon" onClick={() => toggleMaskOne(indexOfFirstVar + index)} />
-                                <FaRegClipboard data-testid="clipboard-icon" className="row-icon" onClick={() => copyValue(v.value)} />
-                                <FaTrash data-testid="trash-icon" className="row-icon" onClick={() => deleteVariable(v.key)} />
+                                <FaEye id={`unmask-${v.key}`} className="row-icon" onClick={() => toggleMaskOne(indexOfFirstVar + index)} />
+                                <FaRegClipboard id={`copy-${v.key}`} data-testid="clipboard-icon" className="row-icon" onClick={() => copyValue(v.value)} />
+                                <FaTrash id={`delete-${v.key}`} data-testid="trash-icon" className="row-icon" onClick={() => deleteVariable(v.key)} />
                             </div>
                         ))}
                     </div>
