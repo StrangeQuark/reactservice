@@ -33,6 +33,8 @@ COPY public ./public
 COPY src ./src
 COPY index.html ./index.html
 COPY vite.config.js ./vite.config.js
+
+RUN npx vitest
 RUN npm run build
 
 # Stage 2: Create minimal runtime image - Deploy via nginx
