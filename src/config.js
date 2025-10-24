@@ -1,8 +1,30 @@
-export const AUTH_API_BASE_URL = import.meta.env.VITE_AUTH_API_BASE_URL// Integration line: Auth
-export const EMAIL_API_BASE_URL = import.meta.env.VITE_EMAIL_API_BASE_URL// Integration line: Email
-export const FILE_API_BASE_URL = import.meta.env.VITE_FILE_API_BASE_URL// Integration line: File
-export const VAULT_API_BASE_URL = import.meta.env.VITE_VAULT_API_BASE_URL// Integration line: Vault
-export const GATEWAY_BASE_URL = import.meta.env.VITE_GATEWAY_BASE_URL// Integration line: Gateway
+const {
+  VITE_AUTH_API_BASE_URL, // Integration line: Auth
+  VITE_EMAIL_API_BASE_URL, // Integration line: Email
+  VITE_FILE_API_BASE_URL, // Integration line: File
+  VITE_VAULT_API_BASE_URL, // Integration line: Vault
+  VITE_GATEWAY_BASE_URL, // Integration line: Gateway
+} = import.meta.env;
+
+const isLocalBrowser = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+
+function adaptBaseUrl(url) {
+  if (!isLocalBrowser)
+    return url
+
+  return url
+            .replace(/auth-service(:\d+)?/, "localhost$1") // Integratin line: Auth
+            .replace(/email-service(:\d+)?/, "localhost$1") // Integratin line: Email
+            .replace(/file-service(:\d+)?/, "localhost$1") // Integratin line: File
+            .replace(/vault-service(:\d+)?/, "localhost$1") // Integratin line: Vault
+            .replace(/gateway-service(:\d+)?/, "localhost$1") // Integratin line: Gateway
+}
+
+export const AUTH_API_BASE_URL = adaptBaseUrl(VITE_AUTH_API_BASE_URL) // Integratin line: Auth
+export const EMAIL_API_BASE_URL = adaptBaseUrl(VITE_EMAIL_API_BASE_URL) // Integratin line: Email
+export const FILE_API_BASE_URL = adaptBaseUrl(VITE_FILE_API_BASE_URL) // Integratin line: File
+export const VAULT_API_BASE_URL = adaptBaseUrl(VITE_VAULT_API_BASE_URL) // Integratin line: Vault
+export const GATEWAY_BASE_URL = adaptBaseUrl(VITE_GATEWAY_BASE_URL) // Integratin line: Gateway
 // Integration function start: Auth
 let AUTH_ENDPOINTS = {
   REGISTER: `${AUTH_API_BASE_URL}/api/auth/register`,
