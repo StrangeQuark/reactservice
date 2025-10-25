@@ -152,7 +152,7 @@ input[data-autocompleted] {
 }
 
 .error-div {
-  height: 100px;
+  height: 140px;
   display: flex;
 }
 /* Integration function end: Auth */

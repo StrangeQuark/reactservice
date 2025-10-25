@@ -38,7 +38,10 @@ const UserLoginForm = () => {
             }).then(response => response.json().then(
                 (data) => {
                     if(response.status === 401) {
-                        setErrorMessage(data.errorMessage)
+                        if(data.errorMessage === "User is disabled")
+                            setErrorMessage("User is disabled - Check your email inbox for a confirmation link")
+                        else
+                            setErrorMessage(data.errorMessage)
                         return
                     }
 
