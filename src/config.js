@@ -3,6 +3,7 @@ const {
   VITE_EMAIL_API_BASE_URL, // Integration line: Email
   VITE_FILE_API_BASE_URL, // Integration line: File
   VITE_VAULT_API_BASE_URL, // Integration line: Vault
+  VITE_TELEMETRY_API_BASE_URL, // Integration line: Telemetry
   VITE_GATEWAY_BASE_URL, // Integration line: Gateway
 } = import.meta.env;
 
@@ -17,6 +18,7 @@ function adaptBaseUrl(url) {
             .replace(/email-service(:\d+)?/, "localhost$1") // Integration line: Email
             .replace(/file-service(:\d+)?/, "localhost$1") // Integration line: File
             .replace(/vault-service(:\d+)?/, "localhost$1") // Integration line: Vault
+            .replace(/telemetry-service(:\d+)?/, "localhost$1") // Integration line: Telemetry
             .replace(/gateway-service(:\d+)?/, "localhost$1") // Integration line: Gateway
 }
 
@@ -24,6 +26,7 @@ export const AUTH_API_BASE_URL = adaptBaseUrl(VITE_AUTH_API_BASE_URL) // Integra
 export const EMAIL_API_BASE_URL = adaptBaseUrl(VITE_EMAIL_API_BASE_URL) // Integration line: Email
 export const FILE_API_BASE_URL = adaptBaseUrl(VITE_FILE_API_BASE_URL) // Integration line: File
 export const VAULT_API_BASE_URL = adaptBaseUrl(VITE_VAULT_API_BASE_URL) // Integration line: Vault
+export const TELEMETRY_API_BASE_URL = adaptBaseUrl(VITE_TELEMETRY_API_BASE_URL) // Integration line: Telemetry
 export const GATEWAY_BASE_URL = adaptBaseUrl(VITE_GATEWAY_BASE_URL) // Integration line: Gateway
 // Integration function start: Auth
 let AUTH_ENDPOINTS = {
@@ -91,6 +94,11 @@ let VAULT_ENDPOINTS = {
   UPDATE_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/update-user-role`
 }
 // Integration function end: Vault
+// Integration function start: Telemetry
+let TELEMETRY_ENDPOINTS = {
+  CREATE_EVENT: `${TELEMETRY_API_BASE_URL}/api/telemetry/create-event`
+}
+// Integration function end: Telemetry
 
 const replaceBaseUrl = (endpoints, newBase) => {
   return Object.fromEntries(
@@ -105,11 +113,13 @@ AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL) // Integration
 EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Email
 FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: File
 VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
+TELEMETRY_ENDPOINTS = replaceBaseUrl(TELEMETRY_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
 // Integration function end: Gateway
 
 export {
   AUTH_ENDPOINTS,// Integration line: Auth
   EMAIL_ENDPOINTS,// Integration line: Email
   FILE_ENDPOINTS,// Integration line: File
-  VAULT_ENDPOINTS// Integration line: Vault
+  VAULT_ENDPOINTS,// Integration line: Vault
+  TELEMETRY_ENDPOINTS// Integration line: Telemetry
 }

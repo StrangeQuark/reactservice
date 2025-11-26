@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { AUTH_ENDPOINTS } from "../../config"
+import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 import "./css/UserLoginForm.css"
 
 const UserLoginForm = () => {
@@ -16,16 +17,19 @@ const UserLoginForm = () => {
     }
 
     const requestHandler = () => {
+        sendTelemetryEvent("react-login-attempt") // Integration line: Telemetry
         //JWT 
         var loginJSON = {"username": username, "password": password}
 
         //Check if the username and password are empty. If they are, display error message
         if(username === "") {
             setErrorMessage('Username is empty')
+            sendTelemetryEvent("react-login-failure", {"failureReason": "Username is empty"}) // Integration line: Telemetry
             return
         }
         if(password === "") {
             setErrorMessage('Password is empty')
+            sendTelemetryEvent("react-login-failure", {"failureReason": "Password is empty"}) // Integration line: Telemetry
             return
         }
 
@@ -42,6 +46,7 @@ const UserLoginForm = () => {
                             setErrorMessage("User is disabled - Check your email inbox for a confirmation link")
                         else
                             setErrorMessage(data.errorMessage)
+                        sendTelemetryEvent("react-login-failure", {"failureReason": data.errorMessage}) // Integration line: Telemetry
                         return
                     }
 
@@ -57,10 +62,11 @@ const UserLoginForm = () => {
                     }).then(res => res.json().then(
                         (d) => {
                             if(!res.ok) {
+                                sendTelemetryEvent("react-login-failure", {"failureReason": d.errorMessage}) // Integration line: Telemetry
                                 setErrorMessage(d.errorMessage)
                                 return
                             }
-
+                            sendTelemetryEvent("react-login-success") // Integration line: Telemetry
                             document.cookie = "access_token=" + d.jwtToken
 
                             // //Navigate back, or go to homepage if coming from the registration page
