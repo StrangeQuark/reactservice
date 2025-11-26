@@ -113,7 +113,7 @@ AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL) // Integration
 EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Email
 FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: File
 VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
-TELEMETRY_ENDPOINTS = replaceBaseUrl(TELEMETRY_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
+TELEMETRY_ENDPOINTS = replaceBaseUrl(TELEMETRY_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Telemetry
 // Integration function end: Gateway
 
 export {
