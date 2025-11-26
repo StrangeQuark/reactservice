@@ -5,6 +5,7 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import UserLoginForm from "../../components/authservice/UserLoginForm"
 import { AUTH_ENDPOINTS } from "../../config"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 describe("UserLoginForm component", () => {
   beforeEach(() => {
@@ -13,6 +14,7 @@ describe("UserLoginForm component", () => {
     delete window.location
     window.location = { href: "" }
     document.cookie = ""
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
   test("renders form elements correctly", () => {
