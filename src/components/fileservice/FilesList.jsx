@@ -12,6 +12,8 @@ import { FaCog } from "react-icons/fa"
 import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
 
 const FilesList = () => {
+    const [uploadProgress, setUploadProgress] = useState(0)
+    const [isUploading, setIsUploading] = useState(false)
     const [collections, setCollections] = useState([])
     const [filteredCollections, setFilteredCollections] = useState([])
     const [files, setFiles] = useState([])
@@ -26,6 +28,7 @@ const FilesList = () => {
     const [currentUserRole, setCurrentUserRole] = useState(null) // Integration line: Auth
     const fileInputRef = useRef(null)
     const { getAccessToken } = useAuth() // Integration line: Auth
+    
 
     const videoExtensions = ["mp4", "webm", "ogg"]
     const audioExtensions = ["mp3", "wav", "flac", "aac", "m4a", "ogg"]
@@ -241,23 +244,52 @@ const FilesList = () => {
         if (!file) 
             return
 
+        if(files.includes(file.name)) {
+            alert("File with this name already exists in this collection")
+            return
+        }
+
         const formData = new FormData()
         formData.append("file", file)
 
-        try {
-            await fetch(`${FILE_ENDPOINTS.UPLOAD}/${selectedCollection.name}`, {
-                method: "POST",
-                body: formData,
-                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
-            })
+        setIsUploading(true)
+        setUploadProgress(0)
 
-            fetchFiles(selectedCollection.name)
-        } catch (error) {
-            console.error("Upload failed", error)
+        const xhr = new XMLHttpRequest()
+        xhr.open("POST", `${FILE_ENDPOINTS.UPLOAD}/${selectedCollection.name}`)
+
+        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken())
+
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100)
+                setUploadProgress(percent)
+            }
         }
 
+        xhr.onload = () => {
+            setIsUploading(false)
+            setUploadProgress(0)
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+                fetchFiles(selectedCollection.name)
+            } else {
+                console.error("Upload failed", xhr.responseText)
+                alert("File upload failed")
+            }
+        }
+
+        xhr.onerror = () => {
+            setIsUploading(false)
+            setUploadProgress(0)
+            console.error("Upload failed")
+            alert("File upload failed")
+        }
+
+        xhr.send(formData)
+
         // Reset the target value to always trigger onChange
-        event.target.value = "";
+        event.target.value = ""
     }
 
     const deleteCollection = async () => {
@@ -292,139 +324,154 @@ const FilesList = () => {
 
     return (
         <div className="files-page">
-            {!selectedCollection && (
-                <>
-                    <div className="collections-header">
-                        <h2>Select a Collection</h2>
-                        <input
-                            type="text"
-                            placeholder="Search collections..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="collection-search"
-                        />
-                        <div className="view-toggle">
-                            <button onClick={() => setViewMode("grid")} className={viewMode === "grid" ? "active" : ""}>Grid</button>
-                            <button onClick={() => setViewMode("list")} className={viewMode === "list" ? "active" : ""}>List</button>
+            <div className={isUploading ? "disabled-during-upload" : ""}>
+                {!selectedCollection && (
+                    <>
+                        <div className="collections-header">
+                            <h2>Select a Collection</h2>
+                            <input
+                                type="text"
+                                placeholder="Search collections..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="collection-search"
+                            />
+                            <div className="view-toggle">
+                                <button onClick={() => setViewMode("grid")} className={viewMode === "grid" ? "active" : ""}>Grid</button>
+                                <button onClick={() => setViewMode("list")} className={viewMode === "list" ? "active" : ""}>List</button>
+                            </div>
+                            <button className="collection-add-btn" onClick={() => setPopupType("create-collection")}>Create collection</button>
                         </div>
-                        <button className="collection-add-btn" onClick={() => setPopupType("create-collection")}>Create collection</button>
-                    </div>
 
-                    {viewMode === "grid" ? (
-                        <div className="collection-grid">
-                            {filteredCollections.map((collection, index) => (
-                                <div
-                                    key={index}
-                                    className="collection-card"
-                                    onClick={() => handleCollectionSelect(collection)}
-                                >
-                                    <div className="collection-icon">📁</div>
-                                    <div className="collection-name">{collection.name}</div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <ul className="collection-list">
-                            {filteredCollections.map((collection, index) => (
-                                <li key={index} onClick={() => handleCollectionSelect(collection)}>
-                                    📁 {collection.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </>
-            )}
-
-            {selectedCollection && (
-                <div className="files-list">
-                    <div className="files-list-header">
-                        <button onClick={() => setSelectedCollection(null)} className="back-button">← Back</button>
-                        <h2>{selectedCollection.name}</h2>
-                        <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
-                        <div className="files-list-right-div">
-                            {(currentUserRole !== "READ") && ( // Integration line: Auth
-                                <button onClick={openFilePicker} className="file-button">Upload</button>
-                            )} {/* Integration line: Auth */}
-                            {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
-                                <div className="cog-wrapper">
-                                    {selectedCollection && (
-                                        <FaCog data-testid="cog-icon" onClick={() => setDisplayPopout(!displayPopout)}/>
-                                    )}
-
-                                    {displayPopout && (
-                                        <div id="file-popout-container" className="file-popout-container">
-                                            {/* Integration function start: Auth */}
-                                            <button onClick={() => { 
-                                                    setPopupType("user-management") 
-                                                    setDisplayPopout(false) 
-                                                }}>
-                                                Manage Users
-                                            </button>
-                                            {currentUserRole === "OWNER" && ( // Integration function end: Auth
-                                                <button onClick={() => {
-                                                    deleteCollection()
-                                                    setDisplayPopout(false)
-                                                }}>
-                                                Delete Collection
-                                                </button>
-                                            )}{/* Integration line: Auth */}
-                                        </div>
-                                    )}
-                                </div>
-                            )}{/* Integration line: Auth */}
-                        </div>
-                    </div>
-                    <ul>
-                        {files.map((file, index) => {
-                            const fileExtension = file.split('.').pop().toLowerCase()
-                            const isVideo = videoExtensions.includes(fileExtension)
-                            const isImage = imageExtensions.includes(fileExtension)
-                            const isAudio = audioExtensions.includes(fileExtension)
-
-                            return(
-                                <li key={index} className="file-item">
-                                    <span>{file}</span>
-                                    <div className="file-item-button-div">
-                                        {isVideo && <button onClick={() => handleVideo(file)} className="stream-btn">Stream</button>}
-                                        {isImage && <button onClick={() => handleImage(file)} className="view-btn">View</button>}
-                                        {isAudio && <button onClick={() => handleAudio(file)} className="listen-btn">Listen</button>}
-                                        <button onClick={() => handleDownload(file)} className="download-btn">Download</button>
-                                        <button onClick={() => handleDelete(file)} className="file-delete-btn">Delete</button>
+                        {viewMode === "grid" ? (
+                            <div className="collection-grid">
+                                {filteredCollections.map((collection, index) => (
+                                    <div
+                                        key={index}
+                                        className="collection-card"
+                                        onClick={() => handleCollectionSelect(collection)}
+                                    >
+                                        <div className="collection-icon">📁</div>
+                                        <div className="collection-name">{collection.name}</div>
                                     </div>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    
-                    {selectedVideoFile && <VideoPlayer videoUrl={selectedVideoFile} onClose={closeVideo} />}
-                    {selectedImageFile && <ImageViewer imageUrl={selectedImageFile} onClose={closeImage} />}
-                    {selectedAudioFile && <MusicPlayer audioUrl={selectedAudioFile} onClose={closeAudio} />}
-                </div>
-            )}
+                                ))}
+                            </div>
+                        ) : (
+                            <ul className="collection-list">
+                                {filteredCollections.map((collection, index) => (
+                                    <li key={index} onClick={() => handleCollectionSelect(collection)}>
+                                        📁 {collection.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </>
+                )}
 
-            {/* Create collection popup */}
-            {popupType === "create-collection" && (
-                <InputPopup
-                    label={"Create a new collection"}
-                    inputs={[
-                        { name: "collectionName", labelValue: "Collection name" }
-                    ]}
-                    onSubmit={(values) => createCollection(values.collectionName)}
-                    onClose={() => setPopupType(null)}
-                />
-            )}
+                {selectedCollection && (
+                    <div className="files-list">
+                        <div className="files-list-header">
+                            <button onClick={() => setSelectedCollection(null)} className="back-button">← Back</button>
+                            <h2>{selectedCollection.name}</h2>
+                            <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
+                            <div className="files-list-right-div">
+                                {(currentUserRole !== "READ") && ( // Integration line: Auth
+                                    <button onClick={openFilePicker} className="file-button">Upload</button>
+                                )} {/* Integration line: Auth */}
+                                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
+                                    <div className="cog-wrapper">
+                                        {selectedCollection && (
+                                            <FaCog data-testid="cog-icon" onClick={() => setDisplayPopout(!displayPopout)}/>
+                                        )}
 
-            {/* User management popup - Integration function start: Auth*/}
-            {popupType === "user-management" && (
-                <UserManagementPopup
-                    onClose={() => setPopupType(null)}
-                    loadUsers={() => loadUsers()}
-                    addUser={(user) => addUser(user)}
-                    deleteUser={(user) => deleteUser(user)}
-                    getAllRoles={() => getAllRoles()}
-                    updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
-                />
-            )}{/* Integration function end: Auth*/}
+                                        {displayPopout && (
+                                            <div id="file-popout-container" className="file-popout-container">
+                                                {/* Integration function start: Auth */}
+                                                <button onClick={() => { 
+                                                        setPopupType("user-management") 
+                                                        setDisplayPopout(false) 
+                                                    }}>
+                                                    Manage Users
+                                                </button>
+                                                {currentUserRole === "OWNER" && ( // Integration function end: Auth
+                                                    <button onClick={() => {
+                                                        deleteCollection()
+                                                        setDisplayPopout(false)
+                                                    }}>
+                                                    Delete Collection
+                                                    </button>
+                                                )}{/* Integration line: Auth */}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}{/* Integration line: Auth */}
+                            </div>
+                        </div>
+
+                        {isUploading && (
+                            <div className="upload-progress">
+                                <div className="progress-bar-bg">
+                                    <div
+                                        className="progress-bar-fill"
+                                        style={{ width: `${uploadProgress}%` }}
+                                    ></div>
+                                </div>
+                                <span>{uploadProgress}%</span>
+                            </div>
+                        )}
+
+                        <ul>
+                            {files.map((file, index) => {
+                                const fileExtension = file.split('.').pop().toLowerCase()
+                                const isVideo = videoExtensions.includes(fileExtension)
+                                const isImage = imageExtensions.includes(fileExtension)
+                                const isAudio = audioExtensions.includes(fileExtension)
+
+                                return(
+                                    <li key={index} className="file-item">
+                                        <span>{file}</span>
+                                        <div className="file-item-button-div">
+                                            {isVideo && <button onClick={() => handleVideo(file)} className="stream-btn">Stream</button>}
+                                            {isImage && <button onClick={() => handleImage(file)} className="view-btn">View</button>}
+                                            {isAudio && <button onClick={() => handleAudio(file)} className="listen-btn">Listen</button>}
+                                            <button onClick={() => handleDownload(file)} className="download-btn">Download</button>
+                                            <button onClick={() => handleDelete(file)} className="file-delete-btn">Delete</button>
+                                        </div>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                        
+                        {selectedVideoFile && <VideoPlayer videoUrl={selectedVideoFile} onClose={closeVideo} />}
+                        {selectedImageFile && <ImageViewer imageUrl={selectedImageFile} onClose={closeImage} />}
+                        {selectedAudioFile && <MusicPlayer audioUrl={selectedAudioFile} onClose={closeAudio} />}
+                    </div>
+                )}
+
+                {/* Create collection popup */}
+                {popupType === "create-collection" && (
+                    <InputPopup
+                        label={"Create a new collection"}
+                        inputs={[
+                            { name: "collectionName", labelValue: "Collection name" }
+                        ]}
+                        onSubmit={(values) => createCollection(values.collectionName)}
+                        onClose={() => setPopupType(null)}
+                    />
+                )}
+
+                {/* User management popup - Integration function start: Auth*/}
+                {popupType === "user-management" && (
+                    <UserManagementPopup
+                        onClose={() => setPopupType(null)}
+                        loadUsers={() => loadUsers()}
+                        addUser={(user) => addUser(user)}
+                        deleteUser={(user) => deleteUser(user)}
+                        getAllRoles={() => getAllRoles()}
+                        updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
+                    />
+                )}{/* Integration function end: Auth*/}
+            </div>
         </div>
     )
 }
