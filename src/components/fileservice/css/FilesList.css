@@ -251,7 +251,7 @@ ul {
   background: #f3f4f6;
 }
 
-.upload-progress {
+.transfer-progress {
     margin-top: 10px;
     width: 100%;
 }
@@ -270,7 +270,7 @@ ul {
     transition: width 0.2s ease;
 }
 
-.disabled-during-upload {
+.disabled-during-transfer {
     pointer-events: none;
     opacity: 0.55;
 }
