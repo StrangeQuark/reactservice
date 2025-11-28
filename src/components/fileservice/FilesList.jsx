@@ -12,8 +12,8 @@ import { FaCog } from "react-icons/fa"
 import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
 
 const FilesList = () => {
-    const [uploadProgress, setUploadProgress] = useState(0)
-    const [isUploading, setIsUploading] = useState(false)
+    const [transferProgress, setTransferProgress] = useState(0)
+    const [isTransferring, setIsTransferring] = useState(false)
     const [collections, setCollections] = useState([])
     const [filteredCollections, setFilteredCollections] = useState([])
     const [files, setFiles] = useState([])
@@ -203,27 +203,52 @@ const FilesList = () => {
     }
 
     const handleDownload = async (fileName) => {
-        try {
-            const res = await fetch(`${FILE_ENDPOINTS.DOWNLOAD}/${selectedCollection.name}/${fileName}`, {
-                    method: "GET",
-                    headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
-                })
+        const xhr = new XMLHttpRequest()
+        xhr.open(
+            "GET",
+            `${FILE_ENDPOINTS.DOWNLOAD}/${selectedCollection.name}/${fileName}`
+        )
+        xhr.responseType = "blob"
 
-            if (!res.ok) 
-                throw new Error("Failed to download file")
+        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
 
-            const blob = await res.blob()
-            const url = window.URL.createObjectURL(blob)
-            const a = document.createElement("a")
-            a.href = url
-            a.download = fileName
-            document.body.appendChild(a)
-            a.click()
-            a.remove()
-            window.URL.revokeObjectURL(url)
-        } catch (err) {
-            console.error(err)
+        setIsTransferring(true)
+        setTransferProgress(0)
+
+        xhr.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100)
+                setTransferProgress(percent)
+            }
         }
+
+        xhr.onload = () => {
+            setIsTransferring(false)
+            setTransferProgress(0)
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const url = window.URL.createObjectURL(xhr.response)
+                const a = document.createElement("a")
+                a.href = url
+                a.download = fileName
+                document.body.appendChild(a)
+                a.click()
+                a.remove()
+                window.URL.revokeObjectURL(url)
+            } else {
+                console.error("Download failed", xhr.responseText)
+                alert("File download failed")
+            }
+        }
+
+        xhr.onerror = () => {
+            setIsTransferring(false)
+            setTransferProgress(0)
+            console.error("Download failed")
+            alert("File download failed")
+        }
+
+        xhr.send()
     }
 
 
@@ -252,24 +277,24 @@ const FilesList = () => {
         const formData = new FormData()
         formData.append("file", file)
 
-        setIsUploading(true)
-        setUploadProgress(0)
+        setIsTransferring(true)
+        setTransferProgress(0)
 
         const xhr = new XMLHttpRequest()
         xhr.open("POST", `${FILE_ENDPOINTS.UPLOAD}/${selectedCollection.name}`)
 
-        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken())
+        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
 
         xhr.upload.onprogress = (event) => {
             if (event.lengthComputable) {
                 const percent = Math.round((event.loaded / event.total) * 100)
-                setUploadProgress(percent)
+                setTransferProgress(percent)
             }
         }
 
         xhr.onload = () => {
-            setIsUploading(false)
-            setUploadProgress(0)
+            setIsTransferring(false)
+            setTransferProgress(0)
 
             if (xhr.status >= 200 && xhr.status < 300) {
                 fetchFiles(selectedCollection.name)
@@ -280,8 +305,8 @@ const FilesList = () => {
         }
 
         xhr.onerror = () => {
-            setIsUploading(false)
-            setUploadProgress(0)
+            setIsTransferring(false)
+            setTransferProgress(0)
             console.error("Upload failed")
             alert("File upload failed")
         }
@@ -324,7 +349,7 @@ const FilesList = () => {
 
     return (
         <div className="files-page">
-            <div className={isUploading ? "disabled-during-upload" : ""}>
+            <div className={isTransferring ? "disabled-during-transfer" : ""}>
                 {!selectedCollection && (
                     <>
                         <div className="collections-header">
@@ -408,15 +433,15 @@ const FilesList = () => {
                             </div>
                         </div>
 
-                        {isUploading && (
-                            <div className="upload-progress">
+                        {isTransferring && (
+                            <div className="transfer-progress">
                                 <div className="progress-bar-bg">
                                     <div
                                         className="progress-bar-fill"
-                                        style={{ width: `${uploadProgress}%` }}
+                                        style={{ width: `${transferProgress}%` }}
                                     ></div>
                                 </div>
-                                <span>{uploadProgress}%</span>
+                                <span>{transferProgress}%</span>
                             </div>
                         )}
 
