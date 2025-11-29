@@ -6,6 +6,7 @@ import { AUTH_ENDPOINTS } from "../../config"
 import "./css/AccountSettings.css"
 import InputPopup from "../InputPopup"
 import { useAuth } from "../../context/AuthContext"
+import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const AccountSettings = () => {
     const { username, getAccessToken, logout } = useAuth()
@@ -17,6 +18,7 @@ const AccountSettings = () => {
         }, [])
 
     const fetchAccountDetails = async () => {
+        sendTelemetryEvent("react-account-settings-visited") // Integration line: Telemetry
         const data = await fetch(`${AUTH_ENDPOINTS.GET_USER_ID}?username=${encodeURIComponent(username)}`, {
             headers: {
                 "Content-Type": "application/json",
@@ -41,6 +43,7 @@ const AccountSettings = () => {
     }
 
     const updateUsername = async (newUsername, password) => {
+        sendTelemetryEvent("react-update-username-attempt") // Integration line: Telemetry
         const response = await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
             method: "POST",
             headers: {
@@ -53,13 +56,16 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
+            sendTelemetryEvent("react-update-username-failure") // Integration line: Telemetry
             return
         }
 
+        sendTelemetryEvent("react-update-username-success") // Integration line: Telemetry
         logout()
     }
 
     const updateEmail = async (newEmail, password) => {
+        sendTelemetryEvent("react-update-email-attempt") // Integration line: Telemetry
         const response = await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "POST",
             headers: {
@@ -72,13 +78,16 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
+            sendTelemetryEvent("react-update-email-failure") // Integration line: Telemetry
             return
         }
 
+        sendTelemetryEvent("react-update-email-success") // Integration line: Telemetry
         setEmail(newEmail)
     }
 
     const updatePassword = async (password, newPassword) => {
+        sendTelemetryEvent("react-update-password-attempt") // Integration line: Telemetry
         const response = await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
             method: "POST",
             headers: {
@@ -91,13 +100,16 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
+            sendTelemetryEvent("react-update-password-failure") // Integration line: Telemetry
             return
         }
 
+        sendTelemetryEvent("react-update-password-success") // Integration line: Telemetry
         logout()
     }
 
     const deleteProfile = async (username, password) => {
+        sendTelemetryEvent("react-delete-profile-attempt") // Integration line: Telemetry
         const response = await fetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
@@ -110,9 +122,11 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
+            sendTelemetryEvent("react-delete-profile-failure") // Integration line: Telemetry
             return
         }
 
+        sendTelemetryEvent("react-delete-profile-success") // Integration line: Telemetry
         logout()
     }
 

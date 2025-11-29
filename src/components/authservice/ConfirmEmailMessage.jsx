@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react"
 import { EMAIL_ENDPOINTS } from "../../config"
 import { authenticateServiceAccount } from "../../utility/AuthUtility"
+import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const ConfirmEmailMessage = () => {
     const [message, setMessage] = useState()
@@ -13,6 +14,7 @@ const ConfirmEmailMessage = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search)
         const token = urlParams.get("token")
+        sendTelemetryEvent("react-confirm-email-message-visited") // Integration line: Telemetry
         fetch(EMAIL_ENDPOINTS.ENABLE_USER + token, {
             method: 'GET',
             }).then(response => response.json().then(
@@ -28,6 +30,7 @@ const ConfirmEmailMessage = () => {
     }, [])
 
     const resendEmailToken = async () => {
+        sendTelemetryEvent("react-resend-email-token-attempt") // Integration line: Telemetry
         var requestBody = {"recipient": expiredTokenEmail, "sender": "donotreply@reactservice.com", "subject": "Account registration"}
 
         fetch(EMAIL_ENDPOINTS.SEND_REGISTER_EMAIL, {
