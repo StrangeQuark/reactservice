@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import FilesList from "../../components/fileservice/FilesList"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 // Mock AuthContext - Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
@@ -15,6 +16,7 @@ vi.mock("../../context/AuthContext", () => ({
 describe("FilesList", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
     global.fetch = vi.fn()
   })
 
