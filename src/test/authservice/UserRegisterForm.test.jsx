@@ -5,11 +5,13 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import UserRegisterForm from "../../components/authservice/UserRegisterForm"
 import * as EmailUtility from "../../utility/EmailUtility"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 describe("UserRegisterForm component", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     global.fetch = vi.fn()
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
     vi.spyOn(EmailUtility, "verifyEmailRegex").mockImplementation(() => true)
   })
 

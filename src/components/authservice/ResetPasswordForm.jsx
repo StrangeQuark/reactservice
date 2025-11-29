@@ -4,6 +4,7 @@
 import { useState } from "react"
 import { EMAIL_ENDPOINTS } from "../../config"
 import { authenticateServiceAccount } from "../../utility/AuthUtility"
+import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const ResetPasswordForm = () => {
     const[isSuccess, setIsSuccess] = useState(false)
@@ -35,6 +36,7 @@ const ResetPasswordForm = () => {
             setErrorMessage("Passwords do not match")
             return
         }
+        sendTelemetryEvent("react-reset-password-form-attempt") // Integration line: Telemetry
 
         fetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD + token + "&newPassword=" + password, {
             method: 'POST',
@@ -46,9 +48,11 @@ const ResetPasswordForm = () => {
                     if(!response.ok) {
                         setErrorMessage(data.message)
                         setIsError(true)
+                        sendTelemetryEvent("react-reset-password-form-failure") // Integration line: Telemetry
                         return
                     }
 
+                    sendTelemetryEvent("react-reset-password-form-success") // Integration line: Telemetry
                     setIsSuccess(true)
                 }
             ))

@@ -5,6 +5,7 @@ import { useState } from "react"
 import { AUTH_ENDPOINTS } from "../../config"
 import { verifyEmailRegex } from "../../utility/EmailUtility"
 import { authenticateServiceAccount } from "../../utility/AuthUtility"
+import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const ResetPasswordSearchForm = () => {
     const[credentials, setCredentials] = useState("")
@@ -28,6 +29,7 @@ const ResetPasswordSearchForm = () => {
         if(verifyEmailRegex(credentials))
             credentialsJson = {"email": credentials}
 
+        sendTelemetryEvent("react-reset-password-search-form-attempt") // Integration line: Telemetry
         fetch(AUTH_ENDPOINTS.PASSWORD_RESET, {
             method: 'POST',
             headers: {
@@ -38,8 +40,11 @@ const ResetPasswordSearchForm = () => {
         }).then(response => {
                 if(!response.ok) {
                     setIsError(true)
+                    sendTelemetryEvent("react-reset-password-search-form-failure") // Integration line: Telemetry
                     return
                 }
+
+                sendTelemetryEvent("react-reset-password-search-form-success") // Integration line: Telemetry
                 setIsSuccess(true)
             }
         )

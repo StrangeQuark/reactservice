@@ -5,6 +5,7 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import UserManagementPopup from "../../components/authservice/UserManagementPopup"
 import { useAuth } from "../../context/AuthContext"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 vi.mock("../../context/AuthContext")
 
@@ -19,7 +20,7 @@ describe("UserManagementPopup", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
     useAuth.mockReturnValue({ getAccessToken: mockGetAccessToken })
 
     global.fetch = vi.fn()

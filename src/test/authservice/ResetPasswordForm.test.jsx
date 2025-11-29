@@ -6,10 +6,12 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import ResetPasswordForm from "../../components/authservice/ResetPasswordForm"
 import { EMAIL_ENDPOINTS } from "../../config"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 describe("ResetPasswordForm", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
     global.fetch = vi.fn()
 
     window.location = { search: "?token=abc123" }
