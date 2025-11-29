@@ -5,6 +5,7 @@ import "./css/UserManagementPopup.css"
 import { useAuth } from "../../context/AuthContext"
 import { FaTrash, FaUserCog, FaTimes } from "react-icons/fa"
 import { AUTH_ENDPOINTS } from "../../config"
+import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRoles, updateUserRole }) => {
     const { getAccessToken } = useAuth()
@@ -21,6 +22,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
     const usersPerPage = 10
 
     useEffect(() => {
+        sendTelemetryEvent("react-user-management-popup-loaded") // Integration line: Telemetry
         fetchUsers()
         fetchRoles()
     }, [])
@@ -63,6 +65,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
     }
 
     const handleSearch = async () => {
+        sendTelemetryEvent("react-user-management-popup-search-attempt") // Integration line: Telemetry
         setSearchResult(null)
 
         if (!searchTerm.trim())
@@ -72,16 +75,19 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
 
-        if (!response.ok)
+        if (!response.ok) {
+            sendTelemetryEvent("react-user-management-popup-search-failure") // Integration line: Telemetry
             return
+        }
 
         const result = await response.json()
 
-
+        sendTelemetryEvent("react-user-management-popup-search-success") // Integration line: Telemetry
         setSearchResult(result)
     }
 
     const handleAddUser = async (username) => {
+        sendTelemetryEvent("react-user-management-popup-add-user") // Integration line: Telemetry
         await addUser(username)
 
         setSearchResult(null)
@@ -93,16 +99,19 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
         if (!confirm(`Remove user ${user.username}?`)) 
             return
 
+        sendTelemetryEvent("react-user-management-popup-delete-user") // Integration line: Telemetry
         await deleteUser(user)
         fetchUsers()
     }
 
     const startEditRole = (user) => {
+        sendTelemetryEvent("react-user-management-popup-start-edit-role") // Integration line: Telemetry
         setEditingUser(user.username)
         setNewRole(user.role)
     }
 
     const handleSaveRole = async (username) => {
+        sendTelemetryEvent("react-user-management-popup-start-save-role") // Integration line: Telemetry
         await updateUserRole(username, newRole)
 
         setEditingUser(null)
