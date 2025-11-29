@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/re
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import VaultList from "../../components/vaultservice/VaultList"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 // Mock useAuth - Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
@@ -28,6 +29,7 @@ Object.assign(navigator, {
 describe("VaultList component", () => {
   beforeEach(() => {
     vi.restoreAllMocks()
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
   afterEach(() => {
