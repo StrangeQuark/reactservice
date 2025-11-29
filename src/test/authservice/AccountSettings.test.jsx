@@ -6,6 +6,7 @@ import { vi } from "vitest"
 import AccountSettings from "../../components/authservice/AccountSettings"
 import { useAuth } from "../../context/AuthContext"
 import { AUTH_ENDPOINTS } from "../../config"
+import * as Telemetry from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 vi.mock("../../context/AuthContext")
 
@@ -20,7 +21,7 @@ describe("AccountSettings component", () => {
       getAccessToken: mockGetAccessToken,
       logout: mockLogout,
     })
-
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
     global.fetch = vi.fn()
   })
 
