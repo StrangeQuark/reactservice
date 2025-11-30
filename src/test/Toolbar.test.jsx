@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import Toolbar from "../components/Toolbar"
+import * as Telemetry from "../utility/TelemetryUtility" // Integration line: Telemetry
 
 // Mock AuthContext since Toolbar depends on it - Integration function start: Auth
 vi.mock("../context/AuthContext", () => ({
@@ -14,6 +15,7 @@ import { useAuth } from "../context/AuthContext"
 describe("Toolbar component", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
   test("renders logo and navigation links", () => {

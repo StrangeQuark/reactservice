@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import "./css/InputPopup.css"
+import { sendTelemetryEvent } from "../utility/TelemetryUtility" // Integration line: Telemetry
 
 const InputPopup = ({ label, inputs, onSubmit, onClose }) => {
     const [formValues, setFormValues] = useState({})
 
     useEffect(() => {
+        sendTelemetryEvent("react-input-popup-opened", {"label": label}) // Integration line: Telemetry
         setFormValues(
             inputs.reduce((acc, input) => {
                 acc[input.name] = input.defaultValue || ""
@@ -18,6 +20,7 @@ const InputPopup = ({ label, inputs, onSubmit, onClose }) => {
     }
 
     const handleSubmit = () => {
+        sendTelemetryEvent("react-input-popup-submitted", {"label": label}) // Integration line: Telemetry
         onSubmit(formValues)
         onClose()
     }
