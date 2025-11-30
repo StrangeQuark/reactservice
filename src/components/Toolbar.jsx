@@ -4,6 +4,7 @@ import logo from "../res/logo.png"
 import { RiLoginCircleLine } from "react-icons/ri" // Integration line: Auth
 import { GiHamburgerMenu } from "react-icons/gi"
 import { useAuth } from "../context/AuthContext" // Integration line: Auth
+import { sendTelemetryEvent } from "../utility/TelemetryUtility" // Integration line: Telemetry
 
 const Toolbar = () => {
     /* Integration function start: Auth */
@@ -11,6 +12,7 @@ const Toolbar = () => {
     const { isLoggedIn, username, logout } = useAuth()
 
     const navigateTo = (path) => {
+        sendTelemetryEvent("react-toolbar-navigation", {"path": path}) // Integration line: Telemetry
         window.location.href = path
     }
     /* Integration function end: Auth */
