@@ -16,6 +16,11 @@ services:
     ports:
       - "6080:80"
     container_name: react-service
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
 networks:
   shared-network:
     external: true
