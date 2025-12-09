@@ -44,6 +44,8 @@ RUN npm run build
 # Stage 2: Create minimal runtime image - Deploy via nginx
 FROM nginx:alpine
 
+RUN apk add --no-cache curl
+
 COPY --from=builder /reactservice/dist /usr/share/nginx/html
 
 # Replace default nginx config
