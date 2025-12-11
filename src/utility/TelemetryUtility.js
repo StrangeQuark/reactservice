@@ -16,7 +16,7 @@ export const sendTelemetryEvent = async (eventType, metadata) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + authenticateServiceAccount()// Integration line: Auth
+                Authorization: "Bearer " + await authenticateServiceAccount(),// Integration line: Auth
             },
             body: JSON.stringify(requestBody),
         })
