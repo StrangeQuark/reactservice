@@ -3,13 +3,11 @@
 
 import { useEffect, useState } from "react"
 import { EMAIL_ENDPOINTS } from "../../config"
-import { authenticateServiceAccount } from "../../utility/AuthUtility"
 import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const ConfirmEmailMessage = () => {
     const [message, setMessage] = useState()
     const [expiredTokenMessage, setExpiredTokenMessage] = useState(false)
-    const [expiredTokenEmail, setExpiredTokenEmail] = useState("")
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search)
@@ -19,8 +17,8 @@ const ConfirmEmailMessage = () => {
             method: 'GET',
             }).then(response => response.json().then(
                 (data) => {
-                    if(data.message === "The token has expired") {
-                        setExpiredTokenEmail(data.email)
+                    if(data.message === "The token has expired - A new confirmation email has been sent") {
+                        sendTelemetryEvent("react-resend-email-token-attempt") // Integration line: Telemetry
                         setExpiredTokenMessage(true)
                     }
                     else
@@ -28,25 +26,6 @@ const ConfirmEmailMessage = () => {
                 }
             ))
     }, [])
-
-    const resendEmailToken = async () => {
-        sendTelemetryEvent("react-resend-email-token-attempt") // Integration line: Telemetry
-        var requestBody = {"recipient": expiredTokenEmail, "sender": "donotreply@reactservice.com", "subject": "Account registration"}
-
-        fetch(EMAIL_ENDPOINTS.SEND_REGISTER_EMAIL, {
-            method: 'POST',
-            headers: {
-                Authorization: "Bearer " + await authenticateServiceAccount(),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-        }).then(response => response.json().then(
-            (data) => {
-                setExpiredTokenMessage(false)
-                setMessage(data.message)
-            }
-        ))
-    }
 
     return(
         <>
@@ -59,9 +38,8 @@ const ConfirmEmailMessage = () => {
             {expiredTokenMessage && (
                 <div id="message-div" className="auth-div">
                     <p id="message-text-field">
-                        This token has expired - Click the link below to request a new token
+                        This token has expired - A new confirmation email has been sent to the attached email address
                     </p>
-                    <a onClick={() => resendEmailToken()} style={{ textDecoration: "underline" }}>Click here</a>
                 </div>
             )}
         </>
