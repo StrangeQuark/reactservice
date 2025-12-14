@@ -4,7 +4,6 @@
 import { useState } from "react"
 import { AUTH_ENDPOINTS } from "../../config"
 import { verifyEmailRegex } from "../../utility/EmailUtility"
-import { authenticateServiceAccount } from "../../utility/AuthUtility"
 import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const ResetPasswordSearchForm = () => {
@@ -33,8 +32,7 @@ const ResetPasswordSearchForm = () => {
         fetch(AUTH_ENDPOINTS.PASSWORD_RESET, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer " + await authenticateServiceAccount() 
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentialsJson)
         }).then(response => {

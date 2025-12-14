@@ -25,11 +25,6 @@ describe("ResetPasswordSearchForm", () => {
 
   test("shows error if server returns 404", async () => {
     global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ message: "ok" }),
-    })
-
-    global.fetch.mockResolvedValueOnce({
       status: 404,
       json: async () => ({ message: "ok" }),
     })
@@ -47,14 +42,12 @@ describe("ResetPasswordSearchForm", () => {
       ).toBeInTheDocument()
     })
 
-    expect(fetch).toHaveBeenNthCalledWith(
-      2,
+    expect(fetch).toHaveBeenCalledWith(
       AUTH_ENDPOINTS.PASSWORD_RESET,
       expect.objectContaining({
         method: "POST",
         headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          Authorization: expect.stringMatching(/^Bearer /),
+          "Content-Type": "application/json"
         }),
         body: JSON.stringify({ email: "wronguser@example.com" }),
       })
@@ -85,14 +78,12 @@ describe("ResetPasswordSearchForm", () => {
       ).toBeInTheDocument()
     })
 
-    expect(fetch).toHaveBeenNthCalledWith(
-      2,
+    expect(fetch).toHaveBeenCalledWith(
       AUTH_ENDPOINTS.PASSWORD_RESET,
       expect.objectContaining({
         method: "POST",
         headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          Authorization: expect.stringMatching(/^Bearer /),
+          "Content-Type": "application/json"
         }),
         body: JSON.stringify({ email: "test@example.com" }),
       })
