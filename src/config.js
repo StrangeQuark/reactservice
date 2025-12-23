@@ -48,8 +48,7 @@ let AUTH_ENDPOINTS = {
 let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`,
-  RESET_USER_PASSWORD: `${EMAIL_API_BASE_URL}/api/email/reset-user-password?token=`,
-  SEND_REGISTER_EMAIL: `${EMAIL_API_BASE_URL}/api/email/send-register-email`
+  RESET_USER_PASSWORD: `${EMAIL_API_BASE_URL}/api/email/reset-user-password?token=`
 }
 // Integration function end: Email
 // Integration function start: File
