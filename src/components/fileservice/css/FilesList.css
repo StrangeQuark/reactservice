@@ -48,6 +48,7 @@ ul {
 .view-btn,
 .stream-btn,
 .download-btn,
+.file-button,
 .file-delete-btn {
     border: none;
     border-radius: 5px;
@@ -84,9 +85,7 @@ ul {
 }
 
 .file-button {
-    border: none;
     background-color: #007bff;
-    color: white;
     border-radius: 5px;
     text-align: center;
     transition: background-color 0.2s;

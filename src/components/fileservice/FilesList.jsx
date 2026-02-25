@@ -275,6 +275,58 @@ const FilesList = () => {
         xhr.send()
     }
 
+    const handleDownloadAll = async () => {
+        sendTelemetryEvent("react-files-download-all-files-attempt", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
+        const xhr = new XMLHttpRequest()
+        xhr.open(
+            "GET",
+            `${FILE_ENDPOINTS.DOWNLOAD_ALL}/${selectedCollection.name}`
+        )
+        xhr.responseType = "blob"
+
+        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
+
+        setIsTransferring(true)
+        setTransferProgress(0)
+
+        xhr.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percent = Math.round((event.loaded / event.total) * 100)
+                setTransferProgress(percent)
+            }
+        }
+
+        xhr.onload = () => {
+            setIsTransferring(false)
+            setTransferProgress(0)
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const url = window.URL.createObjectURL(xhr.response)
+                const a = document.createElement("a")
+                a.href = url
+                a.download = `${selectedCollection.name}.zip`
+                document.body.appendChild(a)
+                a.click()
+                a.remove()
+                window.URL.revokeObjectURL(url)
+                sendTelemetryEvent("react-files-download-all-files-success", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
+            } else {
+                console.error("Download failed", xhr.responseText)
+                alert("File download failed")
+                sendTelemetryEvent("react-files-download-all-files-failure", {"collectionName": selectedCollection.name, "failureReason": xhr.responseText}) // Integration line: Telemetry
+            }
+        }
+
+        xhr.onerror = () => {
+            setIsTransferring(false)
+            setTransferProgress(0)
+            console.error("Download failed")
+            alert("File download failed")
+            sendTelemetryEvent("react-files-download-all-files-failure", {"collectionName": selectedCollection.name, "failureReason": xhr.responseText}) // Integration line: Telemetry
+        }
+
+        xhr.send()
+    }
 
     const handleDelete = async (fileName) => {
         sendTelemetryEvent("react-files-delete-file-attempt", {"collectionName": selectedCollection.name, "fileName": fileName}) // Integration line: Telemetry
@@ -435,7 +487,10 @@ const FilesList = () => {
                             <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
                             <div className="files-list-right-div">
                                 {(currentUserRole !== "READ") && ( // Integration line: Auth
-                                    <button onClick={openFilePicker} className="file-button">Upload</button>
+                                    <>
+                                        <button onClick={() => handleDownloadAll()} className="file-button">Download all</button>
+                                        <button onClick={openFilePicker} className="file-button">Upload</button>
+                                    </>
                                 )} {/* Integration line: Auth */}
                                 {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
                                     <div className="cog-wrapper">

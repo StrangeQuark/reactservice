@@ -57,6 +57,7 @@ let FILE_ENDPOINTS = {
   GET_ALL_COLLECTIONS: `${FILE_API_BASE_URL}/api/file/get-all-collections`,
   NEW_COLLECTION: `${FILE_API_BASE_URL}/api/file/new-collection`,
   DOWNLOAD: `${FILE_API_BASE_URL}/api/file/download`,
+  DOWNLOAD_ALL: `${FILE_API_BASE_URL}/api/file/downloadAll`,
   UPLOAD: `${FILE_API_BASE_URL}/api/file/upload`,
   STREAM: `${FILE_API_BASE_URL}/api/file/stream`,
   DELETE: `${FILE_API_BASE_URL}/api/file/delete`,
