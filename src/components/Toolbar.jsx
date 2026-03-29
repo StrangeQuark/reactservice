@@ -16,22 +16,11 @@ const Toolbar = () => {
         window.location.href = path
     }
     /* Integration function end: Auth */
-    const handleKeyDown = (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault()
-            // Insert search logic here
-        }
-    }
 
     return (
         <div className="toolbar">
             <div className="left-div">
-                <GiHamburgerMenu size={"1em"}/>
                 <img alt="Logo" src={ logo } />
-                <select>
-                    <option className="option">Dropdown</option>
-                    <option className="option">Very very long dropdown option</option>
-                </select>
             </div>
             <div className="center-div">
                 <a href="/">Home</a>
@@ -39,7 +28,6 @@ const Toolbar = () => {
                 <a href="/vault">Vault</a> {/* Integration line: Vault */}
             </div>
             <div className="right-div">
-                <input type="text" id="searchBar" placeholder="Search" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}/>
                 { !isLoggedIn ? <RiLoginCircleLine id="loginButton" data-testid="loginButton" size={"2em"} onClick={() => navigateTo("/login")}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration function start: Auth */}
                 {
                     displayPopout && (<div id='center-popout-container' className="center-popout-container">
