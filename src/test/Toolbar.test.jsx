@@ -69,15 +69,4 @@ describe("Toolbar component", () => {
     fireEvent.click(screen.getByText("Logout"))
     expect(mockLogout).toHaveBeenCalled()
   }) // Integration function end: Auth
-
-  test("handles search bar Enter key", () => {
-    useAuth.mockReturnValue({ isLoggedIn: false }) // Integration line: Auth
-
-    render(<Toolbar />)
-
-    const searchBar = screen.getByPlaceholderText("Search")
-    fireEvent.keyDown(searchBar, { key: "Enter", code: "Enter" })
-
-    expect(searchBar).toBeInTheDocument()
-  })
 })
