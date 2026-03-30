@@ -24,9 +24,9 @@ describe("Toolbar component", () => {
     render(<Toolbar />)
 
     expect(screen.getByAltText("Logo")).toBeInTheDocument()
-    expect(screen.getByText("Home")).toBeInTheDocument()
-    expect(screen.getByText("Files")).toBeInTheDocument() // Integration line: File
-    expect(screen.getByText("Vault")).toBeInTheDocument() // Integration line: Vault
+    expect(screen.getByTestId("home-nav-link")).toBeInTheDocument()
+    expect(screen.getByTestId("files-nav-link")).toBeInTheDocument() // Integration line: File
+    expect(screen.getByTestId("vault-nav-link")).toBeInTheDocument() // Integration line: Vault
   })
   // Integration function start: Auth
   test("shows login button when not logged in", () => {
