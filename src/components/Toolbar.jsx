@@ -2,7 +2,6 @@ import { useState } from "react" // Integration line: Auth
 import "./css/Toolbar.css"
 import logo from "../res/logo.png"
 import { RiLoginCircleLine } from "react-icons/ri" // Integration line: Auth
-import { GiHamburgerMenu } from "react-icons/gi"
 import { useAuth } from "../context/AuthContext" // Integration line: Auth
 import { sendTelemetryEvent } from "../utility/TelemetryUtility" // Integration line: Telemetry
 
@@ -10,10 +9,12 @@ const Toolbar = () => {
     /* Integration function start: Auth */
     const [displayPopout, setDisplayPopout] = useState(false)
     const { isLoggedIn, username, logout } = useAuth()
+    const [centerDropdownOpen, setCenterDropdownOpen] = useState(false);
 
     const navigateTo = (path) => {
         sendTelemetryEvent("react-toolbar-navigation", {"path": path}) // Integration line: Telemetry
         window.location.href = path
+        setCenterDropdownOpen(false)
     }
     /* Integration function end: Auth */
 
@@ -23,9 +24,19 @@ const Toolbar = () => {
                 <img alt="Logo" src={ logo } />
             </div>
             <div className="center-div">
-                <a href="/">Home</a>
-                <a href="/files">Files</a> {/* Integration line: File */}
-                <a href="/vault">Vault</a> {/* Integration line: Vault */}
+                <a href="/" data-testid="home-nav-link">Home</a>
+                <a href="/files" data-testid="files-nav-link">Files</a> {/* Integration line: File */}
+                <a href="/vault" data-testid="vault-nav-link">Vault</a> {/* Integration line: Vault */}
+
+                {/* Mobile dropdown start*/}
+                <button className="center-dropdown-button" onClick={() => setCenterDropdownOpen(!centerDropdownOpen)}>Menu</button>
+
+                <div className={`center-dropdown-container ${centerDropdownOpen ? "show" : ""}`}>
+                    <button onClick={() => { navigateTo("/") }}>Home</button>
+                    <button onClick={() => { navigateTo("/files") }}>Files</button>
+                    <button onClick={() => { navigateTo("/vault") }}>Vault</button>
+                </div>
+                {/* Mobile dropdown end*/}
             </div>
             <div className="right-div">
                 { !isLoggedIn ? <RiLoginCircleLine id="loginButton" data-testid="loginButton" size={"2em"} onClick={() => navigateTo("/login")}/> : <button id="userButton" className="user-button" onClick={() => setDisplayPopout(!displayPopout)}>{username}</button> /* Integration function start: Auth */}

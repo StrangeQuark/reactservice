@@ -17,7 +17,7 @@
 .toolbar img {
   cursor: pointer;
   height: 5vh;
-  padding: 0 1vw;
+  padding: 0.5vh 0.5vw;
 }
 
 .toolbar svg {
@@ -103,4 +103,54 @@
   height: 6vh;
   border: none;
   margin-right: 0.5vw;
+}
+
+.center-dropdown-button {
+  display: none; /* hidden on desktop */
+}
+
+.center-dropdown-container {
+  display: none; /* hidden on desktop */
+}
+
+@media (max-width: 600px) {
+  .center-div a {
+    display: none; /* hide normal links on mobile */
+  }
+
+  .center-dropdown-button {
+    display: block;
+    cursor: pointer;
+    font-size: 120%;
+    font-weight: 1000;
+    background: white;
+    border: none;
+  }
+
+  .center-dropdown-container {
+    display: none;
+    position: absolute;
+    top: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 10;
+    flex-direction: column;
+    min-width: 200px;
+  }
+
+  .center-dropdown-container button {
+    padding: 0.5rem 1rem;
+    width: 100%;
+    border: none;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    font-size: 2rem;
+  }
+
+  .center-dropdown-container.show {
+    display: flex;
+  }
 }
