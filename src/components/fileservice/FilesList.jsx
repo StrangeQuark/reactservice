@@ -549,7 +549,7 @@ const FilesList = () => {
                                             {isImage && <button onClick={() => handleImage(file)} className="view-btn">View</button>}
                                             {isAudio && <button onClick={() => handleAudio(file)} className="listen-btn">Listen</button>}
                                             <button onClick={() => handleDownload(file)} className="download-btn">Download</button>
-                                            {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && <button onClick={() => handleDelete(file)} className="file-delete-btn">Delete</button>}
+                                            {(currentUserRole !== "READ") && <button onClick={() => handleDelete(file)} className="file-delete-btn">Delete</button>}
                                         </div>
                                     </li>
                                 )
