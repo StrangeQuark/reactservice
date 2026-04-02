@@ -205,3 +205,78 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* Mobile-specific styles */
+@media (max-width: 600px) {
+    .vault-page {
+        padding: 20px 5%; /* tighter padding for mobile */
+    }
+
+    .vault-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    .vault-header select,
+    .vault-header button,
+    .vault-header svg {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .vault-controls {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .vault-controls input,
+    .vault-controls button {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .vault-table {
+        display: flex;
+        flex-direction: column;
+        height: auto; /* allow dynamic height */
+    }
+
+    .vault-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .vault-row input {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .vault-row svg.row-icon {
+        width: 28px;
+        height: 28px;
+        margin-top: 4px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    /* Popout adjustments */
+    .vault-popout-container {
+        left: auto;
+        right: 0;
+        min-width: 140px;
+    }
+}
