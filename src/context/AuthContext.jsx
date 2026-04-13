@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
                 const newAccessToken = getCookie("access_token")
                 setIsLoggedIn(true)
                 setUsername(getUsernameFromJWT(newAccessToken))
-                scheduleTokenRefresh(accessToken)
+                scheduleTokenRefresh(newAccessToken)
             }
             setLoading(false)
         }
@@ -51,20 +51,13 @@ export const AuthProvider = ({ children }) => {
     }
 
     const verifyRefreshToken = async () => {
-        const refreshToken = getCookie("refresh_token")
-        if (!refreshToken) return false
-
         try {
             const response = await fetch(AUTH_ENDPOINTS.ACCESS, {
-                headers: {
-                    Authorization: "Bearer " + refreshToken,
-                    "Content-Type": "application/json"
-                }
+                credentials: "include"
             })
-            if (!response.ok) return false
+            if (!response.ok) 
+                return false
 
-            const data = await response.json()
-            document.cookie = "access_token=" + data.jwtToken
             return true
         } catch {
             return false

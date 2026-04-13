@@ -35,6 +35,7 @@ const UserLoginForm = () => {
 
         fetch(AUTH_ENDPOINTS.AUTHENTICATE, {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -50,11 +51,9 @@ const UserLoginForm = () => {
                         return
                     }
 
-                    //Save the JWT token to the cookies
-                    document.cookie = "refresh_token=" + data.jwtToken
-
                     // Fetch access token
                     fetch(AUTH_ENDPOINTS.ACCESS, {
+                        credentials: "include",
                         headers: {
                             Authorization: "Bearer " + data.jwtToken,
                             "Content-Type": "application/json"
@@ -67,7 +66,6 @@ const UserLoginForm = () => {
                                 return
                             }
                             sendTelemetryEvent("react-login-success") // Integration line: Telemetry
-                            document.cookie = "access_token=" + d.jwtToken
 
                             // //Navigate back, or go to homepage if coming from the registration page
                             // if(!document.referrer.endsWith('/register'))
