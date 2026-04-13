@@ -99,5 +99,16 @@ describe("UserLoginForm component", () => {
         body: JSON.stringify({ username: "testuser", password: "password123" })
       })
     )
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      AUTH_ENDPOINTS.ACCESS,
+      expect.objectContaining({
+        credentials: "include",
+        headers: {
+          Authorization: "Bearer mock-refresh-token",
+          "Content-Type": "application/json"
+        }
+      })
+    )
   })
 })

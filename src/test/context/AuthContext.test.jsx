@@ -7,7 +7,8 @@ import { AuthProvider, useAuth } from "../../context/AuthContext"
 
 describe("AuthContext context", () => {
   beforeEach(() => {
-    document.cookie = ""
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
+    document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
     global.fetch = vi.fn()
   })
 
@@ -49,6 +50,24 @@ describe("AuthContext context", () => {
     await waitFor(() => {
       expect(result.current.isLoggedIn).toBe(true)
       expect(result.current.username).toBe("john_doe")
+    })
+  })
+
+  test("initializes from refresh token when access token is missing", async () => {
+    const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "jane_doe" }))
+    document.cookie = "refresh_token=refresh-token"
+
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
+    })
+
+    const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>
+    const { result } = renderHook(() => useAuth(), { wrapper })
+
+    await waitFor(() => {
+      expect(result.current.isLoggedIn).toBe(true)
+      expect(result.current.username).toBe("jane_doe")
     })
   })
 })
