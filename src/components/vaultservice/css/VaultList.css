@@ -2,7 +2,7 @@
 
 .vault-page {
     font-family: Arial, sans-serif;
-    color: #333;
+    color: var(--app-text);
     padding: 50px 20%;
 }
 
@@ -17,10 +17,11 @@
 
 .vault-header select {
     padding: 8px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--app-border-strong);
     border-radius: 6px;
     font-size: 22px;
-    background-color: #fff;
+    background-color: var(--app-input-bg);
+    color: var(--app-input-text);
 }
 
 .vault-header button {
@@ -37,6 +38,7 @@
     width: 32px;
     height: 42px;
     cursor: pointer;
+    color: var(--app-text);
 }
 
 .cog-wrapper {
@@ -50,10 +52,10 @@
   left: 0;
   margin-top: 6px;
   
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--app-surface-elevated);
+  border: 1px solid var(--app-border);
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: var(--app-shadow);
   z-index: 1000;
 
   display: flex;
@@ -69,11 +71,12 @@
   text-align: left;
   cursor: pointer;
   font-size: 14px;
+  color: var(--app-text);
   transition: background-color 0.15s ease;
 }
 
 .vault-popout-container button:hover {
-  background: #f3f4f6;
+  background: var(--app-surface-hover);
 }
 
 .save-btn {
@@ -127,7 +130,9 @@
     padding: 6px 10px;
     font-size: 14px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--app-border-strong);
+    background-color: var(--app-input-bg);
+    color: var(--app-input-text);
     flex: 1;
 }
 
@@ -135,7 +140,7 @@
 .vault-table {
     display: grid;
     grid-template-rows: repeat(10, 1fr); /* always 10 equal slots */
-    border: 1px solid #ddd;
+    border: 1px solid var(--app-border);
     border-radius: 6px;
     height: 70vh;
 }
@@ -145,8 +150,8 @@
     align-items: center;
     gap: 6px;
     padding: 8px;
-    background: #f9f9f9;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    background: var(--app-surface);
+    box-shadow: var(--app-shadow-soft);
 }
 
 .vault-row input[type="text"],
@@ -155,21 +160,23 @@
     padding: 6px 8px;
     font-size: 21px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--app-border-strong);
+    background-color: var(--app-input-bg);
+    color: var(--app-input-text);
 }
 
 .row-icon {
     padding: 5px 8px;
     font-size: 18px;
-    background-color: #e9ecef;
-    border: 1px solid #ccc;
+    background-color: var(--app-surface-muted);
+    border: 1px solid var(--app-border-strong);
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.15s ease;
 }
 
 .row-icon:hover {
-    background-color: #d6d8db;
+    background-color: var(--app-surface-hover);
 }
 
 /* Pagination */
@@ -182,8 +189,9 @@
 
 .pagination button {
     padding: 5px 10px;
-    border: 1px solid #ccc;
-    background-color: white;
+    border: 1px solid var(--app-border-strong);
+    background-color: var(--app-surface-elevated);
+    color: var(--app-text);
     border-radius: 20px;
     font-size: 13px;
     cursor: pointer;

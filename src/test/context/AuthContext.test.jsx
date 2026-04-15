@@ -57,9 +57,12 @@ describe("AuthContext context", () => {
     const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "jane_doe" }))
     document.cookie = "refresh_token=refresh-token"
 
-    global.fetch.mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
+    global.fetch.mockImplementation(async () => {
+      document.cookie = `access_token=header.${payload}.sig; path=/`
+      return {
+        ok: true,
+        json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
+      }
     })
 
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>

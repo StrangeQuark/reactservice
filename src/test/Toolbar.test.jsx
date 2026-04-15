@@ -4,6 +4,8 @@ import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import Toolbar from "../components/Toolbar"
 import * as Telemetry from "../utility/TelemetryUtility" // Integration line: Telemetry
+import logo from "../res/logo.png"
+import darkModeLogo from "../res/logo_dark_mode.png"
 
 // Mock AuthContext since Toolbar depends on it - Integration function start: Auth
 vi.mock("../context/AuthContext", () => ({
@@ -15,6 +17,8 @@ import { useAuth } from "../context/AuthContext"
 describe("Toolbar component", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    window.localStorage.clear()
+    document.documentElement.removeAttribute("data-theme")
     vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
@@ -24,6 +28,7 @@ describe("Toolbar component", () => {
     render(<Toolbar />)
 
     expect(screen.getByAltText("Logo")).toBeInTheDocument()
+    expect(screen.getByAltText("Logo")).toHaveAttribute("src", logo)
     expect(screen.getByTestId("home-nav-link")).toBeInTheDocument()
     expect(screen.getByTestId("files-nav-link")).toBeInTheDocument() // Integration line: File
     expect(screen.getByTestId("vault-nav-link")).toBeInTheDocument() // Integration line: Vault
@@ -69,4 +74,30 @@ describe("Toolbar component", () => {
     fireEvent.click(screen.getByText("Logout"))
     expect(mockLogout).toHaveBeenCalled()
   }) // Integration function end: Auth
+
+  test("uses the stored theme on load", () => {
+    window.localStorage.setItem("reactservice-theme", "dark")
+    useAuth.mockReturnValue({ isLoggedIn: false })
+
+    render(<Toolbar />)
+
+    expect(document.documentElement).toHaveAttribute("data-theme", "dark")
+    expect(screen.getByTestId("theme-toggle")).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByAltText("Logo")).toHaveAttribute("src", darkModeLogo)
+  })
+
+  test("toggles theme and persists it", () => {
+    useAuth.mockReturnValue({ isLoggedIn: false })
+
+    render(<Toolbar />)
+
+    const toggle = screen.getByTestId("theme-toggle")
+
+    fireEvent.click(toggle)
+
+    expect(document.documentElement).toHaveAttribute("data-theme", "dark")
+    expect(window.localStorage.getItem("reactservice-theme")).toBe("dark")
+    expect(toggle).toHaveAttribute("aria-label", "Switch to light mode")
+    expect(screen.getByAltText("Logo")).toHaveAttribute("src", darkModeLogo)
+  })
 })
