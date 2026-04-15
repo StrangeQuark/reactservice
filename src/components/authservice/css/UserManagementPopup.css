@@ -4,7 +4,7 @@
 .user-manager-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.55);
+    background: var(--app-overlay);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,7 +12,7 @@
 }
 
 .user-manager-popup {
-    background: #fff;
+    background: var(--app-surface-elevated);
     border-radius: 12px;
     padding: 25px;
     width: 80%;
@@ -20,8 +20,8 @@
     max-height: 85vh;
     overflow-y: auto;
     font-family: Arial, sans-serif;
-    color: #333;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: var(--app-text);
+    box-shadow: var(--app-shadow);
 }
 
 /* Header bar */
@@ -60,7 +60,9 @@
     padding: 8px 10px;
     font-size: 14px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--app-border-strong);
+    background: var(--app-input-bg);
+    color: var(--app-input-text);
 }
 
 .user-controls button {
@@ -84,13 +86,13 @@
     top: 42px;
     left: 0;
     right: 0;
-    background: #fff;
-    border: 1px solid #ccc;
+    background: var(--app-surface-elevated);
+    border: 1px solid var(--app-border-strong);
     border-radius: 6px;
     z-index: 10000;
     max-height: 200px;
     overflow-y: auto;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: var(--app-shadow-soft);
 }
 
 .search-result {
@@ -100,12 +102,12 @@
     transition: background 0.2s;
 }
 .search-result:hover {
-    background: #f1f1f1;
+    background: var(--app-surface-muted);
 }
 
 /* User table */
 .user-table {
-    border: 1px solid #ddd;
+    border: 1px solid var(--app-border);
     border-radius: 6px;
     display: flex;
     flex-direction: column;
@@ -123,17 +125,17 @@
 }
 
 .user-header {
-    background: #f1f1f1;
+    background: var(--app-surface-muted);
     font-weight: bold;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--app-border);
 }
 
 .user-row {
-    background: #f9f9f9;
-    border-bottom: 1px solid #eee;
+    background: var(--app-surface);
+    border-bottom: 1px solid var(--app-border);
 }
 .user-row:nth-child(even) {
-    background: #fcfcfc;
+    background: var(--app-surface-muted-alt);
 }
 
 /* Inline role editing */
@@ -141,7 +143,9 @@
     padding: 6px 8px;
     font-size: 14px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--app-border-strong);
+    background: var(--app-input-bg);
+    color: var(--app-input-text);
 }
 
 /* Action icons + buttons */
@@ -154,15 +158,15 @@
 .row-icon {
     padding: 6px;
     font-size: 16px;
-    background-color: #e9ecef;
-    border: 1px solid #ccc;
+    background-color: var(--app-surface-muted);
+    border: 1px solid var(--app-border-strong);
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.15s ease;
 }
 
 .row-icon:hover {
-    background-color: #d6d8db;
+    background-color: var(--app-surface-hover);
 }
 
 .actions button {
@@ -201,8 +205,9 @@
 
 .pagination button {
     padding: 5px 10px;
-    border: 1px solid #ccc;
-    background-color: white;
+    border: 1px solid var(--app-border-strong);
+    background-color: var(--app-surface-elevated);
+    color: var(--app-text);
     border-radius: 20px;
     font-size: 13px;
     cursor: pointer;

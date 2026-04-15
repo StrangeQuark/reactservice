@@ -57,7 +57,6 @@ export const AuthProvider = ({ children }) => {
             })
             if (!response.ok) 
                 return false
-
             return true
         } catch {
             return false

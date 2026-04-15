@@ -13,7 +13,8 @@ describe("UserLoginForm component", () => {
     global.fetch = vi.fn()
     delete window.location
     window.location = { href: "" }
-    document.cookie = ""
+    document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
+    document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
     vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
@@ -76,8 +77,14 @@ describe("UserLoginForm component", () => {
     }
 
     global.fetch
-      .mockResolvedValueOnce(mockAuthResponse) // first call: authenticate
-      .mockResolvedValueOnce(mockAccessResponse) // second call: access token
+      .mockImplementationOnce(async () => {
+        document.cookie = "refresh_token=mock-refresh-token; path=/"
+        return mockAuthResponse
+      })
+      .mockImplementationOnce(async () => {
+        document.cookie = "access_token=mock-access-token; path=/"
+        return mockAccessResponse
+      })
 
     render(<UserLoginForm />)
 

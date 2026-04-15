@@ -3,7 +3,7 @@
 .files-page {
     padding: 50px 20%;
     font-family: Arial, sans-serif;
-    color: #333;
+    color: var(--app-text);
 }
 
 .files-page button {
@@ -16,14 +16,14 @@
     width: 80%;
     margin: 20px auto;
     padding: 20px;
-    background: #f9f9f9;
+    background: var(--app-surface);
     border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--app-shadow);
 }
 
 .files-list h2 {
     text-align: center;
-    color: #333;
+    color: var(--app-text);
     margin: 8px;
 }
 
@@ -37,7 +37,7 @@ ul {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--app-border);
 }
 
 .file-item:last-child {
@@ -105,6 +105,7 @@ ul {
     width: 32px;
     height: 42px;
     cursor: pointer;
+    color: var(--app-text);
 }
 
 .cog-wrapper {
@@ -144,13 +145,16 @@ ul {
 .collection-search {
     padding: 14px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--app-border-strong);
+    background: var(--app-input-bg);
+    color: var(--app-input-text);
     flex: 1;
 }
 
 .view-toggle button {
-    border: 1px solid #ccc;
-    background: white;
+    border: 1px solid var(--app-border-strong);
+    background: var(--app-surface-elevated);
+    color: var(--app-text);
 }
 
 .view-toggle .active {
@@ -165,10 +169,10 @@ ul {
 }
 
 .collection-card {
-    background-color: #fff;
+    background-color: var(--app-surface-elevated);
     border-radius: 12px;
     padding: 30px 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: var(--app-shadow);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     display: flex;
@@ -189,7 +193,7 @@ ul {
 .collection-name {
     font-weight: 600;
     font-size: 1rem;
-    color: #333;
+    color: var(--app-text);
 }
 
 .collection-list {
@@ -199,23 +203,24 @@ ul {
 
 .collection-list li {
     padding: 10px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--app-border-strong);
     cursor: pointer;
 }
 
 .collection-list li:hover {
-    background: #f0f0f0;
+    background: var(--app-surface-hover);
 }
 
 .back-button {
     margin-left: 10px;
-    background: #ccc;
+    background: var(--app-neutral-button);
+    color: var(--app-text);
     border: none;
     border-radius: 6px;
 }
 
 .back-button:hover {
-    background: #aaa;
+    background: var(--app-neutral-button-hover);
 }
 
 .file-popout-container {
@@ -224,10 +229,10 @@ ul {
   left: 0;
   margin-top: 6px;
   
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--app-surface-elevated);
+  border: 1px solid var(--app-border);
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: var(--app-shadow);
   z-index: 1000;
 
   display: flex;
@@ -243,11 +248,12 @@ ul {
   text-align: left;
   cursor: pointer;
   font-size: 14px;
+  color: var(--app-text);
   transition: background-color 0.15s ease;
 }
 
 .file-popout-container button:hover {
-  background: #f3f4f6;
+  background: var(--app-surface-hover);
 }
 
 .transfer-progress {
@@ -258,7 +264,7 @@ ul {
 .progress-bar-bg {
     width: 100%;
     height: 8px;
-    background: #ddd;
+    background: var(--app-surface-muted);
     border-radius: 4px;
     overflow: hidden;
 }
