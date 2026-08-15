@@ -5,7 +5,6 @@ import darkModeLogo from "../res/logo_dark_mode.png"
 import { RiLoginCircleLine } from "react-icons/ri" // Integration line: Auth
 import { MdDarkMode, MdLightMode } from "react-icons/md"
 import { useAuth } from "../context/AuthContext" // Integration line: Auth
-import { sendTelemetryEvent } from "../utility/TelemetryUtility" // Integration line: Telemetry
 
 const THEME_STORAGE_KEY = "reactservice-theme"
 
@@ -25,7 +24,6 @@ const Toolbar = () => {
     const [theme, setTheme] = useState(getStoredTheme)
 
     const navigateTo = (path) => {
-        sendTelemetryEvent("react-toolbar-navigation", {"path": path}) // Integration line: Telemetry
         window.location.href = path
         setCenterDropdownOpen(false)
     }

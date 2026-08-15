@@ -10,7 +10,6 @@ import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 import InputPopup from "../InputPopup"
 import { FaCog } from "react-icons/fa"
 import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
-import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const FilesList = () => {
     const [transferProgress, setTransferProgress] = useState(0)
@@ -36,7 +35,6 @@ const FilesList = () => {
     const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico", "avif"]
 
     useEffect(() => {
-        sendTelemetryEvent("react-files-page-visited") // Integration line: Telemetry
         fetchCollections()
     }, [])
 
@@ -65,7 +63,6 @@ const FilesList = () => {
     }
 
     const createCollection = async (collectionName) => {
-        sendTelemetryEvent("react-files-collection-creation-attempt", {"collectionName": collectionName}) // Integration line: Telemetry
         const response = await fetch(`${FILE_ENDPOINTS.NEW_COLLECTION}/${collectionName}`, {
             method: "POST",
             headers: {
@@ -76,18 +73,15 @@ const FilesList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            sendTelemetryEvent("react-files-collection-creation-failure", {"collectionName": collectionName, "failureReason": message.errorMessage}) // Integration line: Telemetry
             return
         }
 
         const data = await response.text()
         if(data !== "New collection successfully created") {
             alert(data)
-            sendTelemetryEvent("react-files-collection-creation-failure", {"collectionName": collectionName, "failureReason": data}) // Integration line: Telemetry
             return
         }
 
-        sendTelemetryEvent("react-files-collection-creation-success", {"collectionName": collectionName}) // Integration line: Telemetry
         fetchCollections()
     }
     // Integration function start: Auth
@@ -123,7 +117,6 @@ const FilesList = () => {
     }
 
     const updateUserRole = async (username, newRole) => {
-        sendTelemetryEvent("react-files-update-user-role-attempt", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         const request = {
             collectionName: selectedCollection.name,
             username: username,
@@ -141,15 +134,12 @@ const FilesList = () => {
 
         if(!response.ok) {
             const data = await response.json()
-            sendTelemetryEvent("react-files-update-user-role-failure", {"collectionName": selectedCollection.name, "failureReason": data.errorMessage}) // Integration line: Telemetry
             alert(data.errorMessage)
             return
         }
-        sendTelemetryEvent("react-files-update-user-role-success", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
     }
 
     const addUser = async (user) => {
-        sendTelemetryEvent("react-files-add-user-attempt", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         const request = {
             collectionName: selectedCollection.name,
             username: user.username,
@@ -167,17 +157,14 @@ const FilesList = () => {
 
         if(!response.ok) {
             const data = await response.json()
-            sendTelemetryEvent("react-files-add-user-failure", {"collectionName": selectedCollection.name, "failureReason": data.errorMessage}) // Integration line: Telemetry
             alert(data.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-files-add-user-success", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         loadUsers()
     }
 
     const deleteUser = async (user) => {
-        sendTelemetryEvent("react-files-delete-user-attempt", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         const request = {
             collectionName: selectedCollection.name,
             username: user.username
@@ -194,12 +181,10 @@ const FilesList = () => {
 
         if(!response.ok) {
             const data = await response.json()
-            sendTelemetryEvent("react-files-delete-user-failure", {"collectionName": selectedCollection.name, "failureReason": data.errorMessage}) // Integration line: Telemetry
             alert(data.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-files-delete-user-success", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         loadUsers()
     }// Integration function end: Auth
 
@@ -219,11 +204,9 @@ const FilesList = () => {
         setSelectedCollection(collection)
         fetchFiles(collection.name)
         getCurrentUserRole(collection.name) // Integration line: Auth
-        sendTelemetryEvent("react-files-collection-selected", {"collectionName": collection.name}) // Integration line: Telemetry
     }
 
     const handleDownload = async (fileName) => {
-        sendTelemetryEvent("react-files-download-file-attempt", {"collectionName": selectedCollection.name, "fileName": fileName}) // Integration line: Telemetry
         const xhr = new XMLHttpRequest()
         xhr.open(
             "GET",
@@ -256,11 +239,9 @@ const FilesList = () => {
                 a.click()
                 a.remove()
                 window.URL.revokeObjectURL(url)
-                sendTelemetryEvent("react-files-download-file-success", {"collectionName": selectedCollection.name, "fileName": fileName}) // Integration line: Telemetry
             } else {
                 console.error("Download failed", xhr.responseText)
                 alert("File download failed")
-                sendTelemetryEvent("react-files-download-file-failure", {"collectionName": selectedCollection.name, "fileName": fileName, "failureReason": xhr.responseText}) // Integration line: Telemetry
             }
         }
 
@@ -269,14 +250,12 @@ const FilesList = () => {
             setTransferProgress(0)
             console.error("Download failed")
             alert("File download failed")
-            sendTelemetryEvent("react-files-download-file-failure", {"collectionName": selectedCollection.name, "fileName": fileName, "failureReason": xhr.responseText}) // Integration line: Telemetry
         }
 
         xhr.send()
     }
 
     const handleDownloadAll = async () => {
-        sendTelemetryEvent("react-files-download-all-files-attempt", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         const xhr = new XMLHttpRequest()
         xhr.open(
             "GET",
@@ -309,11 +288,9 @@ const FilesList = () => {
                 a.click()
                 a.remove()
                 window.URL.revokeObjectURL(url)
-                sendTelemetryEvent("react-files-download-all-files-success", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
             } else {
                 console.error("Download failed", xhr.responseText)
                 alert("File download failed")
-                sendTelemetryEvent("react-files-download-all-files-failure", {"collectionName": selectedCollection.name, "failureReason": xhr.responseText}) // Integration line: Telemetry
             }
         }
 
@@ -322,24 +299,20 @@ const FilesList = () => {
             setTransferProgress(0)
             console.error("Download failed")
             alert("File download failed")
-            sendTelemetryEvent("react-files-download-all-files-failure", {"collectionName": selectedCollection.name, "failureReason": xhr.responseText}) // Integration line: Telemetry
         }
 
         xhr.send()
     }
 
     const handleDelete = async (fileName) => {
-        sendTelemetryEvent("react-files-delete-file-attempt", {"collectionName": selectedCollection.name, "fileName": fileName}) // Integration line: Telemetry
         try {
             await fetch(`${FILE_ENDPOINTS.DELETE}/${selectedCollection.name}/${fileName}`, {
                 method: "DELETE",
                 headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
-            sendTelemetryEvent("react-files-delete-file-success", {"collectionName": selectedCollection.name, "fileName": fileName}) // Integration line: Telemetry
             fetchFiles(selectedCollection.name)
         } catch (error) {
             console.error("Delete failed", error)
-            sendTelemetryEvent("react-files-delete-file-failure", {"collectionName": selectedCollection.name, "fileName": fileName, "failureReason": error}) // Integration line: Telemetry
         }
     }
 
@@ -348,7 +321,6 @@ const FilesList = () => {
         if (!file) 
             return
 
-        sendTelemetryEvent("react-files-upload-file-attempt", {"collectionName": selectedCollection.name, "fileName": file.name}) // Integration line: Telemetry
         if(files.includes(file.name)) {
             alert("File with this name already exists in this collection")
             return
@@ -377,11 +349,9 @@ const FilesList = () => {
             setTransferProgress(0)
 
             if (xhr.status >= 200 && xhr.status < 300) {
-                sendTelemetryEvent("react-files-upload-file-success", {"collectionName": selectedCollection.name, "fileName": file.name}) // Integration line: Telemetry
                 fetchFiles(selectedCollection.name)
             } else {
                 console.error("Upload failed", xhr.responseText)
-                sendTelemetryEvent("react-files-upload-file-failure", {"collectionName": selectedCollection.name, "fileName": file.name, "failureReason": xhr.responseText}) // Integration line: Telemetry
                 alert("File upload failed")
             }
         }
@@ -390,7 +360,6 @@ const FilesList = () => {
             setIsTransferring(false)
             setTransferProgress(0)
             console.error("Upload failed")
-            sendTelemetryEvent("react-files-upload-file-failure", {"collectionName": selectedCollection.name, "fileName": file.name, "failureReason": xhr.responseText}) // Integration line: Telemetry
             alert("File upload failed")
         }
 
@@ -404,7 +373,6 @@ const FilesList = () => {
         if(!confirm("Are you sure you want to delete collection: " + selectedCollection.name))
             return
 
-        sendTelemetryEvent("react-files-delete-collection-attempt", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         const response = await fetch(`${FILE_ENDPOINTS.DELETE_COLLECTION}/${selectedCollection.name}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -413,11 +381,9 @@ const FilesList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            sendTelemetryEvent("react-files-delete-collection-failure", {"collectionName": selectedCollection.name, "failureReason": message.errorMessage}) // Integration line: Telemetry
             return
         }
 
-        sendTelemetryEvent("react-files-delete-collection-success", {"collectionName": selectedCollection.name}) // Integration line: Telemetry
         fetchCollections()
         setSelectedCollection("")
     }
