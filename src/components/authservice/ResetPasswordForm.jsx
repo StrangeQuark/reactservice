@@ -3,7 +3,6 @@
 
 import { useState } from "react"
 import { EMAIL_ENDPOINTS } from "../../config"
-import { authenticateServiceAccount } from "../../utility/AuthUtility"
 
 const ResetPasswordForm = () => {
     const[isSuccess, setIsSuccess] = useState(false)
@@ -36,22 +35,23 @@ const ResetPasswordForm = () => {
             return
         }
 
-        fetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD + token + "&newPassword=" + password, {
-            method: 'POST',
+        const response = await fetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD, {
+            method: "POST",
             headers: {
-                Authorization: "Bearer " + await authenticateServiceAccount(),
-            }
-            }).then(response => response.json().then(
-                (data) => {
-                    if(!response.ok) {
-                        setErrorMessage(data.message)
-                        setIsError(true)
-                        return
-                    }
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ token, newPassword: password })
+        })
 
-                    setIsSuccess(true)
-                }
-            ))
+        const data = await response.json()
+
+        if(!response.ok) {
+            setErrorMessage(data.message)
+            setIsError(true)
+            return
+        }
+
+        setIsSuccess(true)
     }
 
     return(

@@ -38,11 +38,6 @@ describe("ResetPasswordForm", () => {
       json: async () => ({ message: "ok" }),
     })
 
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ message: "ok" }),
-    })
-
     render(<ResetPasswordForm />)
 
     fireEvent.change(screen.getByLabelText("New password:"), {
@@ -61,17 +56,16 @@ describe("ResetPasswordForm", () => {
     })
 
     expect(fetch).toHaveBeenCalledWith(
-      EMAIL_ENDPOINTS.RESET_USER_PASSWORD + "abc123&newPassword=password123",
-      expect.objectContaining({ method: "POST" })
+      EMAIL_ENDPOINTS.RESET_USER_PASSWORD,
+      expect.objectContaining({
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: "abc123", newPassword: "password123" })
+      })
     )
   })
 
   test("shows server error message on failed response", async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ message: "ok" }),
-    })
-
     global.fetch.mockResolvedValueOnce({
       ok: false,
       json: async () => ({ message: "Invalid token" }),
