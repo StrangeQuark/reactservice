@@ -7,7 +7,6 @@ import { useAuth } from "../../context/AuthContext" // Integration line: Auth
 import InputPopup from "../InputPopup"
 import { FaEye, FaTrash, FaRegClipboard, FaFileUpload, FaFileDownload, FaCog } from "react-icons/fa";
 import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
-import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const VaultList = () => {
     const { getAccessToken } = useAuth() // Integration line: Auth
@@ -31,7 +30,6 @@ const VaultList = () => {
     const varsPerPage = 10
 
     useEffect(() => {
-        sendTelemetryEvent("react-vault-page-visited") // Integration line: Telemetry
         fetchServices()
     }, [])
 
@@ -130,7 +128,6 @@ const VaultList = () => {
     }
 
     const updateUserRole = async (username, newRole) => {
-        sendTelemetryEvent("react-vault-update-user-role-attempt", {"serviceName": selectedService}) // Integration line: Telemetry
         const request = {
             serviceName: selectedService,
             username: username,
@@ -148,15 +145,12 @@ const VaultList = () => {
 
         if(!response.ok) {
             const data = await response.json()
-            sendTelemetryEvent("react-vault-update-user-role-failure", {"serviceName": selectedService, "failureReason": data.errorMessage}) // Integration line: Telemetry
             alert(data.errorMessage)
             return
         }
-        sendTelemetryEvent("react-vault-update-user-role-success", {"serviceName": selectedService}) // Integration line: Telemetry
     }
 
     const addUser = async (user) => {
-        sendTelemetryEvent("react-vault-add-user-attempt", {"serviceName": selectedService}) // Integration line: Telemetry
         const request = {
             serviceName: selectedService,
             username: user.username,
@@ -174,17 +168,14 @@ const VaultList = () => {
 
         if(!response.ok) {
             const data = await response.json()
-            sendTelemetryEvent("react-vault-add-user-failure", {"serviceName": selectedService, "failureReason": data.errorMessage}) // Integration line: Telemetry
             alert(data.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-vault-add-user-success", {"serviceName": selectedService}) // Integration line: Telemetry
         loadUsers()
     }
 
     const deleteUser = async (user) => {
-        sendTelemetryEvent("react-vault-delete-user-attempt", {"serviceName": selectedService}) // Integration line: Telemetry
         const request = {
             serviceName: selectedService,
             username: user.username
@@ -201,17 +192,14 @@ const VaultList = () => {
 
         if(!response.ok) {
             const data = await response.json()
-            sendTelemetryEvent("react-vault-delete-user-failure", {"serviceName": selectedService, "failureReason": data.errorMessage}) // Integration line: Telemetry
             alert(data.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-vault-delete-user-success", {"serviceName": selectedService}) // Integration line: Telemetry
         loadUsers()
     } // Integration function end: Auth
 
     const createService = async (serviceName) => {
-        sendTelemetryEvent("react-vault-create-service-attempt", {"serviceName": serviceName}) // Integration line: Telemetry
         const response = await fetch(`${VAULT_ENDPOINTS.CREATE_SERVICE}/${serviceName}`, {
             method: "POST",
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -219,17 +207,14 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-create-service-failure", {"serviceName": serviceName, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-vault-create-service-success", {"serviceName": serviceName}) // Integration line: Telemetry
         fetchServices()
     }
 
     const createEnvironment = async (environmentName) => {
-        sendTelemetryEvent("react-vault-create-environment-attempt", {"serviceName": selectedService, "environmentName": environmentName}) // Integration line: Telemetry
         const response = await fetch(`${VAULT_ENDPOINTS.CREATE_ENVIRONMENT}/${selectedService}/${environmentName}`, {
             method: "POST",
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -237,17 +222,14 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-create-environment-failure", {"serviceName": selectedService, "environmentName": environmentName, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-vault-create-environment-success", {"serviceName": selectedService, "environmentName": environmentName}) // Integration line: Telemetry
         fetchEnvironments(selectedService)
     }
 
      const addVariable = async (key, value) => {
-        sendTelemetryEvent("react-vault-add-variable-attempt", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         let v = {key, value}
 
         const response = await fetch(`${VAULT_ENDPOINTS.ADD_VAR}/${selectedService}/${selectedEnvironment}`, {
@@ -261,7 +243,6 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-add-variable-failure", {"serviceName": selectedService, "environmentName": selectedEnvironment, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
@@ -275,7 +256,6 @@ const VaultList = () => {
                 setCurrentPage(newTotalPages)
             }
 
-            sendTelemetryEvent("react-vault-add-variable-success", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
             return updated
         })
     }
@@ -284,7 +264,6 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete variable: " + variable))
             return
 
-        sendTelemetryEvent("react-vault-delete-variable-attempt", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${selectedService}/${selectedEnvironment}/${variable}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -292,7 +271,6 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-delete-variable-failure", {"serviceName": selectedService, "environmentName": selectedEnvironment, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
@@ -306,7 +284,6 @@ const VaultList = () => {
                 setCurrentPage(newTotalPages === 0 ? 1 : newTotalPages)
             }
 
-            sendTelemetryEvent("react-vault-delete-variable-success", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
             return updated
         })
     }
@@ -315,7 +292,6 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete environment: " + selectedEnvironment))
             return
 
-        sendTelemetryEvent("react-vault-delete-environment-attempt", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_ENVIRONMENT}/${selectedService}/${selectedEnvironment}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -323,12 +299,10 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-delete-environment-failure", {"serviceName": selectedService, "environmentName": selectedEnvironment, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-vault-delete-environment-success", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         fetchEnvironments(selectedService)
         setSelectedEnvironment("")
     }
@@ -337,7 +311,6 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete service: " + selectedService))
             return
 
-        sendTelemetryEvent("react-vault-delete-service-attempt", {"serviceName": selectedService}) // Integration line: Telemetry
         const response = await fetch(`${VAULT_ENDPOINTS.DELETE_SERVICE}/${selectedService}`, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -345,12 +318,10 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-delete-service-failure", {"serviceName": selectedService, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
 
-        sendTelemetryEvent("react-vault-delete-service-success", {"serviceName": selectedService}) // Integration line: Telemetry
         fetchServices()
         setEnvironments([])
         setSelectedService("")
@@ -358,7 +329,6 @@ const VaultList = () => {
     }
 
     const handleSave = async () => {
-        sendTelemetryEvent("react-vault-save-attempt", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         const response = await fetch(`${VAULT_ENDPOINTS.UPDATE_VARS}/${selectedService}/${selectedEnvironment}`, {
             method: "POST",
             headers: {
@@ -370,7 +340,6 @@ const VaultList = () => {
 
         if(!response.ok) {
             const message = await response.json()
-            sendTelemetryEvent("react-vault-save-failure", {"serviceName": selectedService, "environmentName": selectedEnvironment, "failureReason": message.errorMessage}) // Integration line: Telemetry
             alert(message.errorMessage)
             return
         }
@@ -380,7 +349,6 @@ const VaultList = () => {
             alert(data)
         }
 
-        sendTelemetryEvent("react-vault-save-success", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         setChangesMade(false)
     }
 
@@ -389,7 +357,6 @@ const VaultList = () => {
         if (!file) 
             return
 
-        sendTelemetryEvent("react-vault-upload-env-file-attempt", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         const formData = new FormData()
         formData.append("file", file)
 
@@ -400,11 +367,9 @@ const VaultList = () => {
                 headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
             
-            sendTelemetryEvent("react-vault-upload-env-file-success", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
             fetchVariables(selectedService, selectedEnvironment)
         } catch (error) {
             console.error("Upload failed", error)
-            sendTelemetryEvent("react-vault-upload-env-file-failure", {"serviceName": selectedService, "environmentName": selectedEnvironment, "failureReason": error}) // Integration line: Telemetry
         }
     }
 
@@ -413,7 +378,6 @@ const VaultList = () => {
     }
 
     const downloadEnvFile = async () => {
-        sendTelemetryEvent("react-vault-download-env-file-attempt", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         try {
             const res = await fetch(`${VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
                     method: "GET",
@@ -432,32 +396,26 @@ const VaultList = () => {
             a.click()
             a.remove()
             window.URL.revokeObjectURL(url)
-            sendTelemetryEvent("react-vault-download-env-file-success", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         } catch (error) {
             console.error(error)
-            sendTelemetryEvent("react-vault-download-env-file-failure", {"serviceName": selectedService, "environmentName": selectedEnvironment, "failureReason": error}) // Integration line: Telemetry
         }
     }
 
     const toggleMaskAll = () => {
-        sendTelemetryEvent("react-vault-mask-all-click", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         const newMaskState = !maskAll
         setVariables(vars => vars.map(v => ({ ...v, masked: newMaskState })))
         setMaskAll(newMaskState)
     }
 
     const toggleMaskOne = (index) => {
-        sendTelemetryEvent("react-vault-mask-one-click", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         setVariables(vars => vars.map((v, i) => i === index ? { ...v, masked: !v.masked } : v))
     }
 
     const copyValue = (value) => {
-        sendTelemetryEvent("react-vault-copy-click", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         navigator.clipboard.writeText(value)
     }
 
     const handleChangeVar = (index, field, value) => {
-        sendTelemetryEvent("react-vault-change-variable-click", {"serviceName": selectedService, "environmentName": selectedEnvironment}) // Integration line: Telemetry
         setVariables(vars => vars.map((v, i) => i === index ? { ...v, [field]: value } : v))
         setChangesMade(true)
     }

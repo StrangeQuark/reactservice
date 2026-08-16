@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import Toolbar from "../components/Toolbar"
-import * as Telemetry from "../utility/TelemetryUtility" // Integration line: Telemetry
 import logo from "../res/logo.png"
 import darkModeLogo from "../res/logo_dark_mode.png"
 
@@ -19,7 +18,6 @@ describe("Toolbar component", () => {
     vi.clearAllMocks()
     window.localStorage.clear()
     document.documentElement.removeAttribute("data-theme")
-    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
   test("renders logo and navigation links", () => {

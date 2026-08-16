@@ -6,7 +6,6 @@ import { FaCheckCircle } from "react-icons/fa"
 import { verifyEmailRegex } from "../../utility/EmailUtility"
 import { AUTH_ENDPOINTS } from "../../config";
 import "./css/UserRegisterForm.css"
-import { sendTelemetryEvent } from "../../utility/TelemetryUtility" // Integration line: Telemetry
 
 const UserRegisterForm = () => {
   const[username, setUsername] = useState('')
@@ -37,7 +36,6 @@ const UserRegisterForm = () => {
   }
 
   const requestHandler = () => {
-    sendTelemetryEvent("react-user-register-attempt") // Integration line: Telemetry
     setIsSubmitted(true)
 
     setIsUsernameValid(username !== '')
@@ -98,7 +96,6 @@ const UserRegisterForm = () => {
             setIsEmailValid(false)
             setEmailErrorMessage("Email is already taken")
           }
-          sendTelemetryEvent("react-user-register-failure") // Integration line: Telemetry
         } else {
           const data = await response.json()
 
@@ -107,13 +104,11 @@ const UserRegisterForm = () => {
           else
             setRegistrationMessage(`Thank you for signing up! An email has been sent to ${email} with a confirmation link to activate your account.`)
 
-          sendTelemetryEvent("react-user-register-success") // Integration line: Telemetry
           setIsSuccess(true)
         }
       })
       .catch((error) => {
         console.error('Network error or unexpected issue:', error)
-        sendTelemetryEvent("react-user-register-failure") // Integration line: Telemetry
       })
   }
 

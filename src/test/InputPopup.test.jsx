@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import InputPopup from "../components/InputPopup"
-import * as Telemetry from "../utility/TelemetryUtility" // Integration line: Telemetry
 
 describe("InputPopup component", () => {
   const mockOnSubmit = vi.fn()
@@ -15,7 +14,6 @@ describe("InputPopup component", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.spyOn(Telemetry, "sendTelemetryEvent").mockImplementation(async () => {}) // Integration line: Telemetry
   })
 
   test("renders label and inputs", () => {
