@@ -37,15 +37,14 @@ let AUTH_ENDPOINTS = {
   UPDATE_PASSWORD: `${AUTH_API_BASE_URL}/api/auth/user/update-password`,
   SEARCH_USERS: `${AUTH_API_BASE_URL}/api/auth/user/search-users`,
   GET_USER_ID: `${AUTH_API_BASE_URL}/api/auth/user/get-user-id`,
-  GET_USER_DETAILS_BY_IDS: `${AUTH_API_BASE_URL}/api/auth/user/get-user-details-by-ids`,
-  AUTHENTICATE_SERVICE_ACCOUNT: `${AUTH_API_BASE_URL}/api/auth/service-account/authenticate`
+  GET_USER_DETAILS_BY_IDS: `${AUTH_API_BASE_URL}/api/auth/user/get-user-details-by-ids`
 }
 // Integration function end: Auth
 // Integration function start: Email
 let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`,
-  RESET_USER_PASSWORD: `${EMAIL_API_BASE_URL}/api/email/reset-user-password?token=`
+  RESET_USER_PASSWORD: `${EMAIL_API_BASE_URL}/api/email/reset-user-password`
 }
 // Integration function end: Email
 // Integration function start: File
