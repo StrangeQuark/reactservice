@@ -8,7 +8,7 @@ import InputPopup from "../InputPopup"
 import { useAuth } from "../../context/AuthContext"
 
 const AccountSettings = () => {
-    const { username, getAccessToken, logout } = useAuth()
+    const { username, getAccessToken, logout, refreshAccessToken } = useAuth()
     const [popupType, setPopupType] = useState(null)
     const [email, setEmail] = useState(null)
 
@@ -43,6 +43,7 @@ const AccountSettings = () => {
     const updateUsername = async (newUsername, password) => {
         const response = await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
             method: "POST",
+            credentials: "include",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
@@ -56,12 +57,14 @@ const AccountSettings = () => {
             return
         }
 
-        logout()
+        if(!await refreshAccessToken())
+            logout()
     }
 
     const updateEmail = async (newEmail, password) => {
         const response = await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "POST",
+            credentials: "include",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
@@ -75,12 +78,18 @@ const AccountSettings = () => {
             return
         }
 
+        if(!await refreshAccessToken()) {
+            logout()
+            return
+        }
+
         setEmail(newEmail)
     }
 
     const updatePassword = async (password, newPassword) => {
         const response = await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
             method: "POST",
+            credentials: "include",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
@@ -94,7 +103,8 @@ const AccountSettings = () => {
             return
         }
 
-        logout()
+        if(!await refreshAccessToken())
+            logout()
     }
 
     const deleteProfile = async (username, password) => {

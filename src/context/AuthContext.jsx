@@ -9,54 +9,33 @@ const AuthContext = createContext(null)
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState(null)
+    const [accessToken, setAccessToken] = useState(null)
     const [loading, setLoading] = useState(true)
     const [refreshTimer, setRefreshTimer] = useState(null)
 
     useEffect(() => {
         const initAuth = async () => {
-            const accessToken = getCookie("access_token")
-
-            if (accessToken && !isTokenExpired(accessToken)) {
-                setIsLoggedIn(true)
-                setUsername(getUsernameFromJWT(accessToken))
-                scheduleTokenRefresh(accessToken)
-                setLoading(false)
-                return
-            }
-
-            const valid = await verifyRefreshToken()
-            if (valid) {
-                const newAccessToken = getCookie("access_token")
-                setIsLoggedIn(true)
-                setUsername(getUsernameFromJWT(newAccessToken))
-                scheduleTokenRefresh(newAccessToken)
-            }
+            await refreshAccessToken()
             setLoading(false)
         }
         initAuth()
     }, [])
 
-    const getCookie = (name) =>
-        document.cookie.split("; ").find(row => row.startsWith(name + "="))?.split("=")[1] || null
-
-    const isTokenExpired = (token) => {
-        try {
-            const payloadBase64 = token.split(".")[1]
-            const payloadJson = atob(payloadBase64)
-            const { exp } = JSON.parse(payloadJson)
-            return Date.now() >= exp * 1000
-        } catch {
-            return true // Treat invalid tokens as expired
-        }
-    }
-
-    const verifyRefreshToken = async () => {
+    const refreshAccessToken = async () => {
         try {
             const response = await fetch(AUTH_ENDPOINTS.ACCESS, {
+                method: "POST",
                 credentials: "include"
             })
             if (!response.ok) 
                 return false
+
+            const data = await response.json()
+
+            setAccessToken(data.jwtToken)
+            setIsLoggedIn(true)
+            setUsername(getUsernameFromJWT(data.jwtToken))
+            scheduleTokenRefresh(data.jwtToken)
             return true
         } catch {
             return false
@@ -77,13 +56,16 @@ export const AuthProvider = ({ children }) => {
         if (refreshTimer) 
             clearTimeout(refreshTimer)
 
-        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
-        document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
+        fetch(AUTH_ENDPOINTS.LOGOUT, {
+            method: "POST",
+            credentials: "include"
+        })
+        setAccessToken(null)
         setIsLoggedIn(false)
         setUsername(null)
     }
 
-    const getAccessToken = () => getCookie("access_token")
+    const getAccessToken = () => accessToken
 
     const scheduleTokenRefresh = (token) => {
         try {
@@ -99,19 +81,16 @@ export const AuthProvider = ({ children }) => {
                     clearTimeout(refreshTimer)
 
                 const timerId = setTimeout(async () => {
-                    const valid = await verifyRefreshToken()
+                    const valid = await refreshAccessToken()
                     
                     if (!valid) {
                         logout()
-                    } else {
-                        const newAccessToken = getCookie("access_token")
-                        scheduleTokenRefresh(newAccessToken)
                     }
                 }, timeout)
 
                 setRefreshTimer(timerId)
             } else {
-                verifyRefreshToken().then((valid) => {
+                refreshAccessToken().then((valid) => {
                     if (!valid) 
                         logout()
                 })
@@ -122,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, username, loading, setUsername, logout, getAccessToken }}>
+        <AuthContext.Provider value={{ isLoggedIn, username, loading, setUsername, logout, getAccessToken, refreshAccessToken }}>
             {children}
         </AuthContext.Provider>
     )

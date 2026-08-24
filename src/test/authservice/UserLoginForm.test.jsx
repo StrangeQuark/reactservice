@@ -61,11 +61,11 @@ describe("UserLoginForm component", () => {
     })
   })
 
-  test("successful login sets cookies and redirects", async () => {
+  test("successful login refreshes access and redirects", async () => {
     // Mock authenticate response
     const mockAuthResponse = {
       status: 200,
-      json: vi.fn().mockResolvedValue({ jwtToken: "mock-refresh-token" })
+      json: vi.fn().mockResolvedValue({})
     }
 
     // Mock access token response
@@ -75,14 +75,8 @@ describe("UserLoginForm component", () => {
     }
 
     global.fetch
-      .mockImplementationOnce(async () => {
-        document.cookie = "refresh_token=mock-refresh-token; path=/"
-        return mockAuthResponse
-      })
-      .mockImplementationOnce(async () => {
-        document.cookie = "access_token=mock-access-token; path=/"
-        return mockAccessResponse
-      })
+      .mockResolvedValueOnce(mockAuthResponse)
+      .mockResolvedValueOnce(mockAccessResponse)
 
     render(<UserLoginForm />)
 
@@ -91,8 +85,6 @@ describe("UserLoginForm component", () => {
     fireEvent.click(screen.getByRole("button", { name: "LOGIN" }))
 
     await waitFor(() => {
-      expect(document.cookie).toContain("refresh_token=mock-refresh-token")
-      expect(document.cookie).toContain("access_token=mock-access-token")
       expect(window.location.href).toBe("/")
     })
 
@@ -108,11 +100,8 @@ describe("UserLoginForm component", () => {
     expect(global.fetch).toHaveBeenCalledWith(
       AUTH_ENDPOINTS.ACCESS,
       expect.objectContaining({
+        method: "POST",
         credentials: "include",
-        headers: {
-          Authorization: "Bearer mock-refresh-token",
-          "Content-Type": "application/json"
-        }
       })
     )
   })

@@ -20,12 +20,19 @@ describe("AuthContext context", () => {
     expect(result.current.username).toBe(null)
   })
 
-  test("getAccessToken returns cookie value", () => {
-    document.cookie = "access_token=mytoken"
+  test("getAccessToken returns access endpoint value", async () => {
+    const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "john_doe" }))
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
+    })
+
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>
     const { result } = renderHook(() => useAuth(), { wrapper })
 
-    expect(result.current.getAccessToken()).toBe("mytoken")
+    await waitFor(() => {
+      expect(result.current.getAccessToken()).toBe(`header.${payload}.sig`)
+    })
   })
 
   test("logout clears cookies and state", () => {
@@ -35,14 +42,21 @@ describe("AuthContext context", () => {
 
     act(() => result.current.logout())
 
+    expect(global.fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
+      method: "POST",
+      credentials: "include"
+    }))
     expect(result.current.getAccessToken()).toBe(null)
     expect(result.current.isLoggedIn).toBe(false)
     expect(result.current.username).toBe(null)
   })
 
-  test("initializes with valid access token", async () => {
+  test("initializes from refresh cookie", async () => {
     const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "john_doe" }))
-    document.cookie = `access_token=header.${payload}.sig`
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
+    })
 
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>
     const { result } = renderHook(() => useAuth(), { wrapper })
@@ -55,10 +69,7 @@ describe("AuthContext context", () => {
 
   test("initializes from refresh token when access token is missing", async () => {
     const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "jane_doe" }))
-    document.cookie = "refresh_token=refresh-token"
-
     global.fetch.mockImplementation(async () => {
-      document.cookie = `access_token=header.${payload}.sig; path=/`
       return {
         ok: true,
         json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
