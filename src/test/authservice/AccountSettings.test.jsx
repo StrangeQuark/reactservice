@@ -12,15 +12,20 @@ vi.mock("../../context/AuthContext")
 describe("AccountSettings component", () => {
   const mockLogout = vi.fn()
   const mockGetAccessToken = vi.fn(() => "mock-token")
+  const mockRefreshAccessToken = vi.fn(async () => true)
 
   beforeEach(() => {
     vi.clearAllMocks()
     useAuth.mockReturnValue({
       username: "testuser",
       getAccessToken: mockGetAccessToken,
+      refreshAccessToken: mockRefreshAccessToken,
       logout: mockLogout,
     })
-    global.fetch = vi.fn()
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ([{ email: "test@example.com" }])
+    })
   })
 
   test("renders username and fetches email", async () => {
@@ -81,7 +86,7 @@ describe("AccountSettings component", () => {
     expect(await screen.findByText("Delete account")).toBeInTheDocument()
   })
 
-  test("updateUsername calls API and logs out on success via popup", async () => {
+  test("updateUsername calls API and refreshes access on success via popup", async () => {
     // Mock fetch for initial user data
     fetch
       .mockResolvedValueOnce({ json: async () => ({ id: 1 }) }) // GET_USER_ID
@@ -89,6 +94,10 @@ describe("AccountSettings component", () => {
       .mockResolvedValueOnce({ ok: true, json: async () => ([{ email: "test@example.com" }]) })
 
     render(<AccountSettings />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId("email")).toHaveTextContent("test@example.com")
+    })
 
     // Open username popup
     fireEvent.click(await screen.getByTestId("update-username"))
@@ -108,6 +117,8 @@ describe("AccountSettings component", () => {
           body: JSON.stringify({ newUsername: "newuser", password: "password123" }),
         })
       )
+      expect(mockRefreshAccessToken).toHaveBeenCalled()
+      expect(mockLogout).not.toHaveBeenCalled()
     })
   })
 
@@ -147,13 +158,17 @@ describe("AccountSettings component", () => {
     })
   })
 
-  test("updatePassword calls API and logs out on success", async () => {
+  test("updatePassword calls API and refreshes access on success", async () => {
     fetch
       .mockResolvedValueOnce({ json: async () => ({ id: 1 }) }) // GET_USER_ID
       .mockResolvedValueOnce({ json: async () => [{ email: "test@example.com" }] }) // GET_USER_DETAILS_BY_IDS
-      .mockResolvedValueOnce({ json: async () => ([{ email: "test@example.com" }]) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ([{ email: "test@example.com" }]) })
 
     render(<AccountSettings />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId("email")).toHaveTextContent("test@example.com")
+    })
 
     // Open password popup
     fireEvent.click(await screen.getByTestId("update-password"))
@@ -173,6 +188,8 @@ describe("AccountSettings component", () => {
           body: JSON.stringify({ password: "password123", newPassword: "password1234" }),
         })
       )
+      expect(mockRefreshAccessToken).toHaveBeenCalled()
+      expect(mockLogout).not.toHaveBeenCalled()
     })
   })
 

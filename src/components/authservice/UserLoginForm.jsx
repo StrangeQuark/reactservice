@@ -48,11 +48,8 @@ const UserLoginForm = () => {
 
                     // Fetch access token
                     fetch(AUTH_ENDPOINTS.ACCESS, {
+                        method: "POST",
                         credentials: "include",
-                        headers: {
-                            Authorization: "Bearer " + data.jwtToken,
-                            "Content-Type": "application/json"
-                        }
                     }).then(res => res.json().then(
                         (d) => {
                             if(!res.ok) {
