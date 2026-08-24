@@ -302,6 +302,11 @@ describe("VaultList component", () => {
         { headers: { Authorization: "Bearer mock-token" } }
       )
     )
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("get-all-roles"),
+      { headers: { Authorization: "Bearer mock-token" } }
+    )
   })
   // Integration function end: Auth
 
