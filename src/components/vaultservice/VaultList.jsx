@@ -102,7 +102,9 @@ const VaultList = () => {
     }
     // Integration function start: Auth
     const loadUsers = async () => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`)
+        const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`, {
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
 
         const data = await response.json()
 

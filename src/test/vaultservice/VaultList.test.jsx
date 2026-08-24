@@ -274,6 +274,37 @@ describe("VaultList component", () => {
     expect(screen.getByText(/Create new service/i)).toBeInTheDocument()
   })
 
+  // Integration function start: Auth
+  test("loads users with an access token", async () => {
+    fetch
+      .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" })
+      .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => [] })
+      .mockResolvedValueOnce({ ok: true, json: async () => ["OWNER", "MANAGER", "MAINTAINER"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => [] })
+
+    render(<VaultList />)
+
+    await screen.findByText("ServiceA")
+
+    fireEvent.change(screen.getByDisplayValue("Select Service"), {
+      target: { value: "ServiceA" },
+    })
+
+    await screen.findByTestId("cog-icon")
+    fireEvent.click(screen.getByTestId("cog-icon"))
+    fireEvent.click(screen.getByText("Manage Users"))
+
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        expect.stringContaining("get-users-by-service/ServiceA"),
+        { headers: { Authorization: "Bearer mock-token" } }
+      )
+    )
+  })
+  // Integration function end: Auth
+
   test("uploads env file", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
