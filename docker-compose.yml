@@ -14,6 +14,9 @@ services:
     ports:
       - "6080:80"
     container_name: react-service
+    labels:
+      com.msinit.log: "true"
+      com.msinit.service-name: "reactservice"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost" ]
       interval: 10s

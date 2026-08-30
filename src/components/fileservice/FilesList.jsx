@@ -109,7 +109,9 @@ const FilesList = () => {
     }
 
     const getAllRoles = async () => {
-        const response = await fetch(`${FILE_ENDPOINTS.GET_ALL_ROLES}`)
+        const response = await fetch(`${FILE_ENDPOINTS.GET_ALL_ROLES}`, {
+            headers: { Authorization: "Bearer " + getAccessToken() }
+        })
 
         const data = await response.json()
 
