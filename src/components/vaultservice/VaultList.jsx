@@ -37,8 +37,9 @@ const VaultList = () => {
         if (searchTerm.trim() === "") {
             setFilteredVariables(variables)
         } else {
-            const regex = new RegExp(searchTerm, "i")
-            setFilteredVariables(variables.filter(v => regex.test(v.key)))
+            setFilteredVariables(variables.filter(v =>
+                v.key.toLowerCase().includes(searchTerm.toLowerCase())
+            ))
         }
     }, [searchTerm, variables])
 

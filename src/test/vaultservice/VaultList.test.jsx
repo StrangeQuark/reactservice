@@ -149,6 +149,43 @@ describe("VaultList component", () => {
     })
   })
 
+  test("filters variables by special characters", async () => {
+    fetch
+      .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          { key: "API[KEY]", value: "secret" },
+          { key: "DB_PASSWORD", value: "123" },
+        ],
+      })
+
+    render(<VaultList />)
+
+    await screen.findByText("ServiceA")
+
+    fireEvent.change(screen.getByDisplayValue("Select Service"), {
+        target: { value: "ServiceA" },
+    })
+
+    await screen.findByText("dev")
+
+    fireEvent.change(screen.getByDisplayValue("Select Environment"), {
+        target: { value: "dev" },
+    })
+
+    fireEvent.change(screen.getByPlaceholderText(/Search variables/i), {
+      target: { value: "[" },
+    })
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("API[KEY]")).toBeInTheDocument()
+      expect(screen.queryByDisplayValue("DB_PASSWORD")).not.toBeInTheDocument()
+    })
+  })
+
   test("paginates variables correctly", async () => {
     const vars = Array.from({ length: 15 }, (_, i) => ({ key: `KEY${i}`, value: `val${i}` }))
 
