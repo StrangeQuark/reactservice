@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/re
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import VaultList from "../../components/vaultservice/VaultList"
+import { VAULT_ENDPOINTS } from "../../config"
 
 // Mock useAuth - Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
@@ -145,6 +146,43 @@ describe("VaultList component", () => {
 
     await waitFor(() => {
       expect(screen.getByDisplayValue("API_KEY")).toBeInTheDocument()
+      expect(screen.queryByDisplayValue("DB_PASSWORD")).not.toBeInTheDocument()
+    })
+  })
+
+  test("filters variables by special characters", async () => {
+    fetch
+      .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [
+          { key: "API[KEY]", value: "secret" },
+          { key: "DB_PASSWORD", value: "123" },
+        ],
+      })
+
+    render(<VaultList />)
+
+    await screen.findByText("ServiceA")
+
+    fireEvent.change(screen.getByDisplayValue("Select Service"), {
+        target: { value: "ServiceA" },
+    })
+
+    await screen.findByText("dev")
+
+    fireEvent.change(screen.getByDisplayValue("Select Environment"), {
+        target: { value: "dev" },
+    })
+
+    fireEvent.change(screen.getByPlaceholderText(/Search variables/i), {
+      target: { value: "[" },
+    })
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue("API[KEY]")).toBeInTheDocument()
       expect(screen.queryByDisplayValue("DB_PASSWORD")).not.toBeInTheDocument()
     })
   })
@@ -297,10 +335,17 @@ describe("VaultList component", () => {
     fireEvent.click(screen.getByText("Manage Users"))
 
     await waitFor(() =>
-      expect(fetch).toHaveBeenCalledWith(
-        expect.stringContaining("get-users-by-service/ServiceA"),
-        { headers: { Authorization: "Bearer mock-token" } }
-      )
+        expect(fetch).toHaveBeenCalledWith(
+          VAULT_ENDPOINTS.GET_USERS_BY_SERVICE,
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer mock-token",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ serviceName: "ServiceA" })
+          }
+        )
     )
 
     expect(fetch).toHaveBeenCalledWith(

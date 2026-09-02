@@ -17,11 +17,13 @@ const AccountSettings = () => {
         }, [])
 
     const fetchAccountDetails = async () => {
-        const data = await fetch(`${AUTH_ENDPOINTS.GET_USER_ID}?username=${encodeURIComponent(username)}`, {
+        const data = await fetch(AUTH_ENDPOINTS.GET_USER_ID, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + getAccessToken() 
-            }
+            },
+            body: JSON.stringify({ username })
         }).then(res => res.json())
 
         const request = [data]

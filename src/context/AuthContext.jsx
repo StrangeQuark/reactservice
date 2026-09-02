@@ -6,6 +6,15 @@ import { Navigate } from "react-router-dom"
 
 const AuthContext = createContext(null)
 
+export const decodeJWT = (token) => {
+    const payloadBase64 = token.split(".")[1]
+        .replace(/-/g, "+")
+        .replace(/_/g, "/")
+
+    const payloadJson = atob(payloadBase64.padEnd(Math.ceil(payloadBase64.length / 4) * 4, "="))
+    return JSON.parse(payloadJson)
+}
+
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState(null)
@@ -44,9 +53,7 @@ export const AuthProvider = ({ children }) => {
 
     const getUsernameFromJWT = (token) => {
         try {
-            const payloadBase64 = token.split(".")[1]
-            const payloadJson = atob(payloadBase64)
-            return JSON.parse(payloadJson).sub
+            return decodeJWT(token).sub
         } catch {
             return null
         }
@@ -69,9 +76,7 @@ export const AuthProvider = ({ children }) => {
 
     const scheduleTokenRefresh = (token) => {
         try {
-            const payloadBase64 = token.split(".")[1]
-            const payloadJson = atob(payloadBase64)
-            const { exp } = JSON.parse(payloadJson)
+            const { exp } = decodeJWT(token)
 
             const expiresAt = exp * 1000
             const timeout = expiresAt - Date.now() - 60000  

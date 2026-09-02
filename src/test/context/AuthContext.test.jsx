@@ -3,13 +3,22 @@
 import "@testing-library/jest-dom"
 import { renderHook, act, waitFor } from "@testing-library/react"
 import { vi } from "vitest"
-import { AuthProvider, useAuth } from "../../context/AuthContext"
+import { AuthProvider, decodeJWT, useAuth } from "../../context/AuthContext"
 
 describe("AuthContext context", () => {
   beforeEach(() => {
     document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
     document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
     global.fetch = vi.fn()
+  })
+
+  test("decodes Base64URL JWT payloads", () => {
+    const token = "header.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxMjMsInZhbHVlIjoi4K-_In0.signature"
+
+    const payload = decodeJWT(token)
+
+    expect(payload.sub).toBe("test")
+    expect(payload.exp).toBe(123)
   })
 
   test("initial state is correct", () => {

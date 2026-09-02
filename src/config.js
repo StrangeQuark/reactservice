@@ -9,7 +9,7 @@ const {
 const isLocalBrowser = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
 function adaptBaseUrl(url) {
-  if (!isLocalBrowser)
+  if (!url || !isLocalBrowser)
     return url
 
   return url
@@ -101,10 +101,12 @@ const replaceBaseUrl = (endpoints, newBase) => {
   )
 }
 // Integration function start: Gateway
-AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Auth
-EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Email
-FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: File
-VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
+if(GATEWAY_BASE_URL) {
+  AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Auth
+  EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Email
+  FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: File
+  VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
+}
 // Integration function end: Gateway
 
 export {
