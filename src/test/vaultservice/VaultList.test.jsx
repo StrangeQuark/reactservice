@@ -377,10 +377,35 @@ describe("VaultList component", () => {
         target: { value: "dev" },
     })
 
-    const fileInput = screen.getByRole("textbox", { hidden: true })
+    const fileInput = document.querySelector('input[type="file"]')
     const file = new File(["KEY=VAL"], "test.env", { type: "text/plain" })
     fireEvent.change(fileInput, { target: { files: [file] } })
     await waitFor(() => expect(fetch).toHaveBeenCalled())
+  })
+
+  test("does not refresh variables when env file upload fails", async () => {
+    window.alert = vi.fn()
+    fetch
+      .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => [] })
+      .mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ errorMessage: "Environment already contains these variables" }) })
+
+    render(<VaultList />)
+
+    await screen.findByText("ServiceA")
+    fireEvent.change(screen.getByDisplayValue("Select Service"), { target: { value: "ServiceA" } })
+    await screen.findByText("dev")
+    fireEvent.change(screen.getByDisplayValue("Select Environment"), { target: { value: "dev" } })
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(4))
+
+    const fileInput = document.querySelector('input[type="file"]')
+    const file = new File(["KEY=VAL"], "test.env", { type: "text/plain" })
+    fireEvent.change(fileInput, { target: { files: [file] } })
+
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(5))
+    await waitFor(() => expect(window.alert).toHaveBeenCalledWith("Environment already contains these variables"))
   })
 
   test("downloads env file", async () => {

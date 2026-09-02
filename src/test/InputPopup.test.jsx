@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import InputPopup from "../components/InputPopup"
@@ -64,7 +64,7 @@ describe("InputPopup component", () => {
     expect(usernameInput.value).toBe("newuser")
   })
 
-  test("calls onSubmit with form values and closes popup", () => {
+  test("calls onSubmit with form values and closes popup", async () => {
     render(
       <InputPopup
         label="Submit Test"
@@ -85,7 +85,25 @@ describe("InputPopup component", () => {
       username: "submittedUser",
       password: "",
     })
-    expect(mockOnClose).toHaveBeenCalled()
+    await waitFor(() => expect(mockOnClose).toHaveBeenCalled())
+  })
+
+  test("does not close popup when submit fails", async () => {
+    const failedSubmit = vi.fn().mockResolvedValue(false)
+
+    render(
+      <InputPopup
+        label="Submit Test"
+        inputs={defaultInputs}
+        onSubmit={failedSubmit}
+        onClose={mockOnClose}
+      />
+    )
+
+    fireEvent.click(screen.getByText("Save"))
+
+    await waitFor(() => expect(failedSubmit).toHaveBeenCalled())
+    expect(mockOnClose).not.toHaveBeenCalled()
   })
 
   test("closes popup when Cancel is clicked", () => {

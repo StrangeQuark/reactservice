@@ -45,6 +45,7 @@ describe("UserLoginForm component", () => {
 
   test("handles 401 unauthorized response", async () => {
     const mockResponse = {
+      ok: false,
       status: 401,
       json: vi.fn().mockResolvedValue({ errorMessage: "Invalid credentials" })
     }
@@ -64,6 +65,7 @@ describe("UserLoginForm component", () => {
   test("successful login refreshes access and redirects", async () => {
     // Mock authenticate response
     const mockAuthResponse = {
+      ok: true,
       status: 200,
       json: vi.fn().mockResolvedValue({})
     }
@@ -104,5 +106,22 @@ describe("UserLoginForm component", () => {
         credentials: "include",
       })
     )
+  })
+
+  test("handles 500 response without requesting an access token", async () => {
+    global.fetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      json: vi.fn().mockResolvedValue({ errorMessage: "Unable to authenticate" })
+    })
+
+    render(<UserLoginForm />)
+
+    fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
+    fireEvent.change(screen.getByLabelText("Password:"), { target: { value: "password123" } })
+    fireEvent.click(screen.getByRole("button", { name: "LOGIN" }))
+
+    await waitFor(() => expect(screen.getByText("Unable to authenticate")).toBeInTheDocument())
+    expect(global.fetch).toHaveBeenCalledTimes(1)
   })
 })

@@ -84,7 +84,8 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
     }
 
     const handleAddUser = async (username) => {
-        await addUser(username)
+        if(await addUser(username) === false)
+            return
 
         setSearchResult(null)
         setSearchTerm("")
@@ -95,7 +96,9 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
         if (!confirm(`Remove user ${user.username}?`)) 
             return
 
-        await deleteUser(user)
+        if(await deleteUser(user) === false)
+            return
+
         fetchUsers()
     }
 
@@ -105,7 +108,8 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
     }
 
     const handleSaveRole = async (username) => {
-        await updateUserRole(username, newRole)
+        if(await updateUserRole(username, newRole) === false)
+            return
 
         setEditingUser(null)
         setNewRole("")

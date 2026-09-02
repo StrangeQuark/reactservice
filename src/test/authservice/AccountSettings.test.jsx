@@ -16,6 +16,7 @@ describe("AccountSettings component", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    window.alert = vi.fn()
     useAuth.mockReturnValue({
       username: "testuser",
       getAccessToken: mockGetAccessToken,
@@ -191,6 +192,25 @@ describe("AccountSettings component", () => {
       expect(mockRefreshAccessToken).toHaveBeenCalled()
       expect(mockLogout).not.toHaveBeenCalled()
     })
+  })
+
+  test("keeps username popup open when update fails", async () => {
+    fetch
+      .mockResolvedValueOnce({ json: async () => ({ id: 1 }) })
+      .mockResolvedValueOnce({ json: async () => [{ email: "test@example.com" }] })
+      .mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({ errorMessage: "Invalid password" }) })
+
+    render(<AccountSettings />)
+
+    await waitFor(() => expect(screen.getByTestId("email")).toHaveTextContent("test@example.com"))
+    fireEvent.click(await screen.getByTestId("update-username"))
+    fireEvent.change(screen.getByLabelText("New username"), { target: { value: "newuser" } })
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "password123" } })
+    fireEvent.click(screen.getByText("Save"))
+
+    await waitFor(() => expect(window.alert).toHaveBeenCalledWith("Invalid password"))
+    expect(screen.getByText("Edit username")).toBeInTheDocument()
+    expect(mockRefreshAccessToken).not.toHaveBeenCalled()
   })
 
   test("deleteProfile calls API and logs out on success", async () => {

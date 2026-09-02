@@ -159,8 +159,10 @@ const VaultList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
+
+        return true
     }
 
     const addUser = async (user) => {
@@ -182,10 +184,11 @@ const VaultList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         loadUsers()
+        return true
     }
 
     const deleteUser = async (user) => {
@@ -206,10 +209,11 @@ const VaultList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         loadUsers()
+        return true
     } // Integration function end: Auth
 
     const createService = async (serviceName) => {
@@ -222,10 +226,11 @@ const VaultList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            return
+            return false
         }
 
         fetchServices()
+        return true
     }
 
     const createEnvironment = async (environmentName) => {
@@ -238,10 +243,11 @@ const VaultList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            return
+            return false
         }
 
         fetchEnvironments(selectedService)
+        return true
     }
 
      const addVariable = async (key, value) => {
@@ -259,7 +265,7 @@ const VaultList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            return
+            return false
         }
 
         setVariables(prevVars => {
@@ -273,6 +279,8 @@ const VaultList = () => {
 
             return updated
         })
+
+        return true
     }
 
     const deleteVariable = async (variable) => {
@@ -381,11 +389,17 @@ const VaultList = () => {
         formData.append("environmentName", selectedEnvironment)
 
         try {
-            await fetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
+            const response = await fetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
                 method: "POST",
                 body: formData,
                 headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
+
+            if(!response.ok) {
+                const message = await response.json()
+                alert(message.errorMessage)
+                return
+            }
             
             fetchVariables(selectedService, selectedEnvironment)
         } catch (error) {
