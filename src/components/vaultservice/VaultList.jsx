@@ -56,8 +56,10 @@ const VaultList = () => {
     }
 
     const fetchEnvironments = async (service) => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_ENVS_BY_SERVICE}/${service}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+        const response = await fetch(VAULT_ENDPOINTS.GET_ALL_ENVS_BY_SERVICE, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ serviceName: service })
         })
         const data = await response.json()
         setEnvironments(data)
@@ -65,8 +67,10 @@ const VaultList = () => {
 
     const fetchVariables = async (service, environment) => {
         try {
-            const response = await fetch(`${VAULT_ENDPOINTS.GET_VARS_BY_ENV}/${service}/${environment}`, {
-                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            const response = await fetch(VAULT_ENDPOINTS.GET_VARS_BY_ENV, {
+                method: "POST",
+                headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+                body: JSON.stringify({ serviceName: service, environmentName: environment })
             })
 
             if (!response.ok) {
@@ -103,8 +107,10 @@ const VaultList = () => {
     }
     // Integration function start: Auth
     const loadUsers = async () => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_USERS_BY_SERVICE}/${selectedService}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+        const response = await fetch(VAULT_ENDPOINTS.GET_USERS_BY_SERVICE, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" },
+            body: JSON.stringify({ serviceName: selectedService })
         })
 
         const data = await response.json()
@@ -113,8 +119,10 @@ const VaultList = () => {
     }
 
     const getCurrentUserRole = async (service) => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_CURRENT_USER_ROLE}/${service}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+        const response = await fetch(VAULT_ENDPOINTS.GET_CURRENT_USER_ROLE, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" },
+            body: JSON.stringify({ serviceName: service })
         })
 
         const data = await response.json()
@@ -205,9 +213,10 @@ const VaultList = () => {
     } // Integration function end: Auth
 
     const createService = async (serviceName) => {
-        const response = await fetch(`${VAULT_ENDPOINTS.CREATE_SERVICE}/${serviceName}`, {
+        const response = await fetch(VAULT_ENDPOINTS.CREATE_SERVICE, {
             method: "POST",
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ serviceName })
         })
 
         if(!response.ok) {
@@ -220,9 +229,10 @@ const VaultList = () => {
     }
 
     const createEnvironment = async (environmentName) => {
-        const response = await fetch(`${VAULT_ENDPOINTS.CREATE_ENVIRONMENT}/${selectedService}/${environmentName}`, {
+        const response = await fetch(VAULT_ENDPOINTS.CREATE_ENVIRONMENT, {
             method: "POST",
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ serviceName: selectedService, environmentName })
         })
 
         if(!response.ok) {
@@ -237,13 +247,13 @@ const VaultList = () => {
      const addVariable = async (key, value) => {
         let v = {key, value}
 
-        const response = await fetch(`${VAULT_ENDPOINTS.ADD_VAR}/${selectedService}/${selectedEnvironment}`, {
+        const response = await fetch(VAULT_ENDPOINTS.ADD_VAR, {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             },
-            body: JSON.stringify(v)
+            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment, variable: v })
         })
 
         if(!response.ok) {
@@ -269,9 +279,10 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete variable: " + variable))
             return
 
-        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_VAR}/${selectedService}/${selectedEnvironment}/${variable}`, {
+        const response = await fetch(VAULT_ENDPOINTS.DELETE_VAR, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment, variableName: variable })
         })
 
         if(!response.ok) {
@@ -297,9 +308,10 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete environment: " + selectedEnvironment))
             return
 
-        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_ENVIRONMENT}/${selectedService}/${selectedEnvironment}`, {
+        const response = await fetch(VAULT_ENDPOINTS.DELETE_ENVIRONMENT, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment })
         })
 
         if(!response.ok) {
@@ -316,9 +328,10 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete service: " + selectedService))
             return
 
-        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_SERVICE}/${selectedService}`, {
+        const response = await fetch(VAULT_ENDPOINTS.DELETE_SERVICE, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ serviceName: selectedService })
         })
 
         if(!response.ok) {
@@ -334,13 +347,13 @@ const VaultList = () => {
     }
 
     const handleSave = async () => {
-        const response = await fetch(`${VAULT_ENDPOINTS.UPDATE_VARS}/${selectedService}/${selectedEnvironment}`, {
+        const response = await fetch(VAULT_ENDPOINTS.UPDATE_VARS, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             },
-            body: JSON.stringify(variables)
+            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment, variables })
         })
 
         if(!response.ok) {
@@ -364,9 +377,11 @@ const VaultList = () => {
 
         const formData = new FormData()
         formData.append("file", file)
+        formData.append("serviceName", selectedService)
+        formData.append("environmentName", selectedEnvironment)
 
         try {
-            await fetch(`${VAULT_ENDPOINTS.ADD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
+            await fetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
                 method: "POST",
                 body: formData,
                 headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
@@ -384,9 +399,10 @@ const VaultList = () => {
 
     const downloadEnvFile = async () => {
         try {
-            const res = await fetch(`${VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE}/${selectedService}/${selectedEnvironment}`, {
-                    method: "GET",
-                    headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            const res = await fetch(VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE, {
+                    method: "POST",
+                    headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+                    body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment })
                 })
 
             if (!res.ok) 

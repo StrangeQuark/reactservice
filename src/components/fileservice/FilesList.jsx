@@ -63,11 +63,13 @@ const FilesList = () => {
     }
 
     const createCollection = async (collectionName) => {
-        const response = await fetch(`${FILE_ENDPOINTS.NEW_COLLECTION}/${collectionName}`, {
+        const response = await fetch(FILE_ENDPOINTS.NEW_COLLECTION, {
             method: "POST",
             headers: {
-                Authorization: "Bearer " + getAccessToken() // Integration line: Auth
-            }
+                Authorization: "Bearer " + getAccessToken(), // Integration line: Auth
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ collectionName })
         })
 
         if(!response.ok) {
@@ -86,8 +88,10 @@ const FilesList = () => {
     }
     // Integration function start: Auth
     const getCurrentUserRole = async (collectionName) => {
-        const response = await fetch(`${FILE_ENDPOINTS.GET_CURRENT_USER_ROLE}/${collectionName}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+        const response = await fetch(FILE_ENDPOINTS.GET_CURRENT_USER_ROLE, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" },
+            body: JSON.stringify({ collectionName })
         })
 
         const data = await response.json()
@@ -96,11 +100,13 @@ const FilesList = () => {
     }
 
     const loadUsers = async () => {
-        const response = await fetch(`${FILE_ENDPOINTS.GET_USERS_BY_COLLECTION}/${selectedCollection.name}`,{
+        const response = await fetch(FILE_ENDPOINTS.GET_USERS_BY_COLLECTION,{
+            method: "POST",
             headers: { 
                 Authorization: "Bearer " + getAccessToken(),
                 "Content-Type": "application/json",
-            }
+            },
+            body: JSON.stringify({ collectionName: selectedCollection.name })
         })
 
         const data = await response.json()
@@ -192,8 +198,10 @@ const FilesList = () => {
 
     const fetchFiles = async (collectionName) => {
         try {
-            const response = await fetch(`${FILE_ENDPOINTS.GET_ALL}/${collectionName}`, {
-                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            const response = await fetch(FILE_ENDPOINTS.GET_ALL, {
+                method: "POST",
+                headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+                body: JSON.stringify({ collectionName })
             })
             const data = await response.json()
             setFiles(data)
@@ -211,12 +219,13 @@ const FilesList = () => {
     const handleDownload = async (fileName) => {
         const xhr = new XMLHttpRequest()
         xhr.open(
-            "GET",
-            `${FILE_ENDPOINTS.DOWNLOAD}/${selectedCollection.name}/${fileName}`
+            "POST",
+            FILE_ENDPOINTS.DOWNLOAD
         )
         xhr.responseType = "blob"
 
         xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
+        xhr.setRequestHeader("Content-Type", "application/json")
 
         setIsTransferring(true)
         setTransferProgress(0)
@@ -254,18 +263,19 @@ const FilesList = () => {
             alert("File download failed")
         }
 
-        xhr.send()
+        xhr.send(JSON.stringify({ collectionName: selectedCollection.name, fileName }))
     }
 
     const handleDownloadAll = async () => {
         const xhr = new XMLHttpRequest()
         xhr.open(
-            "GET",
-            `${FILE_ENDPOINTS.DOWNLOAD_ALL}/${selectedCollection.name}`
+            "POST",
+            FILE_ENDPOINTS.DOWNLOAD_ALL
         )
         xhr.responseType = "blob"
 
         xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
+        xhr.setRequestHeader("Content-Type", "application/json")
 
         setIsTransferring(true)
         setTransferProgress(0)
@@ -303,14 +313,15 @@ const FilesList = () => {
             alert("File download failed")
         }
 
-        xhr.send()
+        xhr.send(JSON.stringify({ collectionName: selectedCollection.name }))
     }
 
     const handleDelete = async (fileName) => {
         try {
-            await fetch(`${FILE_ENDPOINTS.DELETE}/${selectedCollection.name}/${fileName}`, {
+            await fetch(FILE_ENDPOINTS.DELETE, {
                 method: "DELETE",
-                headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+                headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+                body: JSON.stringify({ collectionName: selectedCollection.name, fileName })
             })
             fetchFiles(selectedCollection.name)
         } catch (error) {
@@ -330,12 +341,13 @@ const FilesList = () => {
 
         const formData = new FormData()
         formData.append("file", file)
+        formData.append("collectionName", selectedCollection.name)
 
         setIsTransferring(true)
         setTransferProgress(0)
 
         const xhr = new XMLHttpRequest()
-        xhr.open("POST", `${FILE_ENDPOINTS.UPLOAD}/${selectedCollection.name}`)
+        xhr.open("POST", FILE_ENDPOINTS.UPLOAD)
 
         xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
 
@@ -375,9 +387,10 @@ const FilesList = () => {
         if(!confirm("Are you sure you want to delete collection: " + selectedCollection.name))
             return
 
-        const response = await fetch(`${FILE_ENDPOINTS.DELETE_COLLECTION}/${selectedCollection.name}`, {
+        const response = await fetch(FILE_ENDPOINTS.DELETE_COLLECTION, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            body: JSON.stringify({ collectionName: selectedCollection.name })
         })
 
         if(!response.ok) {
@@ -394,9 +407,10 @@ const FilesList = () => {
         fileInputRef.current.click()
     }
 
-    const handleVideo = (fileName) => setSelectedVideoFile(FILE_ENDPOINTS.STREAM + `/${selectedCollection.name}/${fileName}`)
-    const handleImage = (fileName) => setSelectedImageFile(FILE_ENDPOINTS.STREAM + `/${selectedCollection.name}/${fileName}`)
-    const handleAudio = (fileName) => setSelectedAudioFile(FILE_ENDPOINTS.STREAM + `/${selectedCollection.name}/${fileName}`)
+    const getStreamUrl = (fileName) => `${FILE_ENDPOINTS.STREAM}?collectionName=${encodeURIComponent(selectedCollection.name)}&fileName=${encodeURIComponent(fileName)}`
+    const handleVideo = (fileName) => setSelectedVideoFile(getStreamUrl(fileName))
+    const handleImage = (fileName) => setSelectedImageFile(getStreamUrl(fileName))
+    const handleAudio = (fileName) => setSelectedAudioFile(getStreamUrl(fileName))
     const closeVideo = () => setSelectedVideoFile(null)
     const closeImage = () => setSelectedImageFile(null)
     const closeAudio = () => setSelectedAudioFile(null)

@@ -68,8 +68,10 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
         if (!searchTerm.trim())
             return
 
-        const response = await fetch(`${AUTH_ENDPOINTS.SEARCH_USERS}?query=${encodeURIComponent(searchTerm)}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+        const response = await fetch(AUTH_ENDPOINTS.SEARCH_USERS, {
+            method: "POST",
+            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" },
+            body: JSON.stringify({ query: searchTerm })
         })
 
         if (!response.ok) {

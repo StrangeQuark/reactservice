@@ -4,6 +4,7 @@ import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/re
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import VaultList from "../../components/vaultservice/VaultList"
+import { VAULT_ENDPOINTS } from "../../config"
 
 // Mock useAuth - Integration function start: Auth
 vi.mock("../../context/AuthContext", () => ({
@@ -334,10 +335,17 @@ describe("VaultList component", () => {
     fireEvent.click(screen.getByText("Manage Users"))
 
     await waitFor(() =>
-      expect(fetch).toHaveBeenCalledWith(
-        expect.stringContaining("get-users-by-service/ServiceA"),
-        { headers: { Authorization: "Bearer mock-token" } }
-      )
+        expect(fetch).toHaveBeenCalledWith(
+          VAULT_ENDPOINTS.GET_USERS_BY_SERVICE,
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer mock-token",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ serviceName: "ServiceA" })
+          }
+        )
     )
 
     expect(fetch).toHaveBeenCalledWith(
