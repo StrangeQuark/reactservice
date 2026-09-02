@@ -113,6 +113,40 @@ describe("VaultList component", () => {
     expect(await screen.findByDisplayValue("DB_PASSWORD")).toBeInTheDocument()
   })
 
+  test("does not display variables from a previously selected environment", async () => {
+    let resolveVariables
+    const variablesResponse = new Promise((resolve) => {
+      resolveVariables = resolve
+    })
+
+    fetch
+      .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA", "ServiceB"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
+      .mockImplementationOnce(() => variablesResponse)
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => ["prod"] })
+      .mockResolvedValueOnce({ ok: true, json: async () => [{ key: "CURRENT_KEY", value: "current" }] })
+
+    render(<VaultList />)
+
+    await screen.findByText("ServiceA")
+    fireEvent.change(screen.getByDisplayValue("Select Service"), { target: { value: "ServiceA" } })
+    await screen.findByText("dev")
+    fireEvent.change(screen.getByDisplayValue("Select Environment"), { target: { value: "dev" } })
+
+    fireEvent.change(screen.getByDisplayValue("ServiceA"), { target: { value: "ServiceB" } })
+    await screen.findByText("prod")
+    fireEvent.change(screen.getByDisplayValue("Select Environment"), { target: { value: "prod" } })
+
+    expect(await screen.findByDisplayValue("CURRENT_KEY")).toBeInTheDocument()
+
+    resolveVariables({ ok: true, json: async () => [{ key: "OLD_KEY", value: "old" }] })
+
+    await waitFor(() => expect(screen.queryByDisplayValue("OLD_KEY")).not.toBeInTheDocument())
+    expect(screen.getByDisplayValue("CURRENT_KEY")).toBeInTheDocument()
+  })
+
   test("filters variables by search term", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
