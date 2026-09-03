@@ -25,14 +25,14 @@ ENV VITE_GATEWAY_BASE_URL=$VITE_GATEWAY_BASE_URL
 WORKDIR /reactservice
 
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm ci
 
 COPY public ./public
 COPY src ./src
 COPY index.html ./index.html
 COPY vite.config.js ./vite.config.js
 
-RUN npx vitest
+RUN npm test
 RUN npm run build
 
 # Stage 2: Create minimal runtime image - Deploy via nginx

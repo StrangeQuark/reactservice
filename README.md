@@ -42,6 +42,11 @@ The `.env` file is required to provide necessary configuration such as encryptio
 
 ## Testing
 Unit tests are provided for pages and components.
+
+```bash
+npm ci
+npm test
+```
 <br><br>
 
 ## Deployment
