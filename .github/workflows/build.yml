@@ -41,8 +41,8 @@ jobs:
           for i in $(seq 1 $max_retries); do
             echo "Health check attempt $i..."
 
-            if curl -s -f http://localhost:6080/ > /dev/null; then
-              echo "App is healthy"
+            if response=$(curl -sS -f http://localhost:6080/) && [ -n "$response" ]; then
+              echo "Reactservice is healthy"
               success=1
               break
             else
