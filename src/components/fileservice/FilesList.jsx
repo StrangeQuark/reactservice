@@ -75,16 +75,17 @@ const FilesList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            return
+            return false
         }
 
         const data = await response.text()
         if(data !== "New collection successfully created") {
             alert(data)
-            return
+            return false
         }
 
         fetchCollections()
+        return true
     }
     // Integration function start: Auth
     const getCurrentUserRole = async (collectionName) => {
@@ -143,8 +144,10 @@ const FilesList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
+
+        return true
     }
 
     const addUser = async (user) => {
@@ -166,10 +169,11 @@ const FilesList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         loadUsers()
+        return true
     }
 
     const deleteUser = async (user) => {
@@ -190,10 +194,11 @@ const FilesList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         loadUsers()
+        return true
     }// Integration function end: Auth
 
     const fetchFiles = async (collectionName) => {
@@ -318,11 +323,18 @@ const FilesList = () => {
 
     const handleDelete = async (fileName) => {
         try {
-            await fetch(FILE_ENDPOINTS.DELETE, {
+            const response = await fetch(FILE_ENDPOINTS.DELETE, {
                 method: "DELETE",
                 headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
                 body: JSON.stringify({ collectionName: selectedCollection.name, fileName })
             })
+
+            if(!response.ok) {
+                const message = await response.json()
+                alert(message.errorMessage)
+                return
+            }
+
             fetchFiles(selectedCollection.name)
         } catch (error) {
             console.error("Delete failed", error)

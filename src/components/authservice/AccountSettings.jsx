@@ -56,11 +56,15 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
-        if(!await refreshAccessToken())
+        if(!await refreshAccessToken()) {
             logout()
+            return false
+        }
+
+        return true
     }
 
     const updateEmail = async (newEmail, password) => {
@@ -77,15 +81,16 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         if(!await refreshAccessToken()) {
             logout()
-            return
+            return false
         }
 
         setEmail(newEmail)
+        return true
     }
 
     const updatePassword = async (password, newPassword) => {
@@ -102,11 +107,15 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
-        if(!await refreshAccessToken())
+        if(!await refreshAccessToken()) {
             logout()
+            return false
+        }
+
+        return true
     }
 
     const deleteProfile = async (username, password) => {
@@ -122,10 +131,11 @@ const AccountSettings = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         logout()
+        return true
     }
 
     return (

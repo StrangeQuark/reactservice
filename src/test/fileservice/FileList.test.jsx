@@ -16,6 +16,7 @@ describe("FilesList", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     global.fetch = vi.fn()
+    window.alert = vi.fn()
   })
 
   test("fetches and displays collections", async () => {
@@ -110,5 +111,23 @@ describe("FilesList", () => {
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /upload/i })).toBeInTheDocument()
     })
+  })
+
+  test("does not remove file when deletion fails", async () => {
+    global.fetch
+      .mockResolvedValueOnce({ json: async () => [{ name: "MyCollection" }] })
+      .mockResolvedValueOnce({ json: async () => ["test.txt"] })
+      .mockResolvedValueOnce({ json: async () => "OWNER" })
+      .mockResolvedValueOnce({ ok: false, status: 500, json: async () => ({ errorMessage: "Unable to delete file" }) })
+
+    render(<FilesList />)
+
+    fireEvent.click(await screen.findByText("MyCollection"))
+    await screen.findByText("test.txt")
+    fireEvent.click(screen.getByRole("button", { name: "Delete" }))
+
+    await waitFor(() => expect(window.alert).toHaveBeenCalledWith("Unable to delete file"))
+    expect(screen.getByText("test.txt")).toBeInTheDocument()
+    expect(global.fetch).toHaveBeenCalledTimes(4)
   })
 })

@@ -24,6 +24,7 @@ const VaultList = () => {
     const [displayPopout, setDisplayPopout] = useState(false)
     const [currentUserRole, setCurrentUserRole] = useState(null)// Integration line: Auth
     const fileInputRef = useRef(null)
+    const selectedVault = useRef({ service: "", environment: "" })
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1)
@@ -46,6 +47,11 @@ const VaultList = () => {
     useEffect(() => {
         setCurrentPage(1)
     }, [searchTerm])
+
+    const isSelectedVault = (service, environment) => {
+        return selectedVault.current.service === service &&
+            selectedVault.current.environment === environment
+    }
 
     const fetchServices = async () => {
         const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_SERVICES}`, {
@@ -80,6 +86,9 @@ const VaultList = () => {
 
             const data = await response.json()
 
+            if(!isSelectedVault(service, environment))
+                return
+
             // mask all initially
             const masked = data.map(v => ({ ...v, masked: true }))
 
@@ -102,7 +111,8 @@ const VaultList = () => {
             }
         } catch (err) {
             console.error("fetchVariables error:", err)
-            alert(err.message)
+            if(isSelectedVault(service, environment))
+                alert(err.message)
         }
     }
     // Integration function start: Auth
@@ -159,8 +169,10 @@ const VaultList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
+
+        return true
     }
 
     const addUser = async (user) => {
@@ -182,10 +194,11 @@ const VaultList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         loadUsers()
+        return true
     }
 
     const deleteUser = async (user) => {
@@ -206,10 +219,11 @@ const VaultList = () => {
         if(!response.ok) {
             const data = await response.json()
             alert(data.errorMessage)
-            return
+            return false
         }
 
         loadUsers()
+        return true
     } // Integration function end: Auth
 
     const createService = async (serviceName) => {
@@ -222,10 +236,11 @@ const VaultList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            return
+            return false
         }
 
         fetchServices()
+        return true
     }
 
     const createEnvironment = async (environmentName) => {
@@ -238,13 +253,16 @@ const VaultList = () => {
         if(!response.ok) {
             const message = await response.json()
             alert(message.errorMessage)
-            return
+            return false
         }
 
         fetchEnvironments(selectedService)
+        return true
     }
 
      const addVariable = async (key, value) => {
+        const service = selectedService
+        const environment = selectedEnvironment
         let v = {key, value}
 
         const response = await fetch(VAULT_ENDPOINTS.ADD_VAR, {
@@ -253,14 +271,18 @@ const VaultList = () => {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             },
-            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment, variable: v })
+            body: JSON.stringify({ serviceName: service, environmentName: environment, variable: v })
         })
 
         if(!response.ok) {
             const message = await response.json()
-            alert(message.errorMessage)
-            return
+            if(isSelectedVault(service, environment))
+                alert(message.errorMessage)
+            return false
         }
+
+        if(!isSelectedVault(service, environment))
+            return true
 
         setVariables(prevVars => {
             const updated = [...prevVars, { ...v, masked: true }]
@@ -273,24 +295,33 @@ const VaultList = () => {
 
             return updated
         })
+
+        return true
     }
 
     const deleteVariable = async (variable) => {
         if(!confirm("Are you sure you want to delete variable: " + variable))
             return
 
+        const service = selectedService
+        const environment = selectedEnvironment
+
         const response = await fetch(VAULT_ENDPOINTS.DELETE_VAR, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
-            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment, variableName: variable })
+            body: JSON.stringify({ serviceName: service, environmentName: environment, variableName: variable })
         })
 
         if(!response.ok) {
             const message = await response.json()
-            alert(message.errorMessage)
+            if(isSelectedVault(service, environment))
+                alert(message.errorMessage)
             return
         }
         
+        if(!isSelectedVault(service, environment))
+            return
+
         setVariables(prevVars => {
             const updated = prevVars.filter(v => v.key !== variable)
             const newTotalPages = Math.ceil(updated.length / varsPerPage)
@@ -347,27 +378,33 @@ const VaultList = () => {
     }
 
     const handleSave = async () => {
+        const service = selectedService
+        const environment = selectedEnvironment
+
         const response = await fetch(VAULT_ENDPOINTS.UPDATE_VARS, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + getAccessToken() // Integration line: Auth
             },
-            body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment, variables })
+            body: JSON.stringify({ serviceName: service, environmentName: environment, variables })
         })
 
         if(!response.ok) {
             const message = await response.json()
-            alert(message.errorMessage)
+            if(isSelectedVault(service, environment))
+                alert(message.errorMessage)
             return
         }
 
         const data = await response.text()
-        if(data !== "All variables updated successfully") {
+        if(isSelectedVault(service, environment) &&
+            data !== "All variables updated successfully") {
             alert(data)
         }
 
-        setChangesMade(false)
+        if(isSelectedVault(service, environment))
+            setChangesMade(false)
     }
 
     const uploadEnvFile = async (event) => {
@@ -375,19 +412,30 @@ const VaultList = () => {
         if (!file) 
             return
 
+        const service = selectedService
+        const environment = selectedEnvironment
+
         const formData = new FormData()
         formData.append("file", file)
-        formData.append("serviceName", selectedService)
-        formData.append("environmentName", selectedEnvironment)
+        formData.append("serviceName", service)
+        formData.append("environmentName", environment)
 
         try {
-            await fetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
+            const response = await fetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
                 method: "POST",
                 body: formData,
                 headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
             })
+
+            if(!response.ok) {
+                const message = await response.json()
+                if(isSelectedVault(service, environment))
+                    alert(message.errorMessage)
+                return
+            }
             
-            fetchVariables(selectedService, selectedEnvironment)
+            if(isSelectedVault(service, environment))
+                fetchVariables(service, environment)
         } catch (error) {
             console.error("Upload failed", error)
         }
@@ -458,9 +506,13 @@ const VaultList = () => {
                         if(e.target.value === "")
                             return
 
+                        selectedVault.current = { service: e.target.value, environment: "" }
                         setSelectedService(e.target.value)
                         getCurrentUserRole(e.target.value) // Integration line: Auth
                         setSelectedEnvironment("")
+                        setEnvironments([])
+                        setVariables([])
+                        setChangesMade(false)
                         fetchEnvironments(e.target.value)
                     }}
                 >
@@ -477,7 +529,10 @@ const VaultList = () => {
                         if(e.target.value === "")
                             return
 
+                        selectedVault.current = { service: selectedService, environment: e.target.value }
                         setSelectedEnvironment(e.target.value)
+                        setVariables([])
+                        setChangesMade(false)
                         fetchVariables(selectedService, e.target.value)
                     }}
                 >

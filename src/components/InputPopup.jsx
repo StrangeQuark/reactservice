@@ -17,9 +17,9 @@ const InputPopup = ({ label, inputs, onSubmit, onClose }) => {
         setFormValues((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleSubmit = () => {
-        onSubmit(formValues)
-        onClose()
+    const handleSubmit = async () => {
+        if(await onSubmit(formValues) !== false)
+            onClose()
     }
 
     return (
