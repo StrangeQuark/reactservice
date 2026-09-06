@@ -43,7 +43,7 @@ RUN apk add --no-cache curl
 COPY --from=builder /reactservice/dist /usr/share/nginx/html
 
 # Replace default nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 

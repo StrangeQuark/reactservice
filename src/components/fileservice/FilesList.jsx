@@ -518,12 +518,11 @@ const FilesList = () => {
 
                         {isTransferring && (
                             <div className="transfer-progress">
-                                <div className="progress-bar-bg">
-                                    <div
-                                        className="progress-bar-fill"
-                                        style={{ width: `${transferProgress}%` }}
-                                    ></div>
-                                </div>
+                                <progress
+                                    className="progress-bar"
+                                    value={transferProgress}
+                                    max="100"
+                                ></progress>
                                 <span>{transferProgress}%</span>
                             </div>
                         )}
