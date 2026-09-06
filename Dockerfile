@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:22-alpine AS builder
+FROM node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32 AS builder
 # Integration function start: Auth
 ARG VITE_AUTH_API_BASE_URL
 ENV VITE_AUTH_API_BASE_URL=$VITE_AUTH_API_BASE_URL
@@ -36,14 +36,14 @@ RUN npm test
 RUN npm run build
 
 # Stage 2: Create minimal runtime image - Deploy via nginx
-FROM nginx:alpine
+FROM nginx:alpine@sha256:a9ae6f6d078d477e21323310498e5196cb2b7c0aedd9e07b7306612077227d7c
 
 RUN apk add --no-cache curl
 
 COPY --from=builder /reactservice/dist /usr/share/nginx/html
 
 # Replace default nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
