@@ -9,12 +9,23 @@ import * as EmailUtility from "../../utility/EmailUtility"
 describe("UserRegisterForm component", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    global.fetch = vi.fn()
+    window.location.href = ""
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ inviteOnly: false })
+    })
     vi.spyOn(EmailUtility, "verifyEmailRegex").mockImplementation(() => true)
   })
 
-  test("renders form fields and button", () => {
+  const renderRegisterForm = async () => {
     render(<UserRegisterForm />)
+    await waitFor(() => {
+      expect(screen.getByLabelText("Username:")).toBeInTheDocument()
+    })
+  }
+
+  test("renders form fields and button", async () => {
+    await renderRegisterForm()
 
     expect(screen.getByText("Create account")).toBeInTheDocument()
     expect(screen.getByLabelText("Username:")).toBeInTheDocument()
@@ -25,7 +36,7 @@ describe("UserRegisterForm component", () => {
   })
 
   test("shows validation errors when fields are empty", async () => {
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.click(screen.getByRole("button", { name: "SIGN UP" }))
 
@@ -38,10 +49,9 @@ describe("UserRegisterForm component", () => {
   })
 
   test("shows error when email is invalid", async () => {
-    global.fetch.mockResolvedValueOnce({ ok: true })
     EmailUtility.verifyEmailRegex.mockReturnValueOnce(false)
 
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "bademail" } })
@@ -56,7 +66,7 @@ describe("UserRegisterForm component", () => {
   })
 
   test("shows error when passwords do not match", async () => {
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } })
@@ -73,10 +83,13 @@ describe("UserRegisterForm component", () => {
   test("handles successful registration with email integration", async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
+      json: async () => ({ inviteOnly: false })
+    }).mockResolvedValueOnce({
+      ok: true,
       json: async () => ({ message: "" })
     })
 
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } })
@@ -93,10 +106,13 @@ describe("UserRegisterForm component", () => {
   test("handles successful registration without email integration", async () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
+      json: async () => ({ inviteOnly: false })
+    }).mockResolvedValueOnce({
+      ok: true,
       json: async () => ({ message: "Registered without email" })
     })
 
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } })
@@ -113,12 +129,15 @@ describe("UserRegisterForm component", () => {
 
   test("handles 400 conflict: username already taken", async () => {
     global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ inviteOnly: false })
+    }).mockResolvedValueOnce({
       ok: false,
       status: 400,
       json: async () => ({ errorMessage: "Username already registered" })
     })
 
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "takenuser" } })
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } })
@@ -134,12 +153,15 @@ describe("UserRegisterForm component", () => {
 
   test("handles 400 conflict: email already taken", async () => {
     global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ inviteOnly: false })
+    }).mockResolvedValueOnce({
       ok: false,
       status: 400,
       json: async () => ({ errorMessage: "Email already registered" })
     })
 
-    render(<UserRegisterForm />)
+    await renderRegisterForm()
 
     fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
     fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "used@example.com" } })
@@ -150,6 +172,35 @@ describe("UserRegisterForm component", () => {
 
     await waitFor(() => {
       expect(screen.getByTitle("Email is already taken")).toBeInTheDocument()
+    })
+  })
+
+  test("includes invitation token from URL fragment", async () => {
+    window.location.href = "/register#inviteToken=invite-token"
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ inviteOnly: true })
+    }).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ message: "" })
+    })
+
+    render(<UserRegisterForm />)
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Invitation code:")).toHaveValue("invite-token")
+    })
+
+    fireEvent.change(screen.getByLabelText("Username:"), { target: { value: "testuser" } })
+    fireEvent.change(screen.getByLabelText("Email:"), { target: { value: "test@example.com" } })
+    fireEvent.change(screen.getByLabelText("Password:"), { target: { value: "secret" } })
+    fireEvent.change(screen.getByLabelText("Confirm password:"), { target: { value: "secret" } })
+    fireEvent.click(screen.getByRole("button", { name: "SIGN UP" }))
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenLastCalledWith(expect.any(String), expect.objectContaining({
+        body: expect.stringContaining("invite-token")
+      }))
     })
   })
 })

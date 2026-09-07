@@ -28,6 +28,7 @@ export const GATEWAY_BASE_URL = adaptBaseUrl(VITE_GATEWAY_BASE_URL) // Integrati
 // Integration function start: Auth
 let AUTH_ENDPOINTS = {
   REGISTER: `${AUTH_API_BASE_URL}/api/auth/register`,
+  INVITE_ONLY: `${AUTH_API_BASE_URL}/api/auth/invitation/invite-only`,
   AUTHENTICATE: `${AUTH_API_BASE_URL}/api/auth/authenticate`,
   ACCESS: `${AUTH_API_BASE_URL}/api/auth/access`,
   LOGOUT: `${AUTH_API_BASE_URL}/api/auth/access/logout`,
