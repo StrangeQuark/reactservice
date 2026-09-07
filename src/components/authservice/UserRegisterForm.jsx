@@ -1,6 +1,6 @@
 // Integration file: Auth
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
 import { FaCheckCircle } from "react-icons/fa"
 import { verifyEmailRegex } from "../../utility/EmailUtility"
@@ -23,11 +23,33 @@ const UserRegisterForm = () => {
   const[isSubmitted, setIsSubmitted] = useState(false)
   const[isSuccess, setIsSuccess] = useState(false)
   const[registrationMessage, setRegistrationMessage] = useState("")
+  const[isInviteOnly, setIsInviteOnly] = useState(null)
+  const[inviteToken, setInviteToken] = useState("")
+  const[inviteErrorMessage, setInviteErrorMessage] = useState("")
 
   const[usernameErrorMessage, setUsernameErrorMessage] = useState("")
   const[emailErrorMessage, setEmailErrorMessage] = useState("")
   const[passwordErrorMessage, setPasswordErrorMessage] = useState("")
   const[confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState("")
+
+  useEffect(() => {
+    const hash = window.location.hash || window.location.href.substring(window.location.href.indexOf("#"))
+    const inviteToken = new URLSearchParams(hash.substring(1)).get("inviteToken")
+    if(inviteToken) {
+      setInviteToken(inviteToken)
+      window.history.replaceState({}, "", "/register")
+    }
+
+    fetch(AUTH_ENDPOINTS.INVITE_ONLY)
+      .then(async (response) => {
+        if(!response.ok)
+          throw new Error("Unable to load invitation settings")
+
+        const data = await response.json()
+        setIsInviteOnly(data.inviteOnly)
+      })
+      .catch(() => setInviteErrorMessage("Unable to load registration settings"))
+  }, [])
 
   const handleKeyDown = (event) => {
       if (event.key === "Enter") {
@@ -55,6 +77,11 @@ const UserRegisterForm = () => {
     setIsPasswordValid(password !== '')
     setPasswordErrorMessage(password !== '' ? "" : "Password must not be blank")
 
+    if(isInviteOnly && inviteToken === '')
+      setInviteErrorMessage("Invitation code must not be blank")
+    else
+      setInviteErrorMessage("")
+
     if (confirmPassword === '') {
       setIsConfirmPasswordValid(false)
       setConfirmPasswordErrorMessage("Confirmation password must not be blank")
@@ -72,12 +99,15 @@ const UserRegisterForm = () => {
       password !== '' &&
       confirmPassword !== '' &&
       confirmPassword === password &&
-      verifyEmailRegex(email)
+      verifyEmailRegex(email) &&
+      (!isInviteOnly || inviteToken !== '')
 
     if (!isFormValid)
       return
 
     var registerJSON = {"username": username, "password": password, "email": email}
+    if(inviteToken !== '')
+      registerJSON.inviteToken = inviteToken
 
     fetch(AUTH_ENDPOINTS.REGISTER, {
       method: 'POST',
@@ -95,6 +125,8 @@ const UserRegisterForm = () => {
           } else if (data.errorMessage === "Email already registered") {
             setIsEmailValid(false)
             setEmailErrorMessage("Email is already taken")
+          } else if (data.errorMessage === "Invitation is invalid or expired") {
+            setInviteErrorMessage(data.errorMessage)
           }
         } else {
           const data = await response.json()
@@ -115,7 +147,11 @@ const UserRegisterForm = () => {
   return(
     <>
       {!isSuccess && (<div id="register-div" className="auth-div">
-        <h1>Create account</h1>
+        {isInviteOnly === null && inviteErrorMessage === "" && <p>Loading registration settings</p>}
+        {isInviteOnly === null && inviteErrorMessage !== "" && <p>{inviteErrorMessage}</p>}
+        {isInviteOnly !== null && <>
+        <h1>{isInviteOnly ? "Create your invited account" : "Create account"}</h1>
+        {isInviteOnly && <p>An invitation is required to create an account.</p>}
 
         <form id="register-form" className="register-form" onKeyDown={handleKeyDown} onSubmit={(e) => e.preventDefault()}>
           <label htmlFor="username">Username:</label>
@@ -145,9 +181,19 @@ const UserRegisterForm = () => {
             <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" spellCheck="false" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
           </div>
           <hr />
+
+          {isInviteOnly && <>
+          <label htmlFor="invite-token">Invitation code:</label>
+          <div>
+            {isSubmitted && (inviteErrorMessage === "" ? <FaCheckCircle className="check-circle" /> : <FaRegCircleXmark title={inviteErrorMessage} className="circle-x-mark" />)}
+            <input type="text" id="invite-token" name="invite-token" placeholder="Type your invitation code" spellCheck="false" value={inviteToken} onChange={(e) => setInviteToken(e.target.value)} />
+          </div>
+          <hr />
+          </>}
         </form>
 
         <button id='submit-button' onClick={() => requestHandler()}>SIGN UP</button>
+        </>}
       </div>)}
 
       {isSuccess && (<div id="request-success-div" className="auth-div">
