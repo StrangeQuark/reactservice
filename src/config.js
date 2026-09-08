@@ -39,14 +39,34 @@ let AUTH_ENDPOINTS = {
   UPDATE_PASSWORD: `${AUTH_API_BASE_URL}/api/auth/user/update-password`,
   SEARCH_USERS: `${AUTH_API_BASE_URL}/api/auth/user/search-users`,
   GET_USER_ID: `${AUTH_API_BASE_URL}/api/auth/user/get-user-id`,
-  GET_USER_DETAILS_BY_IDS: `${AUTH_API_BASE_URL}/api/auth/user/get-user-details-by-ids`
+  GET_USER_DETAILS_BY_IDS: `${AUTH_API_BASE_URL}/api/auth/user/get-user-details-by-ids`,
+  GET_ADMIN_USER: `${AUTH_API_BASE_URL}/api/auth/user/get-admin-user`,
+  UPDATE_ROLE: `${AUTH_API_BASE_URL}/api/auth/user/update-role`,
+  ADD_AUTHORIZATIONS_TO_USER: `${AUTH_API_BASE_URL}/api/auth/user/add-authorizations-to-user`,
+  REMOVE_AUTHORIZATIONS: `${AUTH_API_BASE_URL}/api/auth/user/remove-authorizations`,
+  CREATE_INVITATION: `${AUTH_API_BASE_URL}/api/auth/invitation/create`,
+  DELETE_INVITATION: `${AUTH_API_BASE_URL}/api/auth/invitation/delete`,
+  DELETE_ALL_INVITATIONS: `${AUTH_API_BASE_URL}/api/auth/invitation/delete-all`,
+  GET_ALL_INVITATIONS: `${AUTH_API_BASE_URL}/api/auth/invitation/get-all`,
+  CREATE_AUTHORIZATION: `${AUTH_API_BASE_URL}/api/auth/authorization/create`,
+  GET_ALL_AUTHORIZATIONS: `${AUTH_API_BASE_URL}/api/auth/authorization/get-all`,
+  DELETE_AUTHORIZATION: `${AUTH_API_BASE_URL}/api/auth/authorization/delete`,
+  ADD_ROLE_AUTHORIZATION: `${AUTH_API_BASE_URL}/api/auth/role-authorization/add`,
+  GET_ROLE_AUTHORIZATIONS: `${AUTH_API_BASE_URL}/api/auth/role-authorization/get`,
+  REMOVE_ROLE_AUTHORIZATION: `${AUTH_API_BASE_URL}/api/auth/role-authorization/remove`,
+  GET_ALL_ROLES: `${AUTH_API_BASE_URL}/api/auth/role-authorization/get-all-roles`
 }
 // Integration function end: Auth
 // Integration function start: Email
 let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`,
-  RESET_USER_PASSWORD: `${EMAIL_API_BASE_URL}/api/email/reset-user-password`
+  RESET_USER_PASSWORD: `${EMAIL_API_BASE_URL}/api/email/reset-user-password`,
+  GET_TEMPLATE_EMAIL: `${EMAIL_API_BASE_URL}/api/email/get-template-email`,
+  GET_ALL_TEMPLATE_EMAILS: `${EMAIL_API_BASE_URL}/api/email/get-all-template-emails`,
+  CREATE_TEMPLATE_EMAIL: `${EMAIL_API_BASE_URL}/api/email/create-template-email`,
+  UPDATE_TEMPLATE_EMAIL: `${EMAIL_API_BASE_URL}/api/email/update-template-email`,
+  DELETE_TEMPLATE_EMAIL: `${EMAIL_API_BASE_URL}/api/email/delete-template-email`
 }
 // Integration function end: Email
 // Integration function start: File

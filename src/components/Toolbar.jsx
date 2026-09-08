@@ -19,7 +19,7 @@ const getStoredTheme = () => {
 const Toolbar = () => {
     /* Integration function start: Auth */
     const [displayPopout, setDisplayPopout] = useState(false)
-    const { isLoggedIn, username, logout } = useAuth()
+    const { isLoggedIn, username, logout, hasAuthorization = () => false } = useAuth()
     const [centerDropdownOpen, setCenterDropdownOpen] = useState(false);
     const [theme, setTheme] = useState(getStoredTheme)
 
@@ -89,6 +89,14 @@ const Toolbar = () => {
                         }}>
                             Settings
                         </button>
+
+                        {(hasAuthorization("INVITATION_MANAGEMENT") || hasAuthorization("USER_MANAGEMENT") || hasAuthorization("AUTHORIZATION_MANAGEMENT") || hasAuthorization("EMAIL_TEMPLATE_MANAGEMENT")) &&
+                        <button onClick={() => {
+                            navigateTo(`/admin`)
+                            setDisplayPopout(false)
+                        }}>
+                            Admin
+                        </button>}
 
                         <button onClick={() => {
                             logout()

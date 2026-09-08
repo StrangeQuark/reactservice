@@ -61,7 +61,7 @@ describe("AuthContext context", () => {
   })
 
   test("initializes from refresh cookie", async () => {
-    const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "john_doe" }))
+    const payload = btoa(JSON.stringify({ exp: Date.now() / 1000 + 100, sub: "john_doe", authorizations: ["USER_MANAGEMENT"] }))
     global.fetch.mockResolvedValue({
       ok: true,
       json: vi.fn().mockResolvedValue({ jwtToken: `header.${payload}.sig` }),
@@ -73,6 +73,7 @@ describe("AuthContext context", () => {
     await waitFor(() => {
       expect(result.current.isLoggedIn).toBe(true)
       expect(result.current.username).toBe("john_doe")
+      expect(result.current.hasAuthorization("USER_MANAGEMENT")).toBe(true)
     })
   })
 

@@ -73,6 +73,20 @@ describe("Toolbar component", () => {
     expect(mockLogout).toHaveBeenCalled()
   }) // Integration function end: Auth
 
+  test("shows admin navigation for a management authorization", () => {
+    useAuth.mockReturnValue({
+      isLoggedIn: true,
+      username: "testuser",
+      logout: vi.fn(),
+      hasAuthorization: authorization => authorization === "USER_MANAGEMENT"
+    })
+
+    render(<Toolbar />)
+    fireEvent.click(screen.getByText("testuser"))
+
+    expect(screen.getByText("Admin")).toBeInTheDocument()
+  })
+
   test("uses the stored theme on load", () => {
     window.localStorage.setItem("reactservice-theme", "dark")
     useAuth.mockReturnValue({ isLoggedIn: false })
