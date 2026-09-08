@@ -62,7 +62,7 @@ describe("UserManagementPopup", () => {
     global.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [
-        { userId: "1", username: "alice", email: "alice@test.com" },
+        { userId: "1", username: "alice", email: "alice@test.com", role: "ADMIN" },
         { userId: "2", username: "bob", email: "bob@test.com" },
       ],
     })
@@ -71,6 +71,7 @@ describe("UserManagementPopup", () => {
 
     expect(await screen.findByText("alice")).toBeInTheDocument()
     expect(await screen.findByText("bob")).toBeInTheDocument()
+    expect(await screen.findByText("USER")).toBeInTheDocument()
   })
 
   test("search users and add user from results", async () => {

@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState(null)
     const [accessToken, setAccessToken] = useState(null)
+    const [authorizations, setAuthorizations] = useState([])
     const [loading, setLoading] = useState(true)
     const [refreshTimer, setRefreshTimer] = useState(null)
 
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }) => {
             setAccessToken(data.jwtToken)
             setIsLoggedIn(true)
             setUsername(getUsernameFromJWT(data.jwtToken))
+            setAuthorizations(getAuthorizationsFromJWT(data.jwtToken))
             scheduleTokenRefresh(data.jwtToken)
             return true
         } catch {
@@ -59,6 +61,14 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const getAuthorizationsFromJWT = (token) => {
+        try {
+            return decodeJWT(token).authorizations || []
+        } catch {
+            return []
+        }
+    }
+
     const logout = () => {
         if (refreshTimer) 
             clearTimeout(refreshTimer)
@@ -70,9 +80,12 @@ export const AuthProvider = ({ children }) => {
         setAccessToken(null)
         setIsLoggedIn(false)
         setUsername(null)
+        setAuthorizations([])
     }
 
     const getAccessToken = () => accessToken
+
+    const hasAuthorization = (authorization) => authorizations.includes(authorization)
 
     const scheduleTokenRefresh = (token) => {
         try {
@@ -106,7 +119,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, username, loading, setUsername, logout, getAccessToken, refreshAccessToken }}>
+        <AuthContext.Provider value={{ isLoggedIn, username, loading, authorizations, setUsername, logout, getAccessToken, hasAuthorization, refreshAccessToken }}>
             {children}
         </AuthContext.Provider>
     )

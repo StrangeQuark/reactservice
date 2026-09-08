@@ -49,8 +49,8 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
 
         // Merge the two datasets based on userId
         const merged = data.map(d => ({
-            ...d,
-            ...(userDataMap.get(d.userId) || {})
+            ...(userDataMap.get(d.userId) || {}),
+            ...d
         }))
 
         setUsers(merged)
@@ -59,7 +59,8 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
     const fetchRoles = async () => {
         const data = await getAllRoles()
 
-        setRoles(data)
+        if(Array.isArray(data))
+            setRoles(data)
     }
 
     const handleSearch = async () => {

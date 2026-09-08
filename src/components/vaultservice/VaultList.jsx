@@ -58,7 +58,8 @@ const VaultList = () => {
             headers: { Authorization: "Bearer " + getAccessToken() } // Integration line: Auth
         })
         const data = await response.json()
-        setServices(data)
+        if(response.ok)
+            setServices(data)
     }
 
     const fetchEnvironments = async (service) => {
@@ -68,7 +69,8 @@ const VaultList = () => {
             body: JSON.stringify({ serviceName: service })
         })
         const data = await response.json()
-        setEnvironments(data)
+        if(response.ok)
+            setEnvironments(data)
     }
 
     const fetchVariables = async (service, environment) => {
