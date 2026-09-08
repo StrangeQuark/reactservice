@@ -6,12 +6,10 @@ import { useAuth } from "../../context/AuthContext"
 
 const AuthorizationManagement = () => {
     const { getAccessToken } = useAuth()
-    const [name, setName] = useState("")
     const [authorizations, setAuthorizations] = useState([])
     const [roles, setRoles] = useState([])
     const [role, setRole] = useState("")
     const [roleAuthorizations, setRoleAuthorizations] = useState([])
-    const [message, setMessage] = useState("")
 
     useEffect(() => {
         getAuthorizations()
@@ -52,22 +50,6 @@ const AuthorizationManagement = () => {
             setRoleAuthorizations((await response.json()).map(value => value.authorization.name))
     }
 
-    const createAuthorization = async (event) => {
-        event.preventDefault()
-        const response = await request(AUTH_ENDPOINTS.CREATE_AUTHORIZATION, "POST", { name })
-        const data = await response.json()
-
-        if(!response.ok) {
-            setMessage(data.errorMessage)
-            return
-        }
-
-        setName("")
-        setMessage("Authorization created")
-        getAuthorizations()
-        getRoleAuthorizations()
-    }
-
     const updateRoleAuthorization = async (authorization, checked) => {
         const response = await request(checked ? AUTH_ENDPOINTS.ADD_ROLE_AUTHORIZATION : AUTH_ENDPOINTS.REMOVE_ROLE_AUTHORIZATION,
             checked ? "POST" : "DELETE", { role, authorization })
@@ -76,27 +58,14 @@ const AuthorizationManagement = () => {
             getRoleAuthorizations()
     }
 
-    const deleteAuthorization = async (authorization) => {
-        const response = await request(AUTH_ENDPOINTS.DELETE_AUTHORIZATION, "DELETE", { name: authorization })
-        if(response.ok) {
-            getAuthorizations()
-            getRoleAuthorizations()
-        }
-    }
-
     return (
         <div className="admin-management">
             <div className="admin-section-header">
                 <div>
                     <h2>Authorizations</h2>
-                    <p>Create authorizations and define the defaults for each role.</p>
+                    <p>Define the default authorizations for each role.</p>
                 </div>
             </div>
-            <form className="admin-form" onSubmit={createAuthorization}>
-                <input aria-label="Authorization name" value={name} onChange={event => setName(event.target.value)} placeholder="Authorization name" required />
-                <button type="submit">Create authorization</button>
-            </form>
-            {message && <p className="admin-message">{message}</p>}
             <label className="admin-select-label">Role
                 <select value={role} onChange={event => setRole(event.target.value)}>
                     {roles.map(value => <option key={value}>{value}</option>)}
@@ -107,7 +76,6 @@ const AuthorizationManagement = () => {
                     <input type="checkbox" checked={roleAuthorizations.includes(authorization)}
                            onChange={event => updateRoleAuthorization(authorization, event.target.checked)} />
                     {authorization}
-                    <button className="admin-danger-button" type="button" onClick={() => deleteAuthorization(authorization)}>Delete</button>
                 </label>)}
             </div>
         </div>
