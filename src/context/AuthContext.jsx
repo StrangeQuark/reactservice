@@ -1,7 +1,5 @@
-// Integration file: Auth
-
 import { createContext, useContext, useEffect, useState } from "react"
-import { AUTH_ENDPOINTS } from "../config"
+import { AUTH_ENDPOINTS, AUTHSERVICE_INTEGRATION } from "../config"
 import { Navigate } from "react-router-dom"
 
 const AuthContext = createContext(null)
@@ -24,6 +22,11 @@ export const AuthProvider = ({ children }) => {
     const [refreshTimer, setRefreshTimer] = useState(null)
 
     useEffect(() => {
+        if(!AUTHSERVICE_INTEGRATION) {
+            setLoading(false)
+            return
+        }
+
         const initAuth = async () => {
             await refreshAccessToken()
             setLoading(false)
@@ -32,6 +35,9 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     const refreshAccessToken = async () => {
+        if(!AUTHSERVICE_INTEGRATION)
+            return false
+
         try {
             const response = await fetch(AUTH_ENDPOINTS.ACCESS, {
                 method: "POST",
@@ -73,10 +79,12 @@ export const AuthProvider = ({ children }) => {
         if (refreshTimer) 
             clearTimeout(refreshTimer)
 
-        fetch(AUTH_ENDPOINTS.LOGOUT, {
-            method: "POST",
-            credentials: "include"
-        })
+        if(AUTHSERVICE_INTEGRATION) {
+            fetch(AUTH_ENDPOINTS.LOGOUT, {
+                method: "POST",
+                credentials: "include"
+            })
+        }
         setAccessToken(null)
         setIsLoggedIn(false)
         setUsername(null)
@@ -128,6 +136,9 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => useContext(AuthContext)
 
 export const RequireAuth = ({ children }) => {
+    if(!AUTHSERVICE_INTEGRATION)
+        return children
+
     const { loading, isLoggedIn } = useAuth()
 
     if (loading) return null // or <Spinner /> for nicer UX

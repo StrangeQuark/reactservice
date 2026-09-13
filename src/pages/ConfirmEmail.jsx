@@ -1,5 +1,5 @@
-// Integration file: Email
-// Integration file: Auth
+
+
 
 import Toolbar from '../components/Toolbar'
 import ConfirmEmailMessage from '../components/authservice/ConfirmEmailMessage'

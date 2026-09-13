@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import Toolbar from './../components/Toolbar'
 

@@ -1,4 +1,4 @@
-// Integration file: Auth - Integration file: Email
+
 
 import { useEffect, useState } from "react"
 import { EMAIL_ENDPOINTS } from "../../config"

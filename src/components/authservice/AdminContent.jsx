@@ -1,12 +1,13 @@
-// Integration file: Auth
+
 
 import { useState } from "react"
 import { useAuth } from "../../context/AuthContext"
 import InvitationManagement from "./InvitationManagement"
 import UserAdministration from "./UserAdministration"
 import AuthorizationManagement from "./AuthorizationManagement"
-import EmailTemplateManagement from "./EmailTemplateManagement" // Integration line: Email
+import EmailTemplateManagement from "./EmailTemplateManagement"
 import "./css/AdminContent.css"
+import { EMAILSERVICE_INTEGRATION } from "../../config"
 
 const AdminContent = () => {
     const { hasAuthorization } = useAuth()
@@ -16,7 +17,7 @@ const AdminContent = () => {
         { name: "Invitations", authorization: "INVITATION_MANAGEMENT", component: <InvitationManagement /> },
         { name: "Users", authorization: "USER_MANAGEMENT", component: <UserAdministration /> },
         { name: "Authorizations", authorization: "AUTHORIZATION_MANAGEMENT", component: <AuthorizationManagement /> },
-        { name: "Email Templates", authorization: "EMAIL_TEMPLATE_MANAGEMENT", component: <EmailTemplateManagement /> } // Integration line: Email
+        ...(EMAILSERVICE_INTEGRATION ? [{ name: "Email Templates", authorization: "EMAIL_TEMPLATE_MANAGEMENT", component: <EmailTemplateManagement /> }] : [])
     ].filter(section => hasAuthorization(section.authorization))
 
     if(sections.length === 0)

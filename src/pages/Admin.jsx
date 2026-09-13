@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import Toolbar from "../components/Toolbar"
 import AdminContent from "../components/authservice/AdminContent"

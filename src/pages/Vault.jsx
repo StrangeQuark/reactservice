@@ -1,17 +1,17 @@
-// Integration file: Vault
+
 
 import Toolbar from '../components/Toolbar'
 import VaultList from '../components/vaultservice/VaultList'
-import { RequireAuth } from '../context/AuthContext' // Integration line: Auth
+import { RequireAuth } from '../context/AuthContext'
 
 const Vault = () => {
     return(
         <>
-        <RequireAuth> {/* Integration line: Auth */}
+        <RequireAuth> {}
             <Toolbar />
 
             <VaultList />
-        </RequireAuth> {/* Integration line: Auth */}
+        </RequireAuth> {}
         </>
     )
 }

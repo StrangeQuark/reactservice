@@ -21,6 +21,13 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    env: {
+      VITE_AUTHSERVICE_INTEGRATION: "true",
+      VITE_EMAILSERVICE_INTEGRATION: "true",
+      VITE_FILESERVICE_INTEGRATION: "true",
+      VITE_VAULTSERVICE_INTEGRATION: "true",
+      VITE_GATEWAYSERVICE_INTEGRATION: "true"
+    },
     setupFiles: "./src/test/setupTests.js", // optional: like jest setup
     include: ["src/test/**/*.{test,spec}.{js,jsx}"]
   },

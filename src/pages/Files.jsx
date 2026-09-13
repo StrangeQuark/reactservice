@@ -1,17 +1,17 @@
-// Integration file: File
+
 
 import Toolbar from '../components/Toolbar'
 import FilesList from '../components/fileservice/FilesList'
-import { RequireAuth } from '../context/AuthContext' // Integration line: Auth
+import { RequireAuth } from '../context/AuthContext'
 
 const Files = () => {
     return(
         <>
-        <RequireAuth> {/* Integration line: Auth */}
+        <RequireAuth> {}
             <Toolbar />
 
             <FilesList />
-        </RequireAuth> {/* Integration line: Auth */}
+        </RequireAuth> {}
         </>
     )
 }

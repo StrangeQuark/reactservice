@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -23,7 +23,7 @@ describe("UserLoginForm component", () => {
     expect(screen.getByLabelText("Username:")).toBeInTheDocument()
     expect(screen.getByLabelText("Password:")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "LOGIN" })).toBeInTheDocument()
-    expect(screen.getByText("Forgot password?")).toHaveAttribute("href", "/password-reset") // Integration line: Email
+    expect(screen.getByText("Forgot password?")).toHaveAttribute("href", "/password-reset")
     expect(screen.getByText("Sign up")).toHaveAttribute("href", "/register")
   })
 
