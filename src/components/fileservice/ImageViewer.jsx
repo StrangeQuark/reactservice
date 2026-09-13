@@ -1,19 +1,18 @@
-// Integration file: File
+
 
 import "./css/ImageViewer.css"
 import { useEffect, useState } from "react"
-import { useAuth } from "../../context/AuthContext" // Integration line: Auth
+import { getAuthHeaders } from "../../config"
+import { useAuth } from "../../context/AuthContext"
 
 const ImageViewer = ({ imageUrl, onClose, token }) => {
     const [blobUrl, setBlobUrl] = useState(null)
-    const { getAccessToken } = useAuth() // Integration line: Auth
+    const { getAccessToken } = useAuth()
 
     useEffect(() => {
         const loadImage = async () => {
             const response = await fetch(imageUrl, {
-                headers: {
-                    Authorization: "Bearer " + getAccessToken() // Integration line: Auth
-                }
+                headers: getAuthHeaders(getAccessToken())
             })
             const blob = await response.blob()
             setBlobUrl(URL.createObjectURL(blob))

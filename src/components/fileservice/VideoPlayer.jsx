@@ -1,4 +1,4 @@
-// Integration file: File
+
 
 import "./css/VideoPlayer.css"
 

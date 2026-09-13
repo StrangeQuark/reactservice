@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import { useState } from 'react'
 import "./css/SettingsNavigation.css"

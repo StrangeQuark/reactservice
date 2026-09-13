@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"

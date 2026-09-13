@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import { useState } from 'react'
 import SettingsNavigation from './SettingsNavigation'

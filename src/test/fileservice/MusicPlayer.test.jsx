@@ -1,17 +1,17 @@
-// Integration file: File
+
 
 import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import MusicPlayer from "../../components/fileservice/MusicPlayer"
 
-// Mock useAuth - Integration function start: Auth
+// Mock useAuth
 vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: vi.fn(() => "mock-token"),
   }),
 }))
-// Integration function end: Auth
+
 describe("MusicPlayer", () => {
   let mockBlobUrl
   

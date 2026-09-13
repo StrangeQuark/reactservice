@@ -1,19 +1,18 @@
-// Integration file: File
+
 
 import "./css/MusicPlayer.css"
 import { useEffect, useState } from "react"
-import { useAuth } from "../../context/AuthContext" // Integration line: Auth
+import { getAuthHeaders } from "../../config"
+import { useAuth } from "../../context/AuthContext"
 
 const MusicPlayer = ({ audioUrl, onClose, token }) => {
     const [blobUrl, setBlobUrl] = useState(null)
-    const { getAccessToken } = useAuth() // Integration line: Auth
+    const { getAccessToken } = useAuth()
 
     useEffect(() => {
         const loadAudio = async () => {
             const response = await fetch(audioUrl, {
-                headers: {
-                    Authorization: "Bearer " + getAccessToken() // Integration line: Auth
-                }
+                headers: getAuthHeaders(getAccessToken())
             })
             const blob = await response.blob()
             setBlobUrl(URL.createObjectURL(blob))

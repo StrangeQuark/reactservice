@@ -1,10 +1,21 @@
 const {
-  VITE_AUTH_API_BASE_URL, // Integration line: Auth
-  VITE_EMAIL_API_BASE_URL, // Integration line: Email
-  VITE_FILE_API_BASE_URL, // Integration line: File
-  VITE_VAULT_API_BASE_URL, // Integration line: Vault
-  VITE_GATEWAY_BASE_URL, // Integration line: Gateway
+  VITE_AUTH_API_BASE_URL,
+  VITE_EMAIL_API_BASE_URL,
+  VITE_FILE_API_BASE_URL,
+  VITE_VAULT_API_BASE_URL,
+  VITE_GATEWAY_BASE_URL,
+  VITE_AUTHSERVICE_INTEGRATION,
+  VITE_EMAILSERVICE_INTEGRATION,
+  VITE_FILESERVICE_INTEGRATION,
+  VITE_VAULTSERVICE_INTEGRATION,
+  VITE_GATEWAYSERVICE_INTEGRATION,
 } = import.meta.env;
+
+export const AUTHSERVICE_INTEGRATION = VITE_AUTHSERVICE_INTEGRATION === "true"
+export const EMAILSERVICE_INTEGRATION = VITE_EMAILSERVICE_INTEGRATION === "true"
+export const FILESERVICE_INTEGRATION = VITE_FILESERVICE_INTEGRATION === "true"
+export const VAULTSERVICE_INTEGRATION = VITE_VAULTSERVICE_INTEGRATION === "true"
+export const GATEWAYSERVICE_INTEGRATION = VITE_GATEWAYSERVICE_INTEGRATION === "true"
 
 const isLocalBrowser = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
@@ -13,19 +24,19 @@ function adaptBaseUrl(url) {
     return url
 
   return url
-            .replace(/auth-service(:\d+)?/, "localhost$1") // Integration line: Auth
-            .replace(/email-service(:\d+)?/, "localhost$1") // Integration line: Email
-            .replace(/file-service(:\d+)?/, "localhost$1") // Integration line: File
-            .replace(/vault-service(:\d+)?/, "localhost$1") // Integration line: Vault
-            .replace(/gateway-service(:\d+)?/, "localhost$1") // Integration line: Gateway
+            .replace(/auth-service(:\d+)?/, "localhost$1")
+            .replace(/email-service(:\d+)?/, "localhost$1")
+            .replace(/file-service(:\d+)?/, "localhost$1")
+            .replace(/vault-service(:\d+)?/, "localhost$1")
+            .replace(/gateway-service(:\d+)?/, "localhost$1")
 }
 
-export const AUTH_API_BASE_URL = adaptBaseUrl(VITE_AUTH_API_BASE_URL) // Integration line: Auth
-export const EMAIL_API_BASE_URL = adaptBaseUrl(VITE_EMAIL_API_BASE_URL) // Integration line: Email
-export const FILE_API_BASE_URL = adaptBaseUrl(VITE_FILE_API_BASE_URL) // Integration line: File
-export const VAULT_API_BASE_URL = adaptBaseUrl(VITE_VAULT_API_BASE_URL) // Integration line: Vault
-export const GATEWAY_BASE_URL = adaptBaseUrl(VITE_GATEWAY_BASE_URL) // Integration line: Gateway
-// Integration function start: Auth
+export const AUTH_API_BASE_URL = adaptBaseUrl(VITE_AUTH_API_BASE_URL)
+export const EMAIL_API_BASE_URL = adaptBaseUrl(VITE_EMAIL_API_BASE_URL)
+export const FILE_API_BASE_URL = adaptBaseUrl(VITE_FILE_API_BASE_URL)
+export const VAULT_API_BASE_URL = adaptBaseUrl(VITE_VAULT_API_BASE_URL)
+export const GATEWAY_BASE_URL = adaptBaseUrl(VITE_GATEWAY_BASE_URL)
+
 let AUTH_ENDPOINTS = {
   REGISTER: `${AUTH_API_BASE_URL}/api/auth/register`,
   INVITE_ONLY: `${AUTH_API_BASE_URL}/api/auth/invitation/invite-only`,
@@ -54,8 +65,7 @@ let AUTH_ENDPOINTS = {
   REMOVE_ROLE_AUTHORIZATION: `${AUTH_API_BASE_URL}/api/auth/role-authorization/remove`,
   GET_ALL_ROLES: `${AUTH_API_BASE_URL}/api/auth/role-authorization/get-all-roles`
 }
-// Integration function end: Auth
-// Integration function start: Email
+
 let EMAIL_ENDPOINTS = {
   CONFIRM_TOKEN: `${EMAIL_API_BASE_URL}/api/email/confirm-token?token=`,
   ENABLE_USER: `${EMAIL_API_BASE_URL}/api/email/enable-user?token=`,
@@ -66,8 +76,7 @@ let EMAIL_ENDPOINTS = {
   UPDATE_TEMPLATE_EMAIL: `${EMAIL_API_BASE_URL}/api/email/update-template-email`,
   DELETE_TEMPLATE_EMAIL: `${EMAIL_API_BASE_URL}/api/email/delete-template-email`
 }
-// Integration function end: Email
-// Integration function start: File
+
 let FILE_ENDPOINTS = {
   GET_ALL: `${FILE_API_BASE_URL}/api/file/get-all`,
   GET_ALL_COLLECTIONS: `${FILE_API_BASE_URL}/api/file/get-all-collections`,
@@ -85,8 +94,7 @@ let FILE_ENDPOINTS = {
   ADD_USER_TO_COLLECTION: `${FILE_API_BASE_URL}/api/file/add-user-to-collection`,
   DELETE_USER_FROM_COLLECTION: `${FILE_API_BASE_URL}/api/file/delete-user-from-collection`
 }
-// Integration function end: File
-// Integration function start: Vault
+
 let VAULT_ENDPOINTS = {
   GET_ALL_SERVICES: `${VAULT_API_BASE_URL}/api/vault/get-all-services`,
   GET_SERVICE: `${VAULT_API_BASE_URL}/api/vault/get-service`,
@@ -109,7 +117,6 @@ let VAULT_ENDPOINTS = {
   GET_ALL_ROLES: `${VAULT_API_BASE_URL}/api/vault/get-all-roles`,
   UPDATE_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/update-user-role`
 }
-// Integration function end: Vault
 
 const replaceBaseUrl = (endpoints, newBase) => {
   return Object.fromEntries(
@@ -119,18 +126,28 @@ const replaceBaseUrl = (endpoints, newBase) => {
     })
   )
 }
-// Integration function start: Gateway
-if(GATEWAY_BASE_URL) {
-  AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Auth
-  EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Email
-  FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: File
-  VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL) // Integration line: Vault
+if(GATEWAYSERVICE_INTEGRATION && GATEWAY_BASE_URL) {
+  AUTH_ENDPOINTS = replaceBaseUrl(AUTH_ENDPOINTS, GATEWAY_BASE_URL)
+  EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL)
+  FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL)
+  VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL)
 }
-// Integration function end: Gateway
+
+export const getAuthHeaders = (token) => {
+  if(!AUTHSERVICE_INTEGRATION)
+    return {}
+
+  return { Authorization: "Bearer " + token }
+}
+
+export const setAuthHeader = (request, token) => {
+  if(AUTHSERVICE_INTEGRATION)
+    request.setRequestHeader("Authorization", "Bearer " + token)
+}
 
 export {
-  AUTH_ENDPOINTS,// Integration line: Auth
-  EMAIL_ENDPOINTS,// Integration line: Email
-  FILE_ENDPOINTS,// Integration line: File
-  VAULT_ENDPOINTS,// Integration line: Vault
+  AUTH_ENDPOINTS,
+  EMAIL_ENDPOINTS,
+  FILE_ENDPOINTS,
+  VAULT_ENDPOINTS,
 }

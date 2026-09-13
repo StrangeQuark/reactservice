@@ -1,17 +1,17 @@
-// Integration file: File
+
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { vi } from "vitest"
 import FilesList from "../../components/fileservice/FilesList"
 
-// Mock AuthContext - Integration function start: Auth
+// Mock AuthContext
 vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: () => "mock-token"
   })
 }))
-// Integration function end: Auth
+
 describe("FilesList", () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -64,10 +64,10 @@ describe("FilesList", () => {
       .mockResolvedValueOnce({
         json: async () => ["song.mp3", "movie.mp4"],
       })
-      // role fetch - Integration function start: Auth
+      // role fetch
       .mockResolvedValueOnce({
         json: async () => "OWNER",
-      }) // Integration function end: Auth
+      })
 
     render(<FilesList />)
 
@@ -99,9 +99,9 @@ describe("FilesList", () => {
       .mockResolvedValueOnce({
         json: async () => ["test.txt"],
       })
-      .mockResolvedValueOnce({ // Integration function start: Auth
+      .mockResolvedValueOnce({
         json: async () => "MANAGER",
-      }) // Integration function end: Auth
+      })
 
     render(<FilesList />)
 

@@ -1,15 +1,15 @@
-// Integration file: File
+
 
 import { useEffect, useRef, useState } from "react"
 import VideoPlayer from "./VideoPlayer"
 import ImageViewer from "./ImageViewer"
 import MusicPlayer from "./MusicPlayer"
 import "./css/FilesList.css"
-import { FILE_ENDPOINTS } from "../../config"
-import { useAuth } from "../../context/AuthContext" // Integration line: Auth
+import { AUTHSERVICE_INTEGRATION, FILE_ENDPOINTS, getAuthHeaders, setAuthHeader } from "../../config"
+import { useAuth } from "../../context/AuthContext"
 import InputPopup from "../InputPopup"
 import { FaCog } from "react-icons/fa"
-import UserManagementPopup from "../authservice/UserManagementPopup" // Integration line: Auth
+import UserManagementPopup from "../authservice/UserManagementPopup"
 
 const FilesList = () => {
     const [transferProgress, setTransferProgress] = useState(0)
@@ -25,9 +25,9 @@ const FilesList = () => {
     const [selectedAudioFile, setSelectedAudioFile] = useState(null)
     const [popupType, setPopupType] = useState("")
     const [displayPopout, setDisplayPopout] = useState(false)
-    const [currentUserRole, setCurrentUserRole] = useState(null) // Integration line: Auth
+    const [currentUserRole, setCurrentUserRole] = useState(AUTHSERVICE_INTEGRATION ? null : "OWNER")
     const fileInputRef = useRef(null)
-    const { getAccessToken } = useAuth() // Integration line: Auth
+    const { getAccessToken } = useAuth()
     
 
     const videoExtensions = ["mp4", "webm", "ogg"]
@@ -54,7 +54,7 @@ const FilesList = () => {
         const response = await fetch(FILE_ENDPOINTS.GET_ALL_COLLECTIONS, {
             method: "GET",
             headers: {
-                Authorization: "Bearer " + getAccessToken() // Integration line: Auth
+                ...getAuthHeaders(getAccessToken())
             }
         })
         const data = await response.json()
@@ -66,7 +66,7 @@ const FilesList = () => {
         const response = await fetch(FILE_ENDPOINTS.NEW_COLLECTION, {
             method: "POST",
             headers: {
-                Authorization: "Bearer " + getAccessToken(), // Integration line: Auth
+                ...getAuthHeaders(getAccessToken()),
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ collectionName })
@@ -87,11 +87,13 @@ const FilesList = () => {
         fetchCollections()
         return true
     }
-    // Integration function start: Auth
     const getCurrentUserRole = async (collectionName) => {
+        if(!AUTHSERVICE_INTEGRATION)
+            return
+
         const response = await fetch(FILE_ENDPOINTS.GET_CURRENT_USER_ROLE, {
             method: "POST",
-            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" },
+            headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ collectionName })
         })
 
@@ -104,7 +106,7 @@ const FilesList = () => {
         const response = await fetch(FILE_ENDPOINTS.GET_USERS_BY_COLLECTION,{
             method: "POST",
             headers: { 
-                Authorization: "Bearer " + getAccessToken(),
+                ...getAuthHeaders(getAccessToken()),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ collectionName: selectedCollection.name })
@@ -117,7 +119,7 @@ const FilesList = () => {
 
     const getAllRoles = async () => {
         const response = await fetch(`${FILE_ENDPOINTS.GET_ALL_ROLES}`, {
-            headers: { Authorization: "Bearer " + getAccessToken() }
+            headers: { ...getAuthHeaders(getAccessToken()) }
         })
 
         const data = await response.json()
@@ -135,7 +137,7 @@ const FilesList = () => {
         const response = await fetch(`${FILE_ENDPOINTS.UPDATE_USER_ROLE}`, {
             method: "POST",
             headers: { 
-                Authorization: "Bearer " + getAccessToken(),
+                ...getAuthHeaders(getAccessToken()),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(request)
@@ -160,7 +162,7 @@ const FilesList = () => {
         const response = await fetch(`${FILE_ENDPOINTS.ADD_USER_TO_COLLECTION}`, {
             method: "POST",
             headers: { 
-                Authorization: "Bearer " + getAccessToken(),
+                ...getAuthHeaders(getAccessToken()),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(request)
@@ -185,7 +187,7 @@ const FilesList = () => {
         const response = await fetch(`${FILE_ENDPOINTS.DELETE_USER_FROM_COLLECTION}`, {
             method: "POST",
             headers: { 
-                Authorization: "Bearer " + getAccessToken(),
+                ...getAuthHeaders(getAccessToken()),
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(request)
@@ -199,13 +201,13 @@ const FilesList = () => {
 
         loadUsers()
         return true
-    }// Integration function end: Auth
+    }
 
     const fetchFiles = async (collectionName) => {
         try {
             const response = await fetch(FILE_ENDPOINTS.GET_ALL, {
                 method: "POST",
-                headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+                headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
                 body: JSON.stringify({ collectionName })
             })
             const data = await response.json()
@@ -218,7 +220,7 @@ const FilesList = () => {
     const handleCollectionSelect = (collection) => {
         setSelectedCollection(collection)
         fetchFiles(collection.name)
-        getCurrentUserRole(collection.name) // Integration line: Auth
+        getCurrentUserRole(collection.name)
     }
 
     const handleDownload = async (fileName) => {
@@ -229,7 +231,7 @@ const FilesList = () => {
         )
         xhr.responseType = "blob"
 
-        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
+        setAuthHeader(xhr, getAccessToken())
         xhr.setRequestHeader("Content-Type", "application/json")
 
         setIsTransferring(true)
@@ -279,7 +281,7 @@ const FilesList = () => {
         )
         xhr.responseType = "blob"
 
-        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
+        setAuthHeader(xhr, getAccessToken())
         xhr.setRequestHeader("Content-Type", "application/json")
 
         setIsTransferring(true)
@@ -325,7 +327,7 @@ const FilesList = () => {
         try {
             const response = await fetch(FILE_ENDPOINTS.DELETE, {
                 method: "DELETE",
-                headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+                headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
                 body: JSON.stringify({ collectionName: selectedCollection.name, fileName })
             })
 
@@ -361,7 +363,7 @@ const FilesList = () => {
         const xhr = new XMLHttpRequest()
         xhr.open("POST", FILE_ENDPOINTS.UPLOAD)
 
-        xhr.setRequestHeader("Authorization", "Bearer " + getAccessToken()) // Integration line: Auth
+        setAuthHeader(xhr, getAccessToken())
 
         xhr.upload.onprogress = (event) => {
             if (event.lengthComputable) {
@@ -401,7 +403,7 @@ const FilesList = () => {
 
         const response = await fetch(FILE_ENDPOINTS.DELETE_COLLECTION, {
             method: "DELETE",
-            headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" }, // Integration line: Auth
+            headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ collectionName: selectedCollection.name })
         })
 
@@ -480,13 +482,13 @@ const FilesList = () => {
                             <h2>{selectedCollection.name}</h2>
                             <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden-input" />
                             <div className="files-list-right-div">
-                                {(currentUserRole !== "READ") && ( // Integration line: Auth
+                                {(currentUserRole !== "READ") && (
                                     <>
                                         <button onClick={() => handleDownloadAll()} className="file-button">Download all</button>
                                         <button onClick={openFilePicker} className="file-button">Upload</button>
                                     </>
-                                )} {/* Integration line: Auth */}
-                                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && ( // Integration line: Auth
+                                )}
+                                {(currentUserRole === "OWNER" || currentUserRole === "MANAGER") && (
                                     <div className="cog-wrapper">
                                         {selectedCollection && (
                                             <FaCog data-testid="cog-icon" onClick={() => setDisplayPopout(!displayPopout)}/>
@@ -494,25 +496,25 @@ const FilesList = () => {
 
                                         {displayPopout && (
                                             <div id="file-popout-container" className="file-popout-container">
-                                                {/* Integration function start: Auth */}
-                                                <button onClick={() => { 
+                                                {AUTHSERVICE_INTEGRATION && <button onClick={() => {
                                                         setPopupType("user-management") 
                                                         setDisplayPopout(false) 
                                                     }}>
                                                     Manage Users
                                                 </button>
-                                                {currentUserRole === "OWNER" && ( // Integration function end: Auth
+                                                }
+                                                {currentUserRole === "OWNER" && (
                                                     <button onClick={() => {
                                                         deleteCollection()
                                                         setDisplayPopout(false)
                                                     }}>
                                                     Delete Collection
                                                     </button>
-                                                )}{/* Integration line: Auth */}
+                                                )}
                                             </div>
                                         )}
                                     </div>
-                                )}{/* Integration line: Auth */}
+                                )}
                             </div>
                         </div>
 
@@ -567,8 +569,7 @@ const FilesList = () => {
                     />
                 )}
 
-                {/* User management popup - Integration function start: Auth*/}
-                {popupType === "user-management" && (
+                {AUTHSERVICE_INTEGRATION && popupType === "user-management" && (
                     <UserManagementPopup
                         onClose={() => setPopupType(null)}
                         loadUsers={() => loadUsers()}
@@ -577,7 +578,7 @@ const FilesList = () => {
                         getAllRoles={() => getAllRoles()}
                         updateUserRole={(username, newRole) => updateUserRole(username, newRole)}
                     />
-                )}{/* Integration function end: Auth*/}
+                )}
             </div>
         </div>
     )

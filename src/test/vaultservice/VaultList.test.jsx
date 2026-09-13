@@ -1,4 +1,4 @@
-// Integration file: Vault
+
 
 import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -6,13 +6,13 @@ import { vi } from "vitest"
 import VaultList from "../../components/vaultservice/VaultList"
 import { VAULT_ENDPOINTS } from "../../config"
 
-// Mock useAuth - Integration function start: Auth
+// Mock useAuth
 vi.mock("../../context/AuthContext", () => ({
   useAuth: () => ({
     getAccessToken: vi.fn(() => "mock-token"),
   }),
 }))
-// Integration function end: Auth
+
 // Mock window APIs
 global.confirm = vi.fn(() => true)
 global.URL.createObjectURL = vi.fn(() => "blob:mock-url")
@@ -68,7 +68,7 @@ describe("VaultList component", () => {
   test("fetches environments when selecting service", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] }) // services
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // getCurrentUserRole - Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // getCurrentUserRole
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev", "prod"] }) // envs
 
     render(<VaultList />)
@@ -89,7 +89,7 @@ describe("VaultList component", () => {
   test("fetches variables when selecting environment", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({
         ok: true,
@@ -121,10 +121,10 @@ describe("VaultList component", () => {
 
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA", "ServiceB"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockImplementationOnce(() => variablesResponse)
-      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" })
       .mockResolvedValueOnce({ ok: true, json: async () => ["prod"] })
       .mockResolvedValueOnce({ ok: true, json: async () => [{ key: "CURRENT_KEY", value: "current" }] })
 
@@ -150,7 +150,7 @@ describe("VaultList component", () => {
   test("filters variables by search term", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({
         ok: true,
@@ -187,7 +187,7 @@ describe("VaultList component", () => {
   test("filters variables by special characters", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({
         ok: true,
@@ -226,7 +226,7 @@ describe("VaultList component", () => {
 
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, json: async () => vars })
 
@@ -256,7 +256,7 @@ describe("VaultList component", () => {
   test("toggles mask/unmask all", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, json: async () => [{ key: "DB_PASSWORD", value: "secret" }] })
 
@@ -282,7 +282,7 @@ describe("VaultList component", () => {
   test("copies variable to clipboard", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, json: async () => [{ key: "DB_PASSWORD", value: "secret" }] })
 
@@ -310,7 +310,7 @@ describe("VaultList component", () => {
   test("deletes variable after confirm", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, json: async () => [{ key: "DELETE_ME", value: "123" }] })
       .mockResolvedValueOnce({ ok: true, json: async () => ({}) })
@@ -346,7 +346,7 @@ describe("VaultList component", () => {
     expect(screen.getByText(/Create new service/i)).toBeInTheDocument()
   })
 
-  // Integration function start: Auth
+
   test("loads users with an access token", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
@@ -387,12 +387,12 @@ describe("VaultList component", () => {
       { headers: { Authorization: "Bearer mock-token" } }
     )
   })
-  // Integration function end: Auth
+
 
   test("uploads env file", async () => {
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, json: async () => [] }) // vars
       .mockResolvedValueOnce({ ok: true, json: async () => ({}) }) // upload
@@ -421,7 +421,7 @@ describe("VaultList component", () => {
     window.alert = vi.fn()
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => "MANAGER" })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, json: async () => [] })
       .mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ errorMessage: "Environment already contains these variables" }) })
@@ -446,7 +446,7 @@ describe("VaultList component", () => {
     const blob = new Blob(["test content"], { type: "text/plain" })
     fetch
       .mockResolvedValueOnce({ ok: true, json: async () => ["ServiceA"] })
-      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} }) // Integration line: Auth
+      .mockResolvedValueOnce({ ok: true, json: async () => {"MANAGER"} })
       .mockResolvedValueOnce({ ok: true, json: async () => ["dev"] })
       .mockResolvedValueOnce({ ok: true, blob: async () => blob })
 

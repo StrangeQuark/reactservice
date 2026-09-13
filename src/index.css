@@ -31,7 +31,6 @@
   --theme-toggle-moon: #64748b;
   --theme-toggle-moon-muted: #94a3b8;
 }
-
 :root[data-theme="dark"] {
   color-scheme: dark;
   --app-bg: #0f172a;
@@ -161,7 +160,7 @@ input[data-autocompleted] {
     color: var(--app-input-text);
     border: 1px solid var(--app-border);
 }
-/* Integration function start: Auth */
+
 .auth-div {
   border-radius: 20px;
   background-color: #282c34;
@@ -242,4 +241,3 @@ input[data-autocompleted] {
   height: 140px;
   display: flex;
 }
-/* Integration function end: Auth */

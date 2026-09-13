@@ -1,4 +1,4 @@
-// Integration file: Auth
+
 
 import { useEffect, useState } from "react"
 import { FaRegCircleXmark } from "react-icons/fa6"
