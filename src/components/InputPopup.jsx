@@ -1,17 +1,13 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import "./css/InputPopup.css"
 
 const InputPopup = ({ label, inputs, onSubmit, onClose }) => {
-    const [formValues, setFormValues] = useState({})
-
-    useEffect(() => {
-        setFormValues(
-            inputs.reduce((acc, input) => {
-                acc[input.name] = input.defaultValue || ""
-                return acc
-            }, {})
-        )
-    }, [inputs])
+    const [formValues, setFormValues] = useState(
+        inputs.reduce((acc, input) => {
+            acc[input.name] = input.defaultValue || ""
+            return acc
+        }, {})
+    )
 
     const handleChange = (name, value) => {
         setFormValues((prev) => ({ ...prev, [name]: value }))
