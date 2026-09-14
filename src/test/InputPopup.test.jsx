@@ -49,6 +49,26 @@ describe("InputPopup component", () => {
     expect(emailInput.value).toBe("test@example.com")
   })
 
+  test("replaces default values on change", () => {
+    const inputsWithDefaults = [
+      { name: "email", labelValue: "Email", defaultValue: "test@example.com", placeholder: "Enter email" },
+    ]
+
+    render(
+      <InputPopup
+        label="Change Default Test"
+        inputs={inputsWithDefaults}
+        onSubmit={mockOnSubmit}
+        onClose={mockOnClose}
+      />
+    )
+
+    const emailInput = screen.getByPlaceholderText("Enter email")
+    fireEvent.change(emailInput, { target: { value: "new@example.com" } })
+
+    expect(emailInput.value).toBe("new@example.com")
+  })
+
   test("updates form values on change", () => {
     render(
       <InputPopup
