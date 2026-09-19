@@ -1,5 +1,6 @@
 services:
   react-service:
+    image: ${REACT_SERVICE_IMAGE:-reactservice:local}
     build:
       context: .
       args:
