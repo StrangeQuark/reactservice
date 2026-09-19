@@ -5,6 +5,7 @@ pipeline {
         VAULT_URL = credentials('VAULT_URL')
         CICD_TOKEN = credentials('REACT_CICD_TOKEN')
         VAULTSERVICE_ENABLED = credentials('VAULTSERVICE_ENABLED')
+        KUBERNETES_CICD_TOKEN = credentials('KUBERNETES_CICD_TOKEN')
     }
 
     stages {
@@ -32,6 +33,36 @@ pipeline {
         stage("Deploy & Health Check") {
             steps {
                 script {
+                    def kubernetesEnabled = env.KUBERNETES_ENABLED == "true"
+
+                    if(kubernetesEnabled) {
+                        def imageRepository = env.SERVICE_IMAGE_REPOSITORY
+                        def kubernetesServiceUrl = env.KUBERNETESERVICE_URL
+
+                        if(imageRepository.isEmpty() || kubernetesServiceUrl.isEmpty())
+                            error("ReactService Kubernetes deployment configuration is incomplete")
+
+                        def image = imageRepository + ":" + env.BUILD_NUMBER
+
+                        withEnv([
+                            "REACT_SERVICE_IMAGE=" + image,
+                            "KUBERNETESERVICE_URL=" + kubernetesServiceUrl
+                        ]) {
+                            sh "docker compose --project-name reactservice --env-file reactservice.env build react-service"
+                            sh "docker tag reactservice-react-service " + image
+                            sh "docker push " + image
+                            sh '''
+                                curl --fail-with-body -X POST \\
+                                    -H "X-CICD-TOKEN: $KUBERNETES_CICD_TOKEN" \\
+                                    -F "serviceName=reactservice" \\
+                                    -F "image=$REACT_SERVICE_IMAGE" \\
+                                    -F "environmentFile=@reactservice.env" \\
+                                    "$KUBERNETESERVICE_URL/api/kubernetes/deploy"
+                            '''
+                        }
+                        return
+                    }
+
                     try {
                         sh "docker compose --env-file reactservice.env up --build -d"
 

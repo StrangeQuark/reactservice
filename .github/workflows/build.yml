@@ -11,6 +11,10 @@ jobs:
       VAULT_URL: ${{ secrets.VAULT_URL }}
       CICD_TOKEN: ${{ secrets.REACT_CICD_TOKEN }}
       VAULTSERVICE_ENABLED: ${{ secrets.VAULTSERVICE_ENABLED }}
+      KUBERNETES_CICD_TOKEN: ${{ secrets.KUBERNETES_CICD_TOKEN }}
+      KUBERNETES_ENABLED: ${{ vars.KUBERNETES_ENABLED }}
+      SERVICE_IMAGE_REPOSITORY: ${{ vars.SERVICE_IMAGE_REPOSITORY }}
+      KUBERNETESERVICE_URL: ${{ vars.KUBERNETESERVICE_URL }}
 
     steps:
       - name: Checkout repository
@@ -42,6 +46,32 @@ jobs:
       - name: Deploy & Health Check
         run: |
           set -e
+
+          get_env_value() {
+            grep "^$1=" reactservice.env | cut -d '=' -f2-
+          }
+
+          if [ "$KUBERNETES_ENABLED" = "true" ]; then
+            if [ -z "$SERVICE_IMAGE_REPOSITORY" ] || [ -z "$KUBERNETESERVICE_URL" ]; then
+              echo "ReactService Kubernetes deployment configuration is incomplete"
+              exit 1
+            fi
+
+            REACT_SERVICE_IMAGE="$SERVICE_IMAGE_REPOSITORY:$GITHUB_SHA"
+
+            docker compose --project-name reactservice --env-file reactservice.env build react-service
+            docker tag reactservice-react-service "$REACT_SERVICE_IMAGE"
+            docker push "$REACT_SERVICE_IMAGE"
+
+            curl --fail-with-body -X POST \
+              -H "X-CICD-TOKEN: $KUBERNETES_CICD_TOKEN" \
+              -F "serviceName=reactservice" \
+              -F "image=$REACT_SERVICE_IMAGE" \
+              -F "environmentFile=@reactservice.env" \
+              "$KUBERNETESERVICE_URL/api/kubernetes/deploy"
+
+            exit 0
+          fi
 
           docker compose --env-file reactservice.env up --build -d
 
