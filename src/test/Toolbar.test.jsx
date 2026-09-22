@@ -87,6 +87,19 @@ describe("Toolbar component", () => {
     expect(screen.getByText("Admin")).toBeInTheDocument()
   })
 
+  test("shows VPN navigation for VPN API access", () => {
+    useAuth.mockReturnValue({
+      isLoggedIn: true,
+      username: "testuser",
+      logout: vi.fn(),
+      hasAuthorization: authorization => authorization === "VPN_API_ACCESS"
+    })
+
+    render(<Toolbar />)
+
+    expect(screen.getByTestId("vpn-nav-link")).toBeInTheDocument()
+  })
+
   test("uses the stored theme on load", () => {
     window.localStorage.setItem("reactservice-theme", "dark")
     useAuth.mockReturnValue({ isLoggedIn: false })

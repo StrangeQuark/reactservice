@@ -6,8 +6,9 @@ import InvitationManagement from "./InvitationManagement"
 import UserAdministration from "./UserAdministration"
 import AuthorizationManagement from "./AuthorizationManagement"
 import EmailTemplateManagement from "./EmailTemplateManagement"
+import VpnAdministration from "../vpnservice/VpnAdministration"
 import "./css/AdminContent.css"
-import { EMAILSERVICE_INTEGRATION } from "../../config"
+import { EMAILSERVICE_INTEGRATION, VPNSERVICE_INTEGRATION } from "../../config"
 
 const AdminContent = () => {
     const { hasAuthorization } = useAuth()
@@ -17,7 +18,8 @@ const AdminContent = () => {
         { name: "Invitations", authorization: "INVITATION_MANAGEMENT", component: <InvitationManagement /> },
         { name: "Users", authorization: "USER_MANAGEMENT", component: <UserAdministration /> },
         { name: "Authorizations", authorization: "AUTHORIZATION_MANAGEMENT", component: <AuthorizationManagement /> },
-        ...(EMAILSERVICE_INTEGRATION ? [{ name: "Email Templates", authorization: "EMAIL_TEMPLATE_MANAGEMENT", component: <EmailTemplateManagement /> }] : [])
+        ...(EMAILSERVICE_INTEGRATION ? [{ name: "Email Templates", authorization: "EMAIL_TEMPLATE_MANAGEMENT", component: <EmailTemplateManagement /> }] : []),
+        ...(VPNSERVICE_INTEGRATION ? [{ name: "VPN Devices", authorization: "VPN_MANAGEMENT", component: <VpnAdministration /> }] : [])
     ].filter(section => hasAuthorization(section.authorization))
 
     if(sections.length === 0)

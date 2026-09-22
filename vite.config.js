@@ -26,7 +26,9 @@ export default defineConfig({
       VITE_EMAILSERVICE_INTEGRATION: "true",
       VITE_FILESERVICE_INTEGRATION: "true",
       VITE_VAULTSERVICE_INTEGRATION: "true",
-      VITE_GATEWAYSERVICE_INTEGRATION: "true"
+      VITE_GATEWAYSERVICE_INTEGRATION: "true",
+      VITE_VPNSERVICE_INTEGRATION: "true",
+      VITE_VPN_API_BASE_URL: "http://vpn-service:6040"
     },
     setupFiles: "./src/test/setupTests.js", // optional: like jest setup
     include: ["src/test/**/*.{test,spec}.{js,jsx}"]
