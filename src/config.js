@@ -9,6 +9,7 @@ const {
   VITE_FILESERVICE_INTEGRATION,
   VITE_VAULTSERVICE_INTEGRATION,
   VITE_GATEWAYSERVICE_INTEGRATION,
+  VITE_VPNROUTER_INTEGRATION,
 } = import.meta.env;
 
 export const AUTHSERVICE_INTEGRATION = VITE_AUTHSERVICE_INTEGRATION === "true"
@@ -16,11 +17,19 @@ export const EMAILSERVICE_INTEGRATION = VITE_EMAILSERVICE_INTEGRATION === "true"
 export const FILESERVICE_INTEGRATION = VITE_FILESERVICE_INTEGRATION === "true"
 export const VAULTSERVICE_INTEGRATION = VITE_VAULTSERVICE_INTEGRATION === "true"
 export const GATEWAYSERVICE_INTEGRATION = VITE_GATEWAYSERVICE_INTEGRATION === "true"
+export const VPNROUTER_INTEGRATION = VITE_VPNROUTER_INTEGRATION === "true"
 
 const isLocalBrowser = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+const isVpnRouterBrowser = VPNROUTER_INTEGRATION && !isLocalBrowser && window.location.port === "";
 
 function adaptBaseUrl(url) {
-  if (!url || !isLocalBrowser)
+  if(!url)
+    return url
+
+  if(isVpnRouterBrowser)
+    return window.location.origin
+
+  if(!isLocalBrowser)
     return url
 
   return url
