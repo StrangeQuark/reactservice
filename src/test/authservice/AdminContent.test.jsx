@@ -10,6 +10,7 @@ vi.mock("../../components/authservice/InvitationManagement", () => ({ default: (
 vi.mock("../../components/authservice/UserAdministration", () => ({ default: () => <div>Users content</div> }))
 vi.mock("../../components/authservice/AuthorizationManagement", () => ({ default: () => <div>Authorizations content</div> }))
 vi.mock("../../components/authservice/EmailTemplateManagement", () => ({ default: () => <div>Email templates content</div> }))
+vi.mock("../../components/vpnservice/VpnAdministration", () => ({ default: () => <div>VPN devices content</div> }))
 
 import { useAuth } from "../../context/AuthContext"
 
@@ -39,5 +40,14 @@ describe("AdminContent component", () => {
     render(<AdminContent />)
 
     expect(screen.getByText("Admin access is required")).toBeInTheDocument()
+  })
+
+  test("shows VPN devices for VPN management authorization", () => {
+    useAuth.mockReturnValue({ hasAuthorization: authorization => authorization === "VPN_MANAGEMENT" })
+
+    render(<AdminContent />)
+
+    expect(screen.getByText("VPN Devices")).toBeInTheDocument()
+    expect(screen.getByText("VPN devices content")).toBeInTheDocument()
   })
 })

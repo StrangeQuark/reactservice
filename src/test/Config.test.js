@@ -13,6 +13,8 @@ const loadConfig = async (gatewayBaseUrl, gatewayIntegration = "true", authInteg
   vi.stubEnv("VITE_VAULTSERVICE_INTEGRATION", "true")
   vi.stubEnv("VITE_GATEWAYSERVICE_INTEGRATION", gatewayIntegration)
   vi.stubEnv("VITE_VPNROUTER_INTEGRATION", vpnRouterIntegration)
+  vi.stubEnv("VITE_VPNSERVICE_INTEGRATION", "true")
+  vi.stubEnv("VITE_VPN_API_BASE_URL", "http://vpn-service:6040")
 
   return await import("../config")
 }
@@ -24,17 +26,19 @@ afterEach(() => {
 
 describe("config", () => {
   test("uses service URLs when gateway URL is missing", async () => {
-    const { AUTH_ENDPOINTS, FILE_ENDPOINTS } = await loadConfig("", "false")
+    const { AUTH_ENDPOINTS, FILE_ENDPOINTS, VPN_ENDPOINTS } = await loadConfig("", "false")
 
     expect(AUTH_ENDPOINTS.AUTHENTICATE).toBe("http://auth-service:6001/api/auth/authenticate")
     expect(FILE_ENDPOINTS.GET_ALL).toBe("http://file-service:6010/api/file/get-all")
+    expect(VPN_ENDPOINTS.GET_DEVICES).toBe("http://vpn-service:6040/api/vpn/get-devices")
   })
 
   test("uses gateway URL when gateway URL is present", async () => {
-    const { AUTH_ENDPOINTS, FILE_ENDPOINTS } = await loadConfig("http://gateway-service:8080")
+    const { AUTH_ENDPOINTS, FILE_ENDPOINTS, VPN_ENDPOINTS } = await loadConfig("http://gateway-service:8080")
 
     expect(AUTH_ENDPOINTS.AUTHENTICATE).toBe("http://gateway-service:8080/api/auth/authenticate")
     expect(FILE_ENDPOINTS.GET_ALL).toBe("http://gateway-service:8080/api/file/get-all")
+    expect(VPN_ENDPOINTS.GET_DEVICES).toBe("http://gateway-service:8080/api/vpn/get-devices")
   })
 
   test("does not add an authorization header when Authservice is disabled", async () => {
@@ -51,9 +55,10 @@ describe("config", () => {
         port: "",
       },
     })
-    const { AUTH_ENDPOINTS, FILE_ENDPOINTS } = await loadConfig("", "false", "true", "true")
+    const { AUTH_ENDPOINTS, FILE_ENDPOINTS, VPN_ENDPOINTS } = await loadConfig("", "false", "true", "true")
 
     expect(AUTH_ENDPOINTS.AUTHENTICATE).toBe("http://10.8.0.1/api/auth/authenticate")
     expect(FILE_ENDPOINTS.GET_ALL).toBe("http://10.8.0.1/api/file/get-all")
+    expect(VPN_ENDPOINTS.GET_DEVICES).toBe("http://10.8.0.1/api/vpn/get-devices")
   })
 })

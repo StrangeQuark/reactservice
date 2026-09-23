@@ -10,6 +10,8 @@ const {
   VITE_VAULTSERVICE_INTEGRATION,
   VITE_GATEWAYSERVICE_INTEGRATION,
   VITE_VPNROUTER_INTEGRATION,
+  VITE_VPNSERVICE_INTEGRATION,
+  VITE_VPN_API_BASE_URL,
 } = import.meta.env;
 
 export const AUTHSERVICE_INTEGRATION = VITE_AUTHSERVICE_INTEGRATION === "true"
@@ -18,6 +20,7 @@ export const FILESERVICE_INTEGRATION = VITE_FILESERVICE_INTEGRATION === "true"
 export const VAULTSERVICE_INTEGRATION = VITE_VAULTSERVICE_INTEGRATION === "true"
 export const GATEWAYSERVICE_INTEGRATION = VITE_GATEWAYSERVICE_INTEGRATION === "true"
 export const VPNROUTER_INTEGRATION = VITE_VPNROUTER_INTEGRATION === "true"
+export const VPNSERVICE_INTEGRATION = VITE_VPNSERVICE_INTEGRATION === "true"
 
 const isLocalBrowser = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 const isVpnRouterBrowser = VPNROUTER_INTEGRATION && !isLocalBrowser && window.location.port === "";
@@ -37,6 +40,7 @@ function adaptBaseUrl(url) {
             .replace(/email-service(:\d+)?/, "localhost$1")
             .replace(/file-service(:\d+)?/, "localhost$1")
             .replace(/vault-service(:\d+)?/, "localhost$1")
+            .replace(/vpn-service(:\d+)?/, "localhost$1")
             .replace(/gateway-service(:\d+)?/, "localhost$1")
 }
 
@@ -44,6 +48,7 @@ export const AUTH_API_BASE_URL = adaptBaseUrl(VITE_AUTH_API_BASE_URL)
 export const EMAIL_API_BASE_URL = adaptBaseUrl(VITE_EMAIL_API_BASE_URL)
 export const FILE_API_BASE_URL = adaptBaseUrl(VITE_FILE_API_BASE_URL)
 export const VAULT_API_BASE_URL = adaptBaseUrl(VITE_VAULT_API_BASE_URL)
+export const VPN_API_BASE_URL = adaptBaseUrl(VITE_VPN_API_BASE_URL)
 export const GATEWAY_BASE_URL = adaptBaseUrl(VITE_GATEWAY_BASE_URL)
 
 let AUTH_ENDPOINTS = {
@@ -127,6 +132,16 @@ let VAULT_ENDPOINTS = {
   UPDATE_USER_ROLE: `${VAULT_API_BASE_URL}/api/vault/update-user-role`
 }
 
+let VPN_ENDPOINTS = {
+  CREATE_DEVICE: `${VPN_API_BASE_URL}/api/vpn/create-device`,
+  GET_DEVICES: `${VPN_API_BASE_URL}/api/vpn/get-devices`,
+  REVOKE_DEVICE: `${VPN_API_BASE_URL}/api/vpn/revoke-device`,
+  ROTATE_DEVICE: `${VPN_API_BASE_URL}/api/vpn/rotate-device`,
+  GET_ALL_DEVICES: `${VPN_API_BASE_URL}/api/vpn/get-all-devices`,
+  ADMIN_REVOKE_DEVICE: `${VPN_API_BASE_URL}/api/vpn/admin/revoke-device`,
+  REVOKE_USER_DEVICES: `${VPN_API_BASE_URL}/api/vpn/revoke-user-devices`
+}
+
 const replaceBaseUrl = (endpoints, newBase) => {
   return Object.fromEntries(
     Object.entries(endpoints).map(([key, url]) => {
@@ -140,6 +155,7 @@ if(GATEWAYSERVICE_INTEGRATION && GATEWAY_BASE_URL) {
   EMAIL_ENDPOINTS = replaceBaseUrl(EMAIL_ENDPOINTS, GATEWAY_BASE_URL)
   FILE_ENDPOINTS = replaceBaseUrl(FILE_ENDPOINTS, GATEWAY_BASE_URL)
   VAULT_ENDPOINTS = replaceBaseUrl(VAULT_ENDPOINTS, GATEWAY_BASE_URL)
+  VPN_ENDPOINTS = replaceBaseUrl(VPN_ENDPOINTS, GATEWAY_BASE_URL)
 }
 
 export const getAuthHeaders = (token) => {
@@ -159,4 +175,5 @@ export {
   EMAIL_ENDPOINTS,
   FILE_ENDPOINTS,
   VAULT_ENDPOINTS,
+  VPN_ENDPOINTS,
 }

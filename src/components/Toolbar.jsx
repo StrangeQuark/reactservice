@@ -5,7 +5,7 @@ import darkModeLogo from "../res/logo_dark_mode.png"
 import { RiLoginCircleLine } from "react-icons/ri"
 import { MdDarkMode, MdLightMode } from "react-icons/md"
 import { useAuth } from "../context/AuthContext"
-import { AUTHSERVICE_INTEGRATION, FILESERVICE_INTEGRATION, VAULTSERVICE_INTEGRATION } from "../config"
+import { AUTHSERVICE_INTEGRATION, FILESERVICE_INTEGRATION, VAULTSERVICE_INTEGRATION, VPNSERVICE_INTEGRATION } from "../config"
 
 const THEME_STORAGE_KEY = "reactservice-theme"
 
@@ -46,6 +46,8 @@ const Toolbar = () => {
                 <a href="/" data-testid="home-nav-link">Home</a>
                 {FILESERVICE_INTEGRATION && <a href="/files" data-testid="files-nav-link">Files</a>}
                 {VAULTSERVICE_INTEGRATION && <a href="/vault" data-testid="vault-nav-link">Vault</a>}
+                {VPNSERVICE_INTEGRATION && (!AUTHSERVICE_INTEGRATION || hasAuthorization("VPN_API_ACCESS") || hasAuthorization("VPN_MANAGEMENT")) &&
+                <a href="/vpn" data-testid="vpn-nav-link">VPN</a>}
 
                 {/* Mobile dropdown start*/}
                 <button className="center-dropdown-button" onClick={() => setCenterDropdownOpen(!centerDropdownOpen)}>Menu</button>
@@ -54,6 +56,8 @@ const Toolbar = () => {
                     <button onClick={() => { navigateTo("/") }}>Home</button>
                     {FILESERVICE_INTEGRATION && <button onClick={() => { navigateTo("/files") }}>Files</button>}
                     {VAULTSERVICE_INTEGRATION && <button onClick={() => { navigateTo("/vault") }}>Vault</button>}
+                    {VPNSERVICE_INTEGRATION && (!AUTHSERVICE_INTEGRATION || hasAuthorization("VPN_API_ACCESS") || hasAuthorization("VPN_MANAGEMENT")) &&
+                    <button onClick={() => { navigateTo("/vpn") }}>VPN</button>}
                 </div>
                 {/* Mobile dropdown end*/}
             </div>
@@ -89,7 +93,7 @@ const Toolbar = () => {
                             Settings
                         </button>
 
-                        {(hasAuthorization("INVITATION_MANAGEMENT") || hasAuthorization("USER_MANAGEMENT") || hasAuthorization("AUTHORIZATION_MANAGEMENT") || hasAuthorization("EMAIL_TEMPLATE_MANAGEMENT")) &&
+                        {(hasAuthorization("INVITATION_MANAGEMENT") || hasAuthorization("USER_MANAGEMENT") || hasAuthorization("AUTHORIZATION_MANAGEMENT") || hasAuthorization("EMAIL_TEMPLATE_MANAGEMENT") || hasAuthorization("VPN_MANAGEMENT")) &&
                         <button onClick={() => {
                             navigateTo(`/admin`)
                             setDisplayPopout(false)

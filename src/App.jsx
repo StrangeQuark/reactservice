@@ -9,9 +9,10 @@ import Settings from './pages/Settings'
 import Admin from './pages/Admin'
 import Files from './pages/Files'
 import Vault from './pages/Vault'
+import Vpn from './pages/Vpn'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-import { AUTHSERVICE_INTEGRATION, EMAILSERVICE_INTEGRATION, FILESERVICE_INTEGRATION, VAULTSERVICE_INTEGRATION } from './config'
+import { AUTHSERVICE_INTEGRATION, EMAILSERVICE_INTEGRATION, FILESERVICE_INTEGRATION, VAULTSERVICE_INTEGRATION, VPNSERVICE_INTEGRATION } from './config'
 
 const router = createBrowserRouter(
   [
@@ -29,7 +30,8 @@ const router = createBrowserRouter(
       { path: "/confirm-email", element: <ConfirmEmail /> }
     ] : []),
     ...(FILESERVICE_INTEGRATION ? [{ path: "/files", element: <Files /> }] : []),
-    ...(VAULTSERVICE_INTEGRATION ? [{ path: "/vault", element: <Vault /> }] : [])
+    ...(VAULTSERVICE_INTEGRATION ? [{ path: "/vault", element: <Vault /> }] : []),
+    ...(VPNSERVICE_INTEGRATION ? [{ path: "/vpn", element: <Vpn /> }] : [])
   ],
   {
     future: {

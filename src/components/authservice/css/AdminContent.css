@@ -76,6 +76,25 @@
     font: inherit;
 }
 
+.admin-search-label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 22px;
+    font-weight: 600;
+}
+
+.admin-search-label input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid var(--app-border-strong);
+    border-radius: 6px;
+    background: var(--app-input-bg);
+    color: var(--app-input-text);
+    font: inherit;
+}
+
 .admin-form button {
     white-space: nowrap;
 }
@@ -132,6 +151,13 @@
     margin: 16px 0 0;
     color: var(--app-text-muted);
     overflow-wrap: anywhere;
+}
+
+.admin-empty-state {
+    margin: 32px 0 4px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 .admin-user-details {
