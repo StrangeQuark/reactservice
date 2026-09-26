@@ -30,6 +30,12 @@ pipeline {
                 }
             }
         }
+        stage("Test") {
+            steps {
+                sh "npm ci && npm test"
+            }
+        }
+
         stage("Deploy & Health Check") {
             steps {
                 script {
