@@ -43,6 +43,9 @@ jobs:
 
             echo "Environment variables written to reactservice.env"
           fi
+      - name: Run tests
+        run: npm ci && npm test
+
       - name: Deploy & Health Check
         run: |
           set -e
