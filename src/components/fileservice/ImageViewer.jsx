@@ -1,4 +1,3 @@
-import { traceFetch } from "../../utility/TraceUtility"
 
 
 import "./css/ImageViewer.css"
@@ -12,7 +11,7 @@ const ImageViewer = ({ imageUrl, onClose, token }) => {
 
     useEffect(() => {
         const loadImage = async () => {
-            const response = await traceFetch(imageUrl, {
+            const response = await fetch(imageUrl, {
                 headers: getAuthHeaders(getAccessToken())
             })
             const blob = await response.blob()

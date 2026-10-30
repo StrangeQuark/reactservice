@@ -1,4 +1,3 @@
-import { traceFetch, reportTraceFailure } from "../../utility/TraceUtility"
 
 
 import { useEffect, useRef, useState } from "react"
@@ -52,7 +51,7 @@ const FilesList = () => {
     }, [searchTerm, collections])
 
     const fetchCollections = async () => {
-        const response = await traceFetch(FILE_ENDPOINTS.GET_ALL_COLLECTIONS, {
+        const response = await fetch(FILE_ENDPOINTS.GET_ALL_COLLECTIONS, {
             method: "GET",
             headers: {
                 ...getAuthHeaders(getAccessToken())
@@ -64,7 +63,7 @@ const FilesList = () => {
     }
 
     const createCollection = async (collectionName) => {
-        const response = await traceFetch(FILE_ENDPOINTS.NEW_COLLECTION, {
+        const response = await fetch(FILE_ENDPOINTS.NEW_COLLECTION, {
             method: "POST",
             headers: {
                 ...getAuthHeaders(getAccessToken()),
@@ -92,7 +91,7 @@ const FilesList = () => {
         if(!AUTHSERVICE_INTEGRATION)
             return
 
-        const response = await traceFetch(FILE_ENDPOINTS.GET_CURRENT_USER_ROLE, {
+        const response = await fetch(FILE_ENDPOINTS.GET_CURRENT_USER_ROLE, {
             method: "POST",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ collectionName })
@@ -104,7 +103,7 @@ const FilesList = () => {
     }
 
     const loadUsers = async () => {
-        const response = await traceFetch(FILE_ENDPOINTS.GET_USERS_BY_COLLECTION,{
+        const response = await fetch(FILE_ENDPOINTS.GET_USERS_BY_COLLECTION,{
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -119,7 +118,7 @@ const FilesList = () => {
     }
 
     const getAllRoles = async () => {
-        const response = await traceFetch(`${FILE_ENDPOINTS.GET_ALL_ROLES}`, {
+        const response = await fetch(`${FILE_ENDPOINTS.GET_ALL_ROLES}`, {
             headers: { ...getAuthHeaders(getAccessToken()) }
         })
 
@@ -135,7 +134,7 @@ const FilesList = () => {
             role: newRole
         }
 
-        const response = await traceFetch(`${FILE_ENDPOINTS.UPDATE_USER_ROLE}`, {
+        const response = await fetch(`${FILE_ENDPOINTS.UPDATE_USER_ROLE}`, {
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -160,7 +159,7 @@ const FilesList = () => {
             role: "READ"
         }
 
-        const response = await traceFetch(`${FILE_ENDPOINTS.ADD_USER_TO_COLLECTION}`, {
+        const response = await fetch(`${FILE_ENDPOINTS.ADD_USER_TO_COLLECTION}`, {
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -185,7 +184,7 @@ const FilesList = () => {
             username: user.username
         }
 
-        const response = await traceFetch(`${FILE_ENDPOINTS.DELETE_USER_FROM_COLLECTION}`, {
+        const response = await fetch(`${FILE_ENDPOINTS.DELETE_USER_FROM_COLLECTION}`, {
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -206,7 +205,7 @@ const FilesList = () => {
 
     const fetchFiles = async (collectionName) => {
         try {
-            const response = await traceFetch(FILE_ENDPOINTS.GET_ALL, {
+            const response = await fetch(FILE_ENDPOINTS.GET_ALL, {
                 method: "POST",
                 headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
                 body: JSON.stringify({ collectionName })
@@ -259,7 +258,6 @@ const FilesList = () => {
                 a.remove()
                 window.URL.revokeObjectURL(url)
             } else {
-                reportTraceFailure(xhr)
                 console.error("Download failed", xhr.responseText)
                 alert("File download failed")
             }
@@ -310,7 +308,6 @@ const FilesList = () => {
                 a.remove()
                 window.URL.revokeObjectURL(url)
             } else {
-                reportTraceFailure(xhr)
                 console.error("Download failed", xhr.responseText)
                 alert("File download failed")
             }
@@ -328,7 +325,7 @@ const FilesList = () => {
 
     const handleDelete = async (fileName) => {
         try {
-            const response = await traceFetch(FILE_ENDPOINTS.DELETE, {
+            const response = await fetch(FILE_ENDPOINTS.DELETE, {
                 method: "DELETE",
                 headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
                 body: JSON.stringify({ collectionName: selectedCollection.name, fileName })
@@ -382,7 +379,6 @@ const FilesList = () => {
             if (xhr.status >= 200 && xhr.status < 300) {
                 fetchFiles(selectedCollection.name)
             } else {
-                reportTraceFailure(xhr)
                 console.error("Upload failed", xhr.responseText)
                 alert("File upload failed")
             }
@@ -405,7 +401,7 @@ const FilesList = () => {
         if(!confirm("Are you sure you want to delete collection: " + selectedCollection.name))
             return
 
-        const response = await traceFetch(FILE_ENDPOINTS.DELETE_COLLECTION, {
+        const response = await fetch(FILE_ENDPOINTS.DELETE_COLLECTION, {
             method: "DELETE",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ collectionName: selectedCollection.name })

@@ -1,4 +1,3 @@
-import { traceFetch } from "../utility/TraceUtility"
 import { createContext, useContext, useEffect, useState } from "react"
 import { AUTH_ENDPOINTS, AUTHSERVICE_INTEGRATION } from "../config"
 import { Navigate } from "react-router-dom"
@@ -40,7 +39,7 @@ export const AuthProvider = ({ children }) => {
             return false
 
         try {
-            const response = await traceFetch(AUTH_ENDPOINTS.ACCESS, {
+            const response = await fetch(AUTH_ENDPOINTS.ACCESS, {
                 method: "POST",
                 credentials: "include"
             })
@@ -81,7 +80,7 @@ export const AuthProvider = ({ children }) => {
             clearTimeout(refreshTimer)
 
         if(AUTHSERVICE_INTEGRATION) {
-            traceFetch(AUTH_ENDPOINTS.LOGOUT, {
+            fetch(AUTH_ENDPOINTS.LOGOUT, {
                 method: "POST",
                 credentials: "include"
             })

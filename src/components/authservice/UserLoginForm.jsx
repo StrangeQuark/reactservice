@@ -1,4 +1,3 @@
-import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useState } from "react"
@@ -30,7 +29,7 @@ const UserLoginForm = () => {
             return
         }
 
-        traceFetch(AUTH_ENDPOINTS.AUTHENTICATE, {
+        fetch(AUTH_ENDPOINTS.AUTHENTICATE, {
             method: 'POST',
             credentials: "include",
             headers: {
@@ -48,7 +47,7 @@ const UserLoginForm = () => {
                     }
 
                     // Fetch access token
-                    traceFetch(AUTH_ENDPOINTS.ACCESS, {
+                    fetch(AUTH_ENDPOINTS.ACCESS, {
                         method: "POST",
                         credentials: "include",
                     }).then(res => res.json().then(

@@ -9,7 +9,7 @@ describe("AuthContext context", () => {
   beforeEach(() => {
     document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
     document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
-    global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 401, headers: new Headers() })
+    global.fetch = vi.fn()
   })
 
   test("decodes Base64URL JWT payloads", () => {

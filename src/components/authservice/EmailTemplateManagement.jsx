@@ -1,4 +1,3 @@
-import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useEffect, useState } from "react"
@@ -19,7 +18,7 @@ const EmailTemplateManagement = () => {
         getTemplates()
     }, [])
 
-    const request = (url, method, body) => traceFetch(url, {
+    const request = (url, method, body) => fetch(url, {
         method,
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + getAccessToken() },
         body: body ? JSON.stringify(body) : undefined

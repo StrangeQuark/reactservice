@@ -1,4 +1,3 @@
-import { traceFetch } from "../../utility/TraceUtility"
 
 
 import "./css/MusicPlayer.css"
@@ -12,7 +11,7 @@ const MusicPlayer = ({ audioUrl, onClose, token }) => {
 
     useEffect(() => {
         const loadAudio = async () => {
-            const response = await traceFetch(audioUrl, {
+            const response = await fetch(audioUrl, {
                 headers: getAuthHeaders(getAccessToken())
             })
             const blob = await response.blob()
