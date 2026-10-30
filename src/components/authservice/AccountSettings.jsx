@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useState, useEffect } from "react"
@@ -17,7 +18,7 @@ const AccountSettings = () => {
         }, [])
 
     const fetchAccountDetails = async () => {
-        const data = await fetch(AUTH_ENDPOINTS.GET_USER_ID, {
+        const data = await traceFetch(AUTH_ENDPOINTS.GET_USER_ID, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +29,7 @@ const AccountSettings = () => {
 
         const request = [data]
 
-        const response = await fetch(`${AUTH_ENDPOINTS.GET_USER_DETAILS_BY_IDS}`, {
+        const response = await traceFetch(`${AUTH_ENDPOINTS.GET_USER_DETAILS_BY_IDS}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -43,7 +44,7 @@ const AccountSettings = () => {
     }
 
     const updateUsername = async (newUsername, password) => {
-        const response = await fetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
+        const response = await traceFetch(AUTH_ENDPOINTS.UPDATE_USERNAME, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -68,7 +69,7 @@ const AccountSettings = () => {
     }
 
     const updateEmail = async (newEmail, password) => {
-        const response = await fetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
+        const response = await traceFetch(AUTH_ENDPOINTS.UPDATE_EMAIL, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -94,7 +95,7 @@ const AccountSettings = () => {
     }
 
     const updatePassword = async (password, newPassword) => {
-        const response = await fetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
+        const response = await traceFetch(AUTH_ENDPOINTS.UPDATE_PASSWORD, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -119,7 +120,7 @@ const AccountSettings = () => {
     }
 
     const deleteProfile = async (username, password) => {
-        const response = await fetch(AUTH_ENDPOINTS.DELETE_USER, {
+        const response = await traceFetch(AUTH_ENDPOINTS.DELETE_USER, {
             method: "POST",
             headers: {
                 Authorization: "Bearer " + getAccessToken(),

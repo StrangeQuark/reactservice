@@ -28,6 +28,8 @@ services:
     labels:
       com.msinit.log: "true"
       com.msinit.service-name: "reactservice"
+    logging:
+      driver: json-file
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost" ]
       interval: 10s

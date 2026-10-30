@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 
@@ -11,7 +12,7 @@ const ConfirmEmailMessage = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search)
         const token = urlParams.get("token")
-        fetch(EMAIL_ENDPOINTS.ENABLE_USER + token, {
+        traceFetch(EMAIL_ENDPOINTS.ENABLE_USER + token, {
             method: 'GET',
             }).then(response => response.json().then(
                 (data) => {

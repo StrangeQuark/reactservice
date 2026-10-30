@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 
@@ -27,7 +28,7 @@ const ResetPasswordSearchForm = () => {
         if(verifyEmailRegex(credentials))
             credentialsJson = {"email": credentials}
 
-        fetch(AUTH_ENDPOINTS.PASSWORD_RESET, {
+        traceFetch(AUTH_ENDPOINTS.PASSWORD_RESET, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

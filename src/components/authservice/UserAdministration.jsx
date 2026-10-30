@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useEffect, useState } from "react"
@@ -17,7 +18,7 @@ const UserAdministration = () => {
         getRoles()
     }, [])
 
-    const request = (url, method, body) => fetch(url, {
+    const request = (url, method, body) => traceFetch(url, {
         method,
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + getAccessToken() },
         body: body ? JSON.stringify(body) : undefined

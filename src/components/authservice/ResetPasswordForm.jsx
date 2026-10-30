@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 
@@ -35,7 +36,7 @@ const ResetPasswordForm = () => {
             return
         }
 
-        const response = await fetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD, {
+        const response = await traceFetch(EMAIL_ENDPOINTS.RESET_USER_PASSWORD, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useEffect, useState } from "react"
@@ -33,7 +34,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
             request.push(data[i].userId)
         }
 
-        const response = await fetch(`${AUTH_ENDPOINTS.GET_USER_DETAILS_BY_IDS}`, {
+        const response = await traceFetch(`${AUTH_ENDPOINTS.GET_USER_DETAILS_BY_IDS}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -69,7 +70,7 @@ const UserManagementPopup = ({ onClose, loadUsers, addUser, deleteUser, getAllRo
         if (!searchTerm.trim())
             return
 
-        const response = await fetch(AUTH_ENDPOINTS.SEARCH_USERS, {
+        const response = await traceFetch(AUTH_ENDPOINTS.SEARCH_USERS, {
             method: "POST",
             headers: { Authorization: "Bearer " + getAccessToken(), "Content-Type": "application/json" },
             body: JSON.stringify({ query: searchTerm })

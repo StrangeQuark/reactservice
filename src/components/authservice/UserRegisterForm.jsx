@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useEffect, useState } from "react"
@@ -40,7 +41,7 @@ const UserRegisterForm = () => {
       window.history.replaceState({}, "", "/register")
     }
 
-    fetch(AUTH_ENDPOINTS.INVITE_ONLY)
+    traceFetch(AUTH_ENDPOINTS.INVITE_ONLY)
       .then(async (response) => {
         if(!response.ok)
           throw new Error("Unable to load invitation settings")
@@ -109,7 +110,7 @@ const UserRegisterForm = () => {
     if(inviteToken !== '')
       registerJSON.inviteToken = inviteToken
 
-    fetch(AUTH_ENDPOINTS.REGISTER, {
+    traceFetch(AUTH_ENDPOINTS.REGISTER, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

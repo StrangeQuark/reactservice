@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useEffect, useState } from "react"
@@ -16,7 +17,7 @@ const InvitationManagement = () => {
     }, [])
 
     const getInvitations = async () => {
-        const response = await fetch(AUTH_ENDPOINTS.GET_ALL_INVITATIONS, {
+        const response = await traceFetch(AUTH_ENDPOINTS.GET_ALL_INVITATIONS, {
             headers: { Authorization: "Bearer " + getAccessToken() }
         })
 
@@ -26,7 +27,7 @@ const InvitationManagement = () => {
 
     const createInvitation = async (event) => {
         event.preventDefault()
-        const response = await fetch(AUTH_ENDPOINTS.CREATE_INVITATION, {
+        const response = await traceFetch(AUTH_ENDPOINTS.CREATE_INVITATION, {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: "Bearer " + getAccessToken() },
             body: JSON.stringify({ email })
@@ -44,7 +45,7 @@ const InvitationManagement = () => {
     }
 
     const deleteInvitation = async (id) => {
-        const response = await fetch(AUTH_ENDPOINTS.DELETE_INVITATION, {
+        const response = await traceFetch(AUTH_ENDPOINTS.DELETE_INVITATION, {
             method: "DELETE",
             headers: { "Content-Type": "application/json", Authorization: "Bearer " + getAccessToken() },
             body: JSON.stringify({ id })
@@ -55,7 +56,7 @@ const InvitationManagement = () => {
     }
 
     const deleteAllInvitations = async () => {
-        const response = await fetch(AUTH_ENDPOINTS.DELETE_ALL_INVITATIONS, {
+        const response = await traceFetch(AUTH_ENDPOINTS.DELETE_ALL_INVITATIONS, {
             method: "DELETE",
             headers: { Authorization: "Bearer " + getAccessToken() }
         })

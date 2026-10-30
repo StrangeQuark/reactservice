@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 import { useEffect, useState } from "react"
 import { AUTH_ENDPOINTS, getAuthHeaders, VPN_ENDPOINTS } from "../../config"
 import { useAuth } from "../../context/AuthContext"
@@ -13,7 +14,7 @@ const VpnAdministration = () => {
         getDevices()
     }, [])
 
-    const request = (url, method, body) => fetch(url, {
+    const request = (url, method, body) => traceFetch(url, {
         method,
         headers: { "Content-Type": "application/json", ...getAuthHeaders(getAccessToken()) },
         body: body ? JSON.stringify(body) : undefined

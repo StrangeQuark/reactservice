@@ -1,3 +1,4 @@
+import { traceFetch } from "../../utility/TraceUtility"
 
 
 import { useEffect, useState, useRef } from "react"
@@ -54,7 +55,7 @@ const VaultList = () => {
     }
 
     const fetchServices = async () => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_SERVICES}`, {
+        const response = await traceFetch(`${VAULT_ENDPOINTS.GET_ALL_SERVICES}`, {
             headers: { ...getAuthHeaders(getAccessToken()) }
         })
         const data = await response.json()
@@ -63,7 +64,7 @@ const VaultList = () => {
     }
 
     const fetchEnvironments = async (service) => {
-        const response = await fetch(VAULT_ENDPOINTS.GET_ALL_ENVS_BY_SERVICE, {
+        const response = await traceFetch(VAULT_ENDPOINTS.GET_ALL_ENVS_BY_SERVICE, {
             method: "POST",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: service })
@@ -75,7 +76,7 @@ const VaultList = () => {
 
     const fetchVariables = async (service, environment) => {
         try {
-            const response = await fetch(VAULT_ENDPOINTS.GET_VARS_BY_ENV, {
+            const response = await traceFetch(VAULT_ENDPOINTS.GET_VARS_BY_ENV, {
                 method: "POST",
                 headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
                 body: JSON.stringify({ serviceName: service, environmentName: environment })
@@ -119,7 +120,7 @@ const VaultList = () => {
     }
 
     const loadUsers = async () => {
-        const response = await fetch(VAULT_ENDPOINTS.GET_USERS_BY_SERVICE, {
+        const response = await traceFetch(VAULT_ENDPOINTS.GET_USERS_BY_SERVICE, {
             method: "POST",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: selectedService })
@@ -134,7 +135,7 @@ const VaultList = () => {
         if(!AUTHSERVICE_INTEGRATION)
             return
 
-        const response = await fetch(VAULT_ENDPOINTS.GET_CURRENT_USER_ROLE, {
+        const response = await traceFetch(VAULT_ENDPOINTS.GET_CURRENT_USER_ROLE, {
             method: "POST",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: service })
@@ -146,7 +147,7 @@ const VaultList = () => {
     }
 
     const getAllRoles = async () => {
-        const response = await fetch(`${VAULT_ENDPOINTS.GET_ALL_ROLES}`, {
+        const response = await traceFetch(`${VAULT_ENDPOINTS.GET_ALL_ROLES}`, {
             headers: { ...getAuthHeaders(getAccessToken()) }
         })
 
@@ -162,7 +163,7 @@ const VaultList = () => {
             role: newRole
         }
 
-        const response = await fetch(`${VAULT_ENDPOINTS.UPDATE_USER_ROLE}`, {
+        const response = await traceFetch(`${VAULT_ENDPOINTS.UPDATE_USER_ROLE}`, {
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -187,7 +188,7 @@ const VaultList = () => {
             role: "MAINTAINER"
         }
 
-        const response = await fetch(`${VAULT_ENDPOINTS.ADD_USER_TO_SERVICE}`, {
+        const response = await traceFetch(`${VAULT_ENDPOINTS.ADD_USER_TO_SERVICE}`, {
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -212,7 +213,7 @@ const VaultList = () => {
             username: user.username
         }
 
-        const response = await fetch(`${VAULT_ENDPOINTS.DELETE_USER_FROM_SERVICE}`, {
+        const response = await traceFetch(`${VAULT_ENDPOINTS.DELETE_USER_FROM_SERVICE}`, {
             method: "POST",
             headers: { 
                 ...getAuthHeaders(getAccessToken()),
@@ -232,7 +233,7 @@ const VaultList = () => {
     }
 
     const createService = async (serviceName) => {
-        const response = await fetch(VAULT_ENDPOINTS.CREATE_SERVICE, {
+        const response = await traceFetch(VAULT_ENDPOINTS.CREATE_SERVICE, {
             method: "POST",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName })
@@ -249,7 +250,7 @@ const VaultList = () => {
     }
 
     const createEnvironment = async (environmentName) => {
-        const response = await fetch(VAULT_ENDPOINTS.CREATE_ENVIRONMENT, {
+        const response = await traceFetch(VAULT_ENDPOINTS.CREATE_ENVIRONMENT, {
             method: "POST",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: selectedService, environmentName })
@@ -270,7 +271,7 @@ const VaultList = () => {
         const environment = selectedEnvironment
         let v = {key, value}
 
-        const response = await fetch(VAULT_ENDPOINTS.ADD_VAR, {
+        const response = await traceFetch(VAULT_ENDPOINTS.ADD_VAR, {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
@@ -311,7 +312,7 @@ const VaultList = () => {
         const service = selectedService
         const environment = selectedEnvironment
 
-        const response = await fetch(VAULT_ENDPOINTS.DELETE_VAR, {
+        const response = await traceFetch(VAULT_ENDPOINTS.DELETE_VAR, {
             method: "DELETE",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: service, environmentName: environment, variableName: variable })
@@ -344,7 +345,7 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete environment: " + selectedEnvironment))
             return
 
-        const response = await fetch(VAULT_ENDPOINTS.DELETE_ENVIRONMENT, {
+        const response = await traceFetch(VAULT_ENDPOINTS.DELETE_ENVIRONMENT, {
             method: "DELETE",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment })
@@ -364,7 +365,7 @@ const VaultList = () => {
         if(!confirm("Are you sure you want to delete service: " + selectedService))
             return
 
-        const response = await fetch(VAULT_ENDPOINTS.DELETE_SERVICE, {
+        const response = await traceFetch(VAULT_ENDPOINTS.DELETE_SERVICE, {
             method: "DELETE",
             headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
             body: JSON.stringify({ serviceName: selectedService })
@@ -386,7 +387,7 @@ const VaultList = () => {
         const service = selectedService
         const environment = selectedEnvironment
 
-        const response = await fetch(VAULT_ENDPOINTS.UPDATE_VARS, {
+        const response = await traceFetch(VAULT_ENDPOINTS.UPDATE_VARS, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -426,7 +427,7 @@ const VaultList = () => {
         formData.append("environmentName", environment)
 
         try {
-            const response = await fetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
+            const response = await traceFetch(VAULT_ENDPOINTS.ADD_ENV_FILE, {
                 method: "POST",
                 body: formData,
                 headers: { ...getAuthHeaders(getAccessToken()) }
@@ -452,7 +453,7 @@ const VaultList = () => {
 
     const downloadEnvFile = async () => {
         try {
-            const res = await fetch(VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE, {
+            const res = await traceFetch(VAULT_ENDPOINTS.DOWNLOAD_ENV_FILE, {
                     method: "POST",
                     headers: { ...getAuthHeaders(getAccessToken()), "Content-Type": "application/json" },
                     body: JSON.stringify({ serviceName: selectedService, environmentName: selectedEnvironment })
